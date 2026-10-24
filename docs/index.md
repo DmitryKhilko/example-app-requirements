@@ -5,7 +5,7 @@
 
 <div class="grid cards" markdown>
 
-- :lucide-map: [**Карта фичей**](feature-map.md){ data-preview }
+- :lucide-map: [**Перечень функциональностей**](feature-map.md){ data-preview }
 
     Иерархический перечень всех спецификаций со статусами и ссылками. Формируется автоматически.
 

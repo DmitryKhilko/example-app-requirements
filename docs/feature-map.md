@@ -1,8 +1,8 @@
-# Карта фичей продукта
+# Перечень функциональностей продукта
 
 > Файл формируется автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку `main`. Не редактируйте его вручную: правки будут перезаписаны.
 
-!!! info "Обозначения"
+!!! info status-cols "Обозначения"
 
     - :lucide-inbox: бэклог
     - :lucide-file-pen-line: проработка
@@ -11,7 +11,7 @@
     - :lucide-rocket: реализована
     - :lucide-archive: архив
 
-!!! info "Всего спецификаций: 18"
+!!! info status-cols "Всего спецификаций: 18"
 
     - :lucide-inbox: бэклог: 3
     - :lucide-file-pen-line: проработка: 2
@@ -20,7 +20,7 @@
     - :lucide-rocket: реализована: 6
     - :lucide-archive: архив: 3
 
-## Активные фичи
+## Актуальные функциональности
 
 - **Каталог товаров**: :lucide-inbox:: 1, :lucide-file-pen-line:: 2, :lucide-code-xml:: 1, :lucide-rocket:: 3
     - *Карточка товара*: :lucide-inbox:: 1, :lucide-rocket:: 1
@@ -47,7 +47,7 @@
         - :lucide-rocket: [Оплата через СБП / QR-код](specifications/orders/payment-sbp.md#article-overview){data-preview}
         - :lucide-inbox: [Покупка в рассрочку](specifications/orders/credit-pay.md#article-overview){data-preview}
 
-## Архив фичей
+## Архивные функциональности
 
 > Спецификации из папки `docs/archive/` или со статусом `archived`.
 

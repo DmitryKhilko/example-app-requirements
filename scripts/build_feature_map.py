@@ -288,36 +288,38 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
     active = [f for f in features if not f.archived]
     archived = [f for f in features if f.archived]
 
-    # Сводка выводится двумя обычными блоками admonition (`!!! info`) над разделом «Активные фичи»:
-    # сверху «Обозначения», под ним «Всего спецификаций». Тело блока — отступ 4 пробела.
-    # Модификатор `inline` не используется: такие блоки «плавают» сбоку и сужают карту.
+    # Сводка выводится двумя обычными блоками admonition (`!!! info`) над разделом «Актуальные
+    # функциональности»: сверху «Обозначения», под ним «Всего спецификаций». Тело блока — отступ 4 пробела.
+    # Модификатор `inline` не используется: такие блоки «плавают» сбоку и сужают страницу.
+    # Класс `status-cols` (после типа блока) включает вывод списка в две колонки по 3 статуса:
+    # правило для него задано в theme-custom/stylesheets/extra.css, раздел 4.
     legend = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}" for s in STATUS_ICONS]
     counts = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {sum(1 for f in active if f.status == s)}"
               for s in STATUS_ICONS if s != "archived"]
     counts.append(f"    - {STATUS_ICONS['archived']} {STATUS_TITLES['archived']}: {len(archived)}")
 
     out: list[str] = [
-        "# Карта фичей продукта",
+        "# Перечень функциональностей продукта",
         "",
         "> Файл формируется автоматически скриптом `scripts/build_feature_map.py` "
         "при слиянии изменений в ветку `main`. Не редактируйте его вручную: "
         "правки будут перезаписаны.",
         "",
-        '!!! info "Обозначения"',
+        '!!! info status-cols "Обозначения"',
         "",
         *legend,
         "",
-        f'!!! info "Всего спецификаций: {len(features)}"',
+        f'!!! info status-cols "Всего спецификаций: {len(features)}"',
         "",
         *counts,
         "",
-        "## Активные фичи",
+        "## Актуальные функциональности",
         "",
     ]
     out += render_tree(active) if active else ["*Нет активных фичей*"]
     out += [
         "",
-        "## Архив фичей",
+        "## Архивные функциональности",
         "",
         f"> Спецификации из папки `docs/{archive_dir_name}/` или со статусом `archived`.",
         "",
