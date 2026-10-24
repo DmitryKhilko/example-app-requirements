@@ -2,9 +2,23 @@
 
 > Файл формируется автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку `main`. Не редактируйте его вручную: правки будут перезаписаны.
 
-Обозначения: :lucide-inbox: бэклог · :lucide-file-pen-line: проработка · :lucide-clipboard-check: готова к разработке · :lucide-code-xml: в разработке · :lucide-rocket: реализована · :lucide-archive: архив
+!!! info inline end "Обозначения"
 
-Всего спецификаций: **18** · :lucide-inbox: 3 · :lucide-file-pen-line: 2 · :lucide-clipboard-check: 1 · :lucide-code-xml: 3 · :lucide-rocket: 6 · :lucide-archive: 3
+    - :lucide-inbox: бэклог
+    - :lucide-file-pen-line: проработка
+    - :lucide-clipboard-check: готова к разработке
+    - :lucide-code-xml: в разработке
+    - :lucide-rocket: реализована
+    - :lucide-archive: архив
+
+!!! info inline end "Всего спецификаций: 18"
+
+    - :lucide-inbox: 3
+    - :lucide-file-pen-line: 2
+    - :lucide-clipboard-check: 1
+    - :lucide-code-xml: 3
+    - :lucide-rocket: 6
+    - :lucide-archive: 3
 
 ## Активные фичи
 
