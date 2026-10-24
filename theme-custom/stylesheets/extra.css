@@ -20,6 +20,7 @@
      2. Цвета тёмной схемы slate
      3. Окно предпросмотра ссылок {data-preview} в тёмной схеме
      4. Сводка на странице перечня функциональностей (две колонки)
+     5. Фильтр перечня по статусам (панель кнопок)
    ========================================================================== */
 
 
@@ -120,4 +121,64 @@
   .md-typeset .admonition.status-cols > ul {
     column-count: 1;
   }
+}
+
+
+/* --------------------------------------------------------------------------
+   5. ФИЛЬТР ПЕРЕЧНЯ ПО СТАТУСАМ (feature-map.md)
+
+   Панель .status-filter создаёт скрипт theme-custom/javascripts/status-filter.js:
+   кнопка на каждый статус и «Сбросить». Выбранная кнопка получает класс is-active.
+   Класс sf-hidden скрывает фичи, модули и разделы, не подходящие под фильтр.
+   -------------------------------------------------------------------------- */
+.status-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.status-filter__label {
+  font-weight: 700;
+  margin-right: 0.25rem;
+}
+
+.status-filter__btn,
+.status-filter__reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.25rem 0.8rem;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 2rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.status-filter__btn:hover,
+.status-filter__reset:hover:not(:disabled) {
+  border-color: var(--md-accent-fg-color);
+}
+
+.status-filter__btn.is-active {
+  border-color: var(--md-accent-fg-color);
+  background: var(--md-accent-fg-color--transparent);
+  font-weight: 700;
+}
+
+.status-filter__count {
+  opacity: 0.7;
+}
+
+.status-filter__reset:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.md-typeset .sf-hidden {
+  display: none !important;
 }

@@ -14,8 +14,8 @@
   т. п.) в карту не попадают.
 * Архивная спецификация — файл внутри docs/archive/ ИЛИ файл со статусом
   `archived`. В карте такие фичи выводятся в отдельном разделе со значком коробки.
-* Каждая ссылка ведёт на раздел «Описание» (`#article-overview`) и снабжена атрибутом
-  `{data-preview}` для окна предпросмотра.
+* Каждая ссылка ведёт на раздел «Описание» (`#article-overview`) и снабжена атрибутами
+  `data-preview` (окно предпросмотра) и `data-status` (код статуса для фильтра на странице).
 * В файле карты нет даты и времени, поэтому без реальных изменений в
   спецификациях файл не меняется и автокоммит не создаётся.
 
@@ -91,7 +91,9 @@ DEFAULT_SUBMODULE = "Общее"
 # включает окно предпросмотра этого раздела при наведении (расширение attr_list).
 # Пробела между `)` и `{` быть не должно: иначе attr_list атрибут не применит.
 DESCRIPTION_ANCHOR = "article-overview"
-LINK_ATTRS = "{data-preview}"
+# `data-status` — код статуса фичи: по нему скрипт theme-custom/javascripts/status-filter.js
+# фильтрует перечень на странице (кнопки фильтра строятся из легенды «Обозначения»).
+LINK_ATTRS_TEMPLATE = '{{data-preview data-status="{status}"}}'
 
 # Блок метаданных обязан стоять в самом начале файла между строками `---`.
 FRONT_MATTER_RE = re.compile(
@@ -277,7 +279,8 @@ def render_tree(features: list[Feature]) -> list[str]:
             lines.append(f"    - *{_escape(submodule)}*: {status_counts(tree[module][submodule])}")
             for feature in sorted(tree[module][submodule], key=lambda f: _sort_key(f.name)):
                 lines.append(
-                    f"        - {feature.icon} [{_escape(feature.name)}]({feature.link}){LINK_ATTRS}"
+                    f"        - {feature.icon} [{_escape(feature.name)}]({feature.link})"
+                    + LINK_ATTRS_TEMPLATE.format(status=feature.shown_status)
                 )
     return lines
 
@@ -291,7 +294,8 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
     # Модификатор `inline` не используется: такие блоки «плавают» сбоку и сужают страницу.
     # Класс `status-cols` (после типа блока) включает вывод списка в две колонки по 3 статуса:
     # правило для него задано в theme-custom/stylesheets/extra.css, раздел 4.
-    legend = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}" for s in STATUS_ICONS]
+    # Название статуса в легенде обёрнуто в <span data-status>: из этих пунктов JS строит кнопки фильтра.
+    legend = [f'    - {STATUS_ICONS[s]} <span data-status="{s}">{STATUS_TITLES[s]}</span>' for s in STATUS_ICONS]
     counts = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {sum(1 for f in active if f.status == s)}"
               for s in STATUS_ICONS if s != "archived"]
     counts.append(f"    - {STATUS_ICONS['archived']} {STATUS_TITLES['archived']}: {len(archived)}")
