@@ -13,7 +13,7 @@
   `module`, `submodule`, `feature_name`. Остальные статьи (глоссарий, главная и
   т. п.) в карту не попадают.
 * Архивная спецификация — файл внутри docs/archive/ ИЛИ файл со статусом
-  `archived`. В карте такие фичи выводятся в отдельном разделе со значком 📦.
+  `archived`. В карте такие фичи выводятся в отдельном разделе со значком коробки.
 * В файле карты нет даты и времени, поэтому без реальных изменений в
   спецификациях файл не меняется и автокоммит не создаётся.
 
@@ -51,10 +51,10 @@ DEFAULT_ARCHIVE_DIR_NAME = "archive"
 # Статусы в терминах репозитория (см. [project.extra.status] в zensical.toml).
 # Порядок важен: в таком порядке статусы идут в легенде и статистике.
 STATUS_ICONS = {
-    "published": "🟢",
-    "review": "⏳",
-    "draft": "📋",
-    "archived": "📦",
+    "published": ":lucide-rocket:",
+    "review": ":lucide-search-check:",
+    "draft": ":lucide-file-pen-line:",
+    "archived": ":lucide-archive:",
 }
 STATUS_TITLES = {
     "published": "опубликовано",
@@ -247,7 +247,7 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
     legend = " · ".join(f"{STATUS_ICONS[s]} {STATUS_TITLES[s]}" for s in STATUS_ICONS)
 
     out: list[str] = [
-        "# 🗺️ Карта фичей продукта",
+        "# Карта фичей продукта",
         "",
         "> Файл формируется автоматически скриптом `scripts/build_feature_map.py` "
         "при слиянии изменений в ветку `main`. Не редактируйте его вручную: "
@@ -257,13 +257,13 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
         "",
         f"Обозначения: {legend}",
         "",
-        "## 🚀 Активные фичи",
+        "## Активные фичи",
         "",
     ]
     out += render_tree(active) if active else ["*Нет активных фичей*"]
     out += [
         "",
-        "## 📦 Архив фичей",
+        "## Архив фичей",
         "",
         f"> Спецификации из папки `docs/{archive_dir_name}/` или со статусом `archived`.",
         "",
