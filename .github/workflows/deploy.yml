@@ -28,9 +28,9 @@ jobs:
     permissions:
       contents: write   # право на push коммита с картой фичей
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: 3.x
           cache: pip
@@ -69,16 +69,16 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: main     # последний коммит ветки, включая коммит с картой фичей
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: 3.x
 
       - run: echo "cache_id=$(date --utc +'%V')" >> $GITHUB_ENV
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           key: zensical-toml-${{ env.cache_id }}
           path: .cache
@@ -91,13 +91,13 @@ jobs:
       - run: zensical build --clean
 
       # Настройка инфраструктуры Pages внутри контейнера
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
       # Загрузка сгенерированной папки site/ как артефакта сборки
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: 'site'
 
       # Финальный запуск встроенного деплоя на сервера GitHub
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
