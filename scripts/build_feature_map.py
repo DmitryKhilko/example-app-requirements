@@ -14,6 +14,8 @@
   т. п.) в карту не попадают.
 * Архивная спецификация — файл внутри docs/archive/ ИЛИ файл со статусом
   `archived`. В карте такие фичи выводятся в отдельном разделе со значком коробки.
+* Каждая ссылка ведёт на раздел «Описание» (`#article-overview`) и снабжена атрибутом
+  `{data-preview}` для окна предпросмотра.
 * В файле карты нет даты и времени, поэтому без реальных изменений в
   спецификациях файл не меняется и автокоммит не создаётся.
 
@@ -72,6 +74,13 @@ STATUS_ALIASES = {
 DEFAULT_STATUS = "draft"
 DEFAULT_SUBMODULE = "Общее"
 
+# Каждая ссылка карты ведёт на раздел «Описание» спецификации: в спецификации заголовок
+# должен иметь явный якорь `## Описание {#article-overview}`. Атрибут `data-preview`
+# включает окно предпросмотра этого раздела при наведении (расширение attr_list).
+# Пробела между `)` и `{` быть не должно: иначе attr_list атрибут не применит.
+DESCRIPTION_ANCHOR = "article-overview"
+LINK_ATTRS = "{data-preview}"
+
 # Блок метаданных обязан стоять в самом начале файла между строками `---`.
 FRONT_MATTER_RE = re.compile(
     r"\A﻿?---[ \t]*\r?\n(.*?)\r?\n---[ \t]*(?:\r?\n|\Z)", re.DOTALL
@@ -88,7 +97,7 @@ class Feature:
     module: str
     submodule: str
     name: str
-    link: str          # ссылка на спецификацию относительно файла карты
+    link: str          # ссылка на раздел «Описание» относительно файла карты (с якорем)
     status: str        # ключ из STATUS_ICONS
     archived: bool
 
@@ -203,7 +212,7 @@ def collect_features(
         status = normalize_status(meta.get("status"), path, problems)
         archived = in_archive_dir or status == "archived"
 
-        link = quote(os.path.relpath(path, output.parent).replace(os.sep, "/"))
+        link = quote(os.path.relpath(path, output.parent).replace(os.sep, "/")) + f"#{DESCRIPTION_ANCHOR}"
         features.append(Feature(module, submodule, name, link, status, archived))
 
     return features
@@ -233,7 +242,9 @@ def render_tree(features: list[Feature]) -> list[str]:
         for submodule in sorted(tree[module], key=_sort_key):
             lines.append(f"    - *{_escape(submodule)}*")
             for feature in sorted(tree[module][submodule], key=lambda f: _sort_key(f.name)):
-                lines.append(f"        - {feature.icon} [{_escape(feature.name)}]({feature.link})")
+                lines.append(
+                    f"        - {feature.icon} [{_escape(feature.name)}]({feature.link}){LINK_ATTRS}"
+                )
     return lines
 
 
