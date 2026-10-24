@@ -2,7 +2,7 @@
 module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Фильтр по диапазону цен с ползунком"
-status: "review"
+status: "development"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 ---

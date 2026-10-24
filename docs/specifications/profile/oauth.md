@@ -2,7 +2,7 @@
 module: "Личный кабинет"
 submodule: "Профиль пользователя"
 feature_name: "Привязка профилей социальных сетей"
-status: "draft"
+status: "backlog"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 ---

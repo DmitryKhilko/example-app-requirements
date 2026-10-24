@@ -2,7 +2,7 @@
 module: "Название модуля"            # обязательное: верхний уровень карты фичей
 submodule: "Название субмодуля"      # необязательное, по умолчанию «Общее»
 feature_name: "Название фичи"        # обязательное: текст ссылки в карте фичей
-status: "draft"                      # draft | review | published | archived
+status: "backlog"                    # backlog | analysis | ready | development | released | archived
 doc_version: "0.01"
 owner: "Фамилия Имя"
 ---

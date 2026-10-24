@@ -68,10 +68,17 @@ text = "Nunito"
 code = "Fira Code"
 
 [project.extra.status]
+# Статусы фич (поле status в спецификациях, карта фичей), жизненный цикл SDLC
+backlog = "Бэклог"
+analysis = "Проработка"
+ready = "Готова к разработке"
+development = "В разработке"
+released = "Реализована"
+archived = "Архив"
+# Статусы статей базы знаний, не являющихся фичами (например, glossary.md)
 draft = "Черновик"
 review = "На проверке"
 published = "Опубликовано"
-archived = "Архив"
 
 [[project.theme.palette]]
 media = "(prefers-color-scheme: light)"

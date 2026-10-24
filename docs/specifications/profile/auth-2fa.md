@@ -2,7 +2,7 @@
 module: "Личный кабинет"
 submodule: "Авторизация"
 feature_name: "Двухфакторная аутентификация (2FA)"
-status: "review"
+status: "development"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 ---

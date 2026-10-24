@@ -50,28 +50,42 @@ DEFAULT_DOCS_DIR = REPO_ROOT / "docs"
 DEFAULT_OUTPUT = DEFAULT_DOCS_DIR / "feature-map.md"
 DEFAULT_ARCHIVE_DIR_NAME = "archive"
 
-# Статусы в терминах репозитория (см. [project.extra.status] в zensical.toml).
-# Порядок важен: в таком порядке статусы идут в легенде и статистике.
+# Статусы фичи по жизненному циклу (SDLC); те же подписи заданы в [project.extra.status]
+# файла zensical.toml. Порядок важен: в таком порядке статусы идут в легенде и статистике.
+#   backlog     — фича заведена, к работе не приступали
+#   analysis    — проработка: аналитик пишет требования, спецификация на согласовании
+#   ready       — спецификация утверждена, фича готова к разработке
+#   development — идёт разработка
+#   released    — реализована, работает в эксплуатации
+#   archived    — выведена из эксплуатации (ставится автоматически для файлов из docs/archive/)
 STATUS_ICONS = {
-    "published": ":lucide-rocket:",
-    "review": ":lucide-search-check:",
-    "draft": ":lucide-file-pen-line:",
+    "backlog": ":lucide-inbox:",
+    "analysis": ":lucide-file-pen-line:",
+    "ready": ":lucide-clipboard-check:",
+    "development": ":lucide-code-xml:",
+    "released": ":lucide-rocket:",
     "archived": ":lucide-archive:",
 }
 STATUS_TITLES = {
-    "published": "опубликовано",
-    "review": "на проверке",
-    "draft": "черновик",
+    "backlog": "бэклог",
+    "analysis": "проработка",
+    "ready": "готова к разработке",
+    "development": "в разработке",
+    "released": "реализована",
     "archived": "архив",
 }
-# Синонимы: допускаются русские статусы из исходной концепции Feature Map.
+# Синонимы: допускаются русские названия статусов (регистр не важен).
 STATUS_ALIASES = {
-    "готово": "published",
-    "в разработке": "review",
-    "бэклог": "draft",
+    "бэклог": "backlog",
+    "проработка": "analysis",
+    "анализ": "analysis",
+    "готова к разработке": "ready",
+    "в разработке": "development",
+    "реализована": "released",
+    "готово": "released",
     "архив": "archived",
 }
-DEFAULT_STATUS = "draft"
+DEFAULT_STATUS = "backlog"
 DEFAULT_SUBMODULE = "Общее"
 
 # Каждая ссылка карты ведёт на раздел «Описание» спецификации: в спецификации заголовок
@@ -253,7 +267,7 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
     archived = [f for f in features if f.archived]
 
     counts = [f"{STATUS_ICONS[s]} {sum(1 for f in active if f.status == s)}"
-              for s in ("published", "review", "draft")]
+              for s in STATUS_ICONS if s != "archived"]
     counts.append(f"{STATUS_ICONS['archived']} {len(archived)}")
     legend = " · ".join(f"{STATUS_ICONS[s]} {STATUS_TITLES[s]}" for s in STATUS_ICONS)
 
@@ -264,9 +278,9 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
         "при слиянии изменений в ветку `main`. Не редактируйте его вручную: "
         "правки будут перезаписаны.",
         "",
-        f"Всего спецификаций: **{len(features)}** · " + " · ".join(counts),
-        "",
         f"Обозначения: {legend}",
+        "",
+        f"Всего спецификаций: **{len(features)}** · " + " · ".join(counts),
         "",
         "## Активные фичи",
         "",

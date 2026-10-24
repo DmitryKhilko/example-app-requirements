@@ -2,7 +2,7 @@
 module: "Личный кабинет"
 submodule: "Профиль пользователя"
 feature_name: "Редактирование персональных данных"
-status: "published"
+status: "released"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 ---

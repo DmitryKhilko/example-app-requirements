@@ -2,7 +2,7 @@
 module: "Управление заказами"
 submodule: "История заказов"
 feature_name: "Отмена заказа клиентом"
-status: "review"
+status: "ready"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 ---

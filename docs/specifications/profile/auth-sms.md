@@ -2,7 +2,7 @@
 module: "Личный кабинет"
 submodule: "Авторизация"
 feature_name: "Вход по номеру телефона и SMS"
-status: "published"
+status: "released"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 ---

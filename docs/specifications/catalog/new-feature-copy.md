@@ -2,7 +2,7 @@
 module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Ещё одна новая фича"
-status: "draft"
+status: "analysis"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 ---

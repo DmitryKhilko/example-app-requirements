@@ -2,7 +2,7 @@
 module: "Каталог товаров"
 submodule: "Карточка товара"
 feature_name: "Блок похожих товаров (рекомендации)"
-status: "draft"
+status: "backlog"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 ---
