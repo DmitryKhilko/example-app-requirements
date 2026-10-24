@@ -266,12 +266,13 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
     active = [f for f in features if not f.archived]
     archived = [f for f in features if f.archived]
 
-    # Сводка выводится двумя inline-блоками admonition справа от карты (синтаксис `!!! info inline end`).
-    # Блоки обязаны стоять ДО содержимого, рядом с которым они отображаются; тело блока — отступ 4 пробела.
+    # Сводка выводится двумя обычными блоками admonition (`!!! info`) над разделом «Активные фичи»:
+    # сверху «Обозначения», под ним «Всего спецификаций». Тело блока — отступ 4 пробела.
+    # Модификатор `inline` не используется: такие блоки «плавают» сбоку и сужают карту.
     legend = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}" for s in STATUS_ICONS]
-    counts = [f"    - {STATUS_ICONS[s]} {sum(1 for f in active if f.status == s)}"
+    counts = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {sum(1 for f in active if f.status == s)}"
               for s in STATUS_ICONS if s != "archived"]
-    counts.append(f"    - {STATUS_ICONS['archived']} {len(archived)}")
+    counts.append(f"    - {STATUS_ICONS['archived']} {STATUS_TITLES['archived']}: {len(archived)}")
 
     out: list[str] = [
         "# Карта фичей продукта",
@@ -280,11 +281,11 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
         "при слиянии изменений в ветку `main`. Не редактируйте его вручную: "
         "правки будут перезаписаны.",
         "",
-        '!!! info inline end "Обозначения"',
+        '!!! info "Обозначения"',
         "",
         *legend,
         "",
-        f'!!! info inline end "Всего спецификаций: {len(features)}"',
+        f'!!! info "Всего спецификаций: {len(features)}"',
         "",
         *counts,
         "",

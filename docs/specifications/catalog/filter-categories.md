@@ -3,7 +3,7 @@ module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Фильтрация по категориям и тегам"
 status: "released"
-doc_version: "0.01"
+doc_version: "0.02"
 owner: "Дмитрий Хилько"
 ---
 
