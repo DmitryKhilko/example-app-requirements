@@ -1,6 +1,6 @@
 [project]
-site_name = "Пример организации требований с использованием подхода "Documentation as Code""
-site_description = "Пример организации требований с использованием подхода "Documentation as Code""
+site_name = "Пример организации требований с использованием подхода Documentation as Code"
+site_description = "Пример организации требований с использованием подхода Documentation as Code"
 # ВАЖНО: укажите реальный адрес сайта, иначе instant-навигация и поиск работают некорректно
 # Для GitHub Pages: https://dmitrykhilko.github.io/example-app-requirements/
 site_url = "https://dmitrykhilko.github.io/example-app-requirements/"
