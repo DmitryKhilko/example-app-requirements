@@ -1,13 +1,15 @@
-name: ci 
+name: ci
+
+# Срабатывает при каждом слиянии (push) в основную ветку.
+# Порядок: 1) обновить карту фичей -> 2) собрать и опубликовать сайт.
 on:
   push:
     branches:
       - main
+  workflow_dispatch:   # ручной запуск из вкладки Actions
 
 permissions:
-  contents: write
-  pages: write      # Обязательное разрешение для деплоя Pages
-  id-token: write   # Обязательное разрешение для авторизации
+  contents: read
 
 # Запрещаем одновременные сборки (если вы сделаете 2 коммита подряд, старый деплой прервется)
 concurrency:
@@ -15,39 +17,87 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  # --------------------------------------------------------------------------
+  # Шаг 1. Пересобрать docs/feature-map.md и закоммитить его в main, если он изменился.
+  # Коммит от GITHUB_TOKEN не запускает новый workflow, поэтому цикла не возникает.
+  # Метка [skip ci] добавлена как страховка (например, если позже заменить токен на PAT).
+  # --------------------------------------------------------------------------
+  feature-map:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write   # право на push коммита с картой фичей
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-python@v5
         with:
           python-version: 3.x
-          
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+
+      - run: pip install -r scripts/requirements.txt
+
+      # Падает с ошибкой, если в метаданных спецификаций нет module или feature_name
+      - name: Build feature map
+        run: python scripts/build_feature_map.py
+
+      - name: Commit feature map
+        run: |
+          if [ -n "$(git status --porcelain docs/feature-map.md)" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add docs/feature-map.md
+            git commit -m "docs: автоматическое обновление карты фичей [skip ci]"
+            git push origin HEAD:main
+          else
+            echo "Изменений в карте фичей нет."
+          fi
+
+  # --------------------------------------------------------------------------
+  # Шаг 2. Сборка статического сайта и публикация на GitHub Pages.
+  # Выполняется после шага 1 и берёт из main уже актуальную карту фичей.
+  # --------------------------------------------------------------------------
+  deploy:
+    needs: feature-map
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write      # Обязательное разрешение для деплоя Pages
+      id-token: write   # Обязательное разрешение для авторизации
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main     # последний коммит ветки, включая коммит с картой фичей
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
       - run: echo "cache_id=$(date --utc +'%V')" >> $GITHUB_ENV
       - uses: actions/cache@v4
         with:
-          key: zensical-toml-${{ github.env.cache_id }}
+          key: zensical-toml-${{ env.cache_id }}
           path: .cache
           restore-keys: |
             zensical-toml-
-            
+
       - run: pip install zensical
-      
+
       # Сборка сайта (Zensical сложит готовый HTML в папку site/)
       - run: zensical build --clean
-      
-      # Шаг А: Настройка инфраструктуры Pages внутри контейнера
+
+      # Настройка инфраструктуры Pages внутри контейнера
       - uses: actions/configure-pages@v5
-      
-      # Шаг Б: Загрузка сгенерированной папки site/ как артефакта сборки
+
+      # Загрузка сгенерированной папки site/ как артефакта сборки
       - uses: actions/upload-pages-artifact@v3
         with:
           path: 'site'
-          
-      # Шаг В: Финальный запуск встроенного деплоя на сервера GitHub
+
+      # Финальный запуск встроенного деплоя на сервера GitHub
       - id: deployment
         uses: actions/deploy-pages@v4
