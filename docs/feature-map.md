@@ -2,7 +2,7 @@
 
 > Файл формируется автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку `main`. Не редактируйте его вручную: правки будут перезаписаны.
 
-Всего спецификаций: **17** · 🟢 6 · ⏳ 4 · 📋 4 · 📦 3
+Всего спецификаций: **18** · 🟢 6 · ⏳ 4 · 📋 5 · 📦 3
 
 Обозначения: 🟢 опубликовано · ⏳ на проверке · 📋 черновик · 📦 архив
 
@@ -13,6 +13,7 @@
         - 📋 [Блок похожих товаров (рекомендации)](specifications/catalog/product-recommendations.md)
         - 🟢 [Галерея изображений с зумом](specifications/catalog/product-gallery.md)
     - *Поиск и фильтрация*
+        - 📋 [Ещё одна новая фича](specifications/catalog/new-feature%20copy.md)
         - 📋 [Новая фича](specifications/catalog/new-feature.md)
         - 🟢 [Полнотекстовый поиск по названию](specifications/catalog/search-text.md)
         - ⏳ [Фильтр по диапазону цен с ползунком](specifications/catalog/filter-price-slider.md)
