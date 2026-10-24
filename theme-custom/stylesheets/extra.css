@@ -2,9 +2,19 @@
   cursor: pointer;
 }
 
-/* Переопределяем цвета для темной схемы slate */
+/* Цвета для тёмной схемы slate */
 [data-md-color-scheme="slate"] {
   --md-default-bg-color: #131720;         /* Основной фон страниц */
-  --md-default-bg-color--light: #212833;  /* Фон для блоков кода, всплывающих окон */
-  --md-code-bg-color: #212833;            /* Фон для инлайн-кода */
+  --md-default-bg-color--light: #212833;  /* Фон блоков кода, всплывающих окон */
+  --md-code-bg-color: #212833;            /* Фон инлайн-кода */
+}
+
+/* Окно предпросмотра ссылки {data-preview} в тёмной схеме */
+[data-md-color-scheme="slate"] .md-tooltip2 {
+  --md-default-bg-color: #212833;   /* фон окна, накладки и стрелка берут этот цвет */
+}
+
+[data-md-color-scheme="slate"] .md-tooltip2__inner {
+  background-color: #212833 !important;
+  color: #e2e8f0 !important;
 }
