@@ -5,19 +5,19 @@
 !!! info status-cols "Обозначения"
 
     - :lucide-inbox: бэклог
-    - :lucide-file-pen-line: проработка
-    - :lucide-clipboard-check: готова к разработке
-    - :lucide-code-xml: в разработке
-    - :lucide-rocket: реализована
+    - :lucide-file-pen-line: анализ
+    - :lucide-clipboard-check: готово к разработке
+    - :lucide-code-xml: разработка
+    - :lucide-rocket: реализовано
     - :lucide-archive: архив
 
 !!! info status-cols "Всего спецификаций: 18"
 
     - :lucide-inbox: бэклог: 3
-    - :lucide-file-pen-line: проработка: 2
-    - :lucide-clipboard-check: готова к разработке: 1
-    - :lucide-code-xml: в разработке: 3
-    - :lucide-rocket: реализована: 6
+    - :lucide-file-pen-line: анализ: 2
+    - :lucide-clipboard-check: готово к разработке: 1
+    - :lucide-code-xml: разработка: 3
+    - :lucide-rocket: реализовано: 6
     - :lucide-archive: архив: 3
 
 ## Актуальные функциональности

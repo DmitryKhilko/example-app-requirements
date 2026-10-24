@@ -70,10 +70,10 @@ code = "Fira Code"
 [project.extra.status]
 # Статусы фич (поле status в спецификациях, карта фичей), жизненный цикл SDLC
 backlog = "Бэклог"
-analysis = "Проработка"
-ready = "Готова к разработке"
-development = "В разработке"
-released = "Реализована"
+analysis = "Анализ"
+ready = "Готово к разработке"
+development = "Разработка"
+released = "Реализовано"
 archived = "Архив"
 # Статусы статей базы знаний, не являющихся фичами (например, glossary.md)
 draft = "Черновик"
