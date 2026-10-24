@@ -116,8 +116,13 @@ class Feature:
     archived: bool
 
     @property
+    def shown_status(self) -> str:
+        """Статус, под которым фича показана в карте (архивные всегда `archived`)."""
+        return "archived" if self.archived else self.status
+
+    @property
     def icon(self) -> str:
-        return STATUS_ICONS["archived"] if self.archived else STATUS_ICONS[self.status]
+        return STATUS_ICONS[self.shown_status]
 
 
 class Problems:
@@ -244,17 +249,34 @@ def _escape(text: str) -> str:
     return text.replace("[", r"\[").replace("]", r"\]")
 
 
+def status_counts(features: list[Feature]) -> str:
+    """Счётчики фич по значкам статусов, например `:lucide-inbox:: 3, :lucide-rocket:: 6`.
+
+    Порядок — как в STATUS_ICONS; статусы без фич не выводятся.
+    """
+    parts = []
+    for status, icon in STATUS_ICONS.items():
+        count = sum(1 for f in features if f.shown_status == status)
+        if count:
+            parts.append(f"{icon}: {count}")
+    return ", ".join(parts)
+
+
 def render_tree(features: list[Feature]) -> list[str]:
-    """Дерево «модуль -> субмодуль -> фича». Отступ 4 пробела (требование Python-Markdown)."""
+    """Дерево «модуль -> субмодуль -> фича» со счётчиками статусов в заголовках модуля и субмодуля.
+
+    Отступ 4 пробела (требование Python-Markdown).
+    """
     tree: dict[str, dict[str, list[Feature]]] = defaultdict(lambda: defaultdict(list))
     for feature in features:
         tree[feature.module][feature.submodule].append(feature)
 
     lines: list[str] = []
     for module in sorted(tree, key=_sort_key):
-        lines.append(f"- **{_escape(module)}**")
+        module_features = [f for subs in tree[module].values() for f in subs]
+        lines.append(f"- **{_escape(module)}**: {status_counts(module_features)}")
         for submodule in sorted(tree[module], key=_sort_key):
-            lines.append(f"    - *{_escape(submodule)}*")
+            lines.append(f"    - *{_escape(submodule)}*: {status_counts(tree[module][submodule])}")
             for feature in sorted(tree[module][submodule], key=lambda f: _sort_key(f.name)):
                 lines.append(
                     f"        - {feature.icon} [{_escape(feature.name)}]({feature.link}){LINK_ATTRS}"
