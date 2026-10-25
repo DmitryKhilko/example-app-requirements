@@ -129,6 +129,18 @@ SPEC_KEYS = ("module", "submodule", "feature_name")
 # Индексы папок (index.md): названия служебных папок для меню. Названия папок модулей берутся из поля `module`.
 FOLDER_TITLES = {"specifications": "Спецификации", "archive": "Архив"}
 INDEX_NAME = "index.md"
+INDEX_MARKER = "scripts/build_feature_map.py"   # по этой строке скрипт узнаёт свои (сгенерированные) файлы
+# Навигация (меню сайта): Zensical берёт названия папок из имён папок, поэтому меню собирается скриптом
+# и записывается в zensical.toml между маркерами NAV_BEGIN и NAV_END.
+DEFAULT_CONFIG = REPO_ROOT / "zensical.toml"
+NAV_BEGIN = "# BEGIN GENERATED NAV (scripts/build_feature_map.py) — не редактируйте вручную"
+NAV_END = "# END GENERATED NAV"
+# Служебные страницы в начале меню: (название, файл относительно docs). Отсутствующие файлы пропускаются.
+ROOT_PAGES = [
+    ("О программном продукте", "index.md"),
+    ("Перечень функциональностей продукта", "feature-map.md"),
+    ("Глоссарий", "glossary.md"),
+]
 # Блок «Внимание» в разделе «Описание» каждого индекса (admonition, тело — отступ 4 пробела).
 INDEX_WARNING = [
     '!!! warning "Внимание"',
@@ -422,8 +434,8 @@ def render_index(folder: Path, docs_dir: Path, features: list[Feature]) -> str:
             lines.append(f"- [{_escape(sub_title)}]({name}/{INDEX_NAME}#{DESCRIPTION_ANCHOR})"
                          f"{{data-preview}}: {status_counts(sub_features)}")
     if direct:
-        lines += [f"Спецификации раздела «{title}»: всего {len(direct)}.", "", *INDEX_WARNING,
-                  "## Спецификации {#specs}", ""]
+        lines += [f"Спецификации раздела «{title}»: всего {len(direct)}.", "",
+                  *([] if subfolders else INDEX_WARNING), "## Спецификации {#specs}", ""]
         by_sub: dict[str, list[Feature]] = defaultdict(list)
         for f in direct:
             by_sub[f.submodule].append(f)
@@ -436,27 +448,84 @@ def render_index(folder: Path, docs_dir: Path, features: list[Feature]) -> str:
 
 
 def build_indexes(docs_dir: Path, features: list[Feature], problems: Problems) -> dict[Path, str]:
-    """index.md для каждой папки со спецификациями и для всех её родителей внутри docs (кроме самой docs)."""
-    folders: set[Path] = set()
-    for f in features:
-        parent = (docs_dir / f.path).parent
-        while parent != docs_dir:
-            folders.add(parent)
-            parent = parent.parent
+    """index.md только для папок модулей, то есть папок, где спецификации лежат непосредственно.
 
+    Корневые папки (specifications, archive, archive/specifications) индексов не получают: они избыточны.
+    """
+    folders = {(docs_dir / f.path).parent for f in features}
     result: dict[Path, str] = {}
     for folder in sorted(folders):
         target = folder / INDEX_NAME
-        if target.exists() and "scripts/build_feature_map.py" not in target.read_text(encoding="utf-8"):
+        if target.exists() and INDEX_MARKER not in target.read_text(encoding="utf-8"):
             problems.warning(target, "файл создан вручную и не перезаписывается; удалите его, чтобы сформировать автоматически")
             continue
         result[target] = render_index(folder, docs_dir, features)
     return result
 
 
-def sync_indexes(indexes: dict[Path, str], check: bool) -> tuple[int, int]:
-    """Записывает индексы (или проверяет их). Возвращает (изменено, всего)."""
+def stale_indexes(docs_dir: Path, wanted: dict[Path, str]) -> list[Path]:
+    """Ранее сгенерированные index.md, которые больше не нужны (например, в корневых папках)."""
+    return [p for p in sorted(docs_dir.rglob(INDEX_NAME))
+            if p not in wanted and p.parent != docs_dir and INDEX_MARKER in p.read_text(encoding="utf-8")]
+
+
+def _toml(text: str) -> str:
+    return '"' + text.replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Path, str]) -> str:
+    """Блок `nav = [...]` для zensical.toml: служебные страницы, затем вкладки по корневым папкам.
+
+    Вкладка — первая папка пути (specifications, archive), раздел меню — модуль (папка со спецификациями),
+    промежуточные папки пропускаются. Названия берутся из FOLDER_TITLES и поля `module`.
+    """
+    items = [f"    {{ {_toml(title)} = {_toml(page)} }}," for title, page in ROOT_PAGES if (docs_dir / page).exists()]
+
+    folders = sorted({(docs_dir / f.path).parent for f in features})
+    tabs: dict[str, list[Path]] = defaultdict(list)
+    for folder in folders:
+        tabs[folder.relative_to(docs_dir).parts[0]].append(folder)
+    order = [k for k in FOLDER_TITLES if k in tabs] + sorted(k for k in tabs if k not in FOLDER_TITLES)
+
+    for tab in order:
+        sections = []
+        for folder in tabs[tab]:
+            rel = folder.relative_to(docs_dir).as_posix()
+            pages = [f for f in features if (docs_dir / f.path).parent == folder]
+            title = _folder_title(folder, features, docs_dir)
+            paths = ([f"{rel}/{INDEX_NAME}"] if (folder / INDEX_NAME) in wanted_indexes or (folder / INDEX_NAME).exists() else [])
+            paths += [f.path for f in sorted(pages, key=lambda x: _sort_key(x.name))]
+            body = ",\n".join(f"            {_toml(p)}" for p in paths)
+            sections.append(f"        {{ {_toml(title)} = [\n{body},\n        ] }},")
+        items.append(f"    {{ {_toml(FOLDER_TITLES.get(tab, tab))} = [\n" + "\n".join(sections) + "\n    ] },")
+    return "nav = [\n" + "\n".join(items) + "\n]"
+
+
+def sync_nav(config: Path, nav: str, check: bool, problems: Problems) -> bool:
+    """Записывает nav между маркерами в zensical.toml. Возвращает True, если файл изменился (или устарел)."""
+    if not config.exists():
+        return False
+    text = config.read_text(encoding="utf-8")
+    block = f"{NAV_BEGIN}\n{nav}\n{NAV_END}"
+    pattern = re.compile(re.escape(NAV_BEGIN) + r".*?" + re.escape(NAV_END), re.DOTALL)
+    if not pattern.search(text):
+        problems.warning(config, f"нет маркеров `{NAV_BEGIN}` … `{NAV_END}`: меню не обновлено")
+        return False
+    new = pattern.sub(lambda _: block, text, count=1)
+    if new == text:
+        return False
+    if not check:
+        config.write_text(new, encoding="utf-8", newline="\n")
+    return True
+
+
+def sync_indexes(indexes: dict[Path, str], check: bool, stale: list[Path] = ()) -> tuple[int, int]:
+    """Записывает индексы, удаляет лишние (или только проверяет). Возвращает (изменено, всего)."""
     changed = 0
+    for path in stale:
+        changed += 1
+        if not check:
+            path.unlink()
     for path, content in indexes.items():
         current = path.read_text(encoding="utf-8") if path.exists() else None
         if current == content:
@@ -472,6 +541,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--docs", type=Path, default=DEFAULT_DOCS_DIR, help="папка со спецификациями")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="файл карты фичей")
     parser.add_argument("--archive-dir", default=DEFAULT_ARCHIVE_DIR_NAME, help="имя папки архива")
+    parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG, help="zensical.toml с блоком меню (nav)")
     parser.add_argument("--check", action="store_true", help="не писать файл, а проверить его актуальность")
     args = parser.parse_args(argv)
 
@@ -489,14 +559,18 @@ def main(argv: list[str] | None = None) -> int:
     content = render_map(features, args.archive_dir)
     current = args.output.read_text(encoding="utf-8") if args.output.exists() else None
     indexes = build_indexes(docs_dir, features, problems)
+    stale = stale_indexes(docs_dir, indexes)
+    nav = render_nav(docs_dir, features, indexes)
 
     if args.check:
-        stale_idx, _ = sync_indexes(indexes, check=True)
-        if current != content or stale_idx:
-            print("Карта фичей или индексы папок устарели: запустите scripts/build_feature_map.py "
-                  f"({_display(args.output)}, индексов: {stale_idx}).", file=sys.stderr)
+        stale_idx, _ = sync_indexes(indexes, check=True, stale=stale)
+        nav_stale = sync_nav(args.config, nav, True, problems)
+        if current != content or stale_idx or nav_stale:
+            print("Карта фичей, индексы папок или меню устарели: запустите scripts/build_feature_map.py "
+                  f"(карта: {'устарела' if current != content else 'ок'}, индексов: {stale_idx}, "
+                  f"меню: {'устарело' if nav_stale else 'ок'}).", file=sys.stderr)
             return 1
-        print("Карта фичей и индексы папок актуальны.")
+        print("Карта фичей, индексы папок и меню актуальны.")
         return 0
 
     if current == content:
@@ -504,8 +578,9 @@ def main(argv: list[str] | None = None) -> int:
     else:
         args.output.write_text(content, encoding="utf-8", newline="\n")
         print(f"Карта фичей обновлена: {_display(args.output)} ({len(features)} спецификаций).")
-    changed, total = sync_indexes(indexes, check=False)
-    print(f"Индексы папок: обновлено {changed} из {total}.")
+    changed, total = sync_indexes(indexes, check=False, stale=stale)
+    print(f"Индексы папок: изменено {changed} (всего {total}, удалено лишних {len(stale)}).")
+    print("Меню (nav) обновлено." if sync_nav(args.config, nav, False, problems) else "Меню (nav) без изменений.")
     return 0
 
 if __name__ == "__main__":

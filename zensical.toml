@@ -12,6 +12,62 @@ edit_uri = "edit/main/docs/"
 extra_css = ["stylesheets/extra.css"]
 extra_javascript = ["javascripts/tiles.js", "javascripts/status-filter.js"]
 
+# Не публиковать служебные файлы (скрипты, схемы, таксономию)
+# exclude_docs = """
+#*.py
+#*.json
+#*.yml
+#"""
+
+# Меню сайта формируется скриптом scripts/build_feature_map.py (названия папок по-русски).
+# BEGIN GENERATED NAV (scripts/build_feature_map.py) — не редактируйте вручную
+nav = [
+    { "О программном продукте" = "index.md" },
+    { "Перечень функциональностей продукта" = "feature-map.md" },
+    { "Глоссарий" = "glossary.md" },
+    { "Спецификации" = [
+        { "Каталог товаров" = [
+            "specifications/catalog/index.md",
+            "specifications/catalog/product-recommendations.md",
+            "specifications/catalog/product-gallery.md",
+            "specifications/catalog/new-feature-copy.md",
+            "specifications/catalog/new-feature.md",
+            "specifications/catalog/search-text.md",
+            "specifications/catalog/filter-price-slider.md",
+            "specifications/catalog/filter-categories.md",
+        ] },
+        { "Управление заказами" = [
+            "specifications/orders/index.md",
+            "specifications/orders/checkout-map.md",
+            "specifications/orders/payment-sbp.md",
+            "specifications/orders/order-cancel.md",
+            "specifications/orders/credit-pay.md",
+        ] },
+        { "Личный кабинет" = [
+            "specifications/profile/index.md",
+            "specifications/profile/auth-sms.md",
+            "specifications/profile/auth-2fa.md",
+            "specifications/profile/oauth.md",
+            "specifications/profile/edit-data.md",
+        ] },
+    ] },
+    { "Архив" = [
+        { "Каталог товаров" = [
+            "archive/specifications/catalog/index.md",
+            "archive/specifications/catalog/search-old.md",
+        ] },
+        { "Управление заказами" = [
+            "archive/specifications/orders/index.md",
+            "archive/specifications/orders/print-receipt.md",
+        ] },
+        { "Личный кабинет" = [
+            "archive/specifications/profile/index.md",
+            "archive/specifications/profile/legacy-cards.md",
+        ] },
+    ] },
+]
+# END GENERATED NAV
+
 # --- ТЕМА ---
 [project.theme]
 language = "ru"

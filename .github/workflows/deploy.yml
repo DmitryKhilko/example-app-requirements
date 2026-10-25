@@ -44,11 +44,11 @@ jobs:
 
       - name: Commit feature map and folder indexes
         run: |
-          if [ -n "$(git status --porcelain docs)" ]; then
+          if [ -n "$(git status --porcelain docs zensical.toml)" ]; then
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add docs
-            git commit -m "docs: автоматическое обновление карты фичей и индексов папок [skip ci]"
+            git add docs zensical.toml
+            git commit -m "docs: автоматическое обновление карты фичей, индексов папок и меню [skip ci]"
             git push origin HEAD:main
           else
             echo "Изменений в карте фичей нет."
