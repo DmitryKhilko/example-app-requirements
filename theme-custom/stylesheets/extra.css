@@ -21,6 +21,7 @@
      3. Окно предпросмотра ссылок {data-preview} в тёмной схеме
      4. Сводка на странице перечня функциональностей (две колонки)
      5. Фильтр перечня по статусам (кнопки темы)
+     6. Поле отбора перечня по названию
    ========================================================================== */
 
 
@@ -135,4 +136,31 @@
 .md-typeset a.md-button[data-filter],
 .md-typeset a.md-button[data-filter-reset] {
   margin: 0 0.25rem 0.5rem 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   6. ПОЛЕ ОТБОРА ПЕРЕЧНЯ ПО НАЗВАНИЮ
+
+   Поле <input class="feature-search" data-feature-search> выводит скрипт
+   scripts/build_feature_map.py под кнопками фильтра; ввод обрабатывает
+   theme-custom/javascripts/status-filter.js. Цвета берутся из переменных темы,
+   поэтому поле одинаково выглядит в светлой и тёмной схемах.
+   -------------------------------------------------------------------------- */
+.md-typeset input.feature-search {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 0.8rem;
+  padding: 0.55rem 0.8rem;
+  font: inherit;
+  color: var(--md-default-fg-color);
+  background-color: var(--md-default-bg-color);
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+}
+
+.md-typeset input.feature-search:focus {
+  outline: none;
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 0 0 0.1rem var(--md-accent-fg-color--transparent);
 }

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   status-filter.js — фильтр перечня функциональностей по статусам
+   status-filter.js — отбор перечня функциональностей по статусам и по названию
 
    Страница docs/feature-map.md формируется скриптом scripts/build_feature_map.py.
    В ней:
@@ -15,6 +15,12 @@
    полными (это итоги по модулю, а не результат фильтра). Выбор попадает в адрес
    страницы (?status=ready,development), поэтому им можно делиться.
 
+   Отбор по названию. Под кнопками стоит поле <input data-feature-search>. Введённый текст
+   (без учёта регистра) ищется в названии модуля, субмодуля и функциональности: если совпало
+   название модуля или субмодуля, показываются все их функциональности. Отбор по статусу и по
+   названию действуют одновременно: показываются функциональности, подходящие под оба условия.
+   Текст попадает в адрес страницы (?q=...).
+
    Скрытие делается инлайн-стилем (display:none), поэтому от extra.css скрипт не зависит.
 
    Почему обработчик клика повешен на весь документ, а не на кнопки. На сайте включена
@@ -29,6 +35,8 @@
   "use strict";
 
   var PARAM = "status";
+  var PARAM_Q = "q";
+  var query = "";    // введённый текст отбора по названию (в нижнем регистре)
   var ACTIVE_CLASS = "md-button--primary";
   var active = {};   // выбранные статусы: { "ready": true, ... }
 
@@ -52,6 +60,11 @@
     return result;
   }
 
+  function readQuery() {
+    try { return new URLSearchParams(window.location.search).get(PARAM_Q) || ""; }
+    catch (e) { return ""; }
+  }
+
   /* Записывает выбор в адрес страницы, не создавая записи в истории браузера */
   function writeUrl() {
     try {
@@ -59,6 +72,8 @@
       var codes = Object.keys(active);
       if (codes.length) url.searchParams.set(PARAM, codes.join(","));
       else url.searchParams.delete(PARAM);
+      if (query) url.searchParams.set(PARAM_Q, query);
+      else url.searchParams.delete(PARAM_Q);
       window.history.replaceState(window.history.state, "", url.toString());
     } catch (e) { /* не критично */ }
   }
@@ -70,10 +85,28 @@
     if (!root) return;
     var any = Object.keys(active).length > 0;
 
-    function matches(a) { return !any || active[a.getAttribute("data-status")]; }
+    function statusOk(a) { return !any || active[a.getAttribute("data-status")]; }
+
+    /* Название элемента списка: первый элемент strong (модуль), em (субмодуль) или a (функциональность);
+       счётчики статусов в заголовках модулей в поиск не попадают */
+    function label(li) {
+      var el = li.querySelector(":scope > strong, :scope > em, :scope > a");
+      return el ? el.textContent.toLowerCase() : "";
+    }
+
+    /* Совпадение с текстом отбора: название самой функциональности или любого из её родителей */
+    function queryOk(a) {
+      if (!query) return true;
+      for (var li = a.closest("li"); li && root.contains(li); li = li.parentElement && li.parentElement.closest("li")) {
+        if (label(li).indexOf(query) !== -1) return true;
+      }
+      return false;
+    }
+
+    function matches(a) { return statusOk(a) && queryOk(a); }
 
     /* Фича и любой её родитель (субмодуль, модуль) скрыты, если ни одна из вложенных ссылок
-       не подходит под выбранные статусы */
+       не подходит под выбранные статусы и текст отбора */
     Array.prototype.forEach.call(root.querySelectorAll("li"), function (li) {
       var inner = li.querySelectorAll("a[data-status]");
       if (inner.length) setVisible(li, Array.prototype.some.call(inner, matches));
@@ -100,6 +133,8 @@
       btn.setAttribute("role", "button");
       btn.setAttribute("aria-pressed", on ? "true" : "false");
     });
+    var field = root.querySelector("input[data-feature-search]");
+    if (field && field.value.toLowerCase().trim() !== query) field.value = query;
     writeUrl();
   }
 
@@ -112,10 +147,19 @@
 
     if (target.hasAttribute("data-filter-reset")) {
       active = {};
+      query = "";
     } else {
       var code = target.getAttribute("data-filter");
       if (active[code]) delete active[code]; else active[code] = true;
     }
+    apply();
+  }, true);
+
+  /* Ввод текста в поле отбора по названию (в том числе очистка крестиком в поле поиска) */
+  document.addEventListener("input", function (e) {
+    var field = e.target && e.target.matches ? (e.target.matches("input[data-feature-search]") ? e.target : null) : null;
+    if (!field) return;
+    query = field.value.toLowerCase().trim();
     apply();
   }, true);
 
@@ -127,6 +171,10 @@
     if (!first || first.hasAttribute("data-sf-init")) return;
     first.setAttribute("data-sf-init", "");
     active = readUrl(codesOnPage(root));
+    var q = readQuery();
+    query = q.toLowerCase().trim();
+    var field = root.querySelector("input[data-feature-search]");
+    if (field) field.value = q;
     apply();
   }
 
