@@ -2,7 +2,7 @@
 module: "Управление заказами"
 submodule: "История заказов"
 feature_name: "Выписка заказов в виде бумажного чека"
-status: "released"
+status: "archived"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 ---
