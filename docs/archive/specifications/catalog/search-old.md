@@ -20,4 +20,4 @@ owner: "Дмитрий Хилько"
 
 ## Критерии приёмки {#acceptance-criteria}
 
-- Заменено фичей «Полнотекстовый поиск по названию».
+- Заменено фичей ["Полнотекстовый поиск по названию"](../../../specifications/catalog/search-text.md#article-overview){data-preview}.
