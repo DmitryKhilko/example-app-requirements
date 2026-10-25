@@ -148,15 +148,6 @@ ROOT_PAGES = [
     ("Перечень функциональностей продукта", "feature-map.md"),
     ("Глоссарий", "glossary.md"),
 ]
-# Блок «Внимание» в разделе «Описание» каждого индекса (admonition, тело — отступ 4 пробела).
-INDEX_WARNING = [
-    '!!! warning "Внимание"',
-    "",
-    "    Файл формируется автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку "
-    "`main`. Не редактируйте его вручную: правки будут перезаписаны.",
-    "",
-]
-
 # ---------------------------------------------------------------------------
 # Модель данных
 # ---------------------------------------------------------------------------
@@ -342,28 +333,43 @@ def render_tree(features: list[Feature]) -> list[str]:
     return lines
 
 
+def legend_block() -> list[str]:
+    """Инфо-блок «Статусы требований» (одна колонка с пояснениями), общий для карты и индексов модулей."""
+    legend = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" for s in STATUS_ICONS]
+    return ['!!! info "Статусы требований"', "", *legend, ""]
+
+
+def warning_block() -> list[str]:
+    """Блок «Внимание» об автоматическом формировании файла (карта и индексы)."""
+    return ['!!! warning "Внимание"', "",
+            "    Файл формируется автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку "
+            "`main`. Не редактируйте файл вручную: правки будут перезаписаны.", ""]
+
+
+def statistics_block(features: list[Feature]) -> list[str]:
+    """Блок «Всего спецификаций: N» — две колонки по 3 статуса (класс `status-cols`, см. extra.css, раздел 4)."""
+    counts = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {sum(1 for f in features if f.shown_status == s)}"
+              for s in STATUS_ICONS]
+    return [f'!!! info status-cols "Всего спецификаций: {len(features)}"', "", *counts, ""]
+
+
+def selection_block() -> list[str]:
+    """Текст раздела «Отбор функциональностей продукта», кнопки статусов и поле отбора по названию.
+
+    Кнопки — ссылки с классом `.md-button` (оформляет тема, см. документацию Zensical «Buttons»), поле — обычный
+    HTML-элемент `input` (Markdown пропускает его без изменений). Клики и ввод обрабатывает
+    theme-custom/javascripts/status-filter.js, вид поля задаёт extra.css, раздел 6.
+    """
+    buttons = [f'[{STATUS_ICONS[s]} {STATUS_TITLES[s]}](#){{ .md-button data-filter="{s}" }}' for s in STATUS_ICONS]
+    buttons.append('[Сбросить](#){ .md-button data-filter-reset="" }')
+    search_field = (f'<input type="search" class="feature-search" data-feature-search="" autocomplete="off" '
+                    f'placeholder="{SEARCH_PLACEHOLDER}" aria-label="{SEARCH_PLACEHOLDER}">')
+    return [SELECTION_DESCRIPTION, "", *buttons, "", search_field, ""]
+
+
 def render_map(features: list[Feature], archive_dir_name: str) -> str:
     active = [f for f in features if not f.archived]
     archived = [f for f in features if f.archived]
-
-    # Сводка выводится двумя обычными блоками admonition (`!!! info`): «Обозначения» — в разделе
-    # «Описание», «Всего спецификаций» — в разделе «Статистика». Тело блока — отступ 4 пробела.
-    # Модификатор `inline` не используется: такие блоки «плавают» сбоку и сужают страницу.
-    # «Обозначения» — одна колонка с пояснениями. «Всего спецификаций» — две колонки по 3 статуса: класс
-    # `status-cols` (после типа блока) включает их правилом из theme-custom/stylesheets/extra.css, раздел 4.
-    legend = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" for s in STATUS_ICONS]
-    # Кнопки фильтра по статусам: ссылки с классом `.md-button` (оформляет тема, см. документацию
-    # Zensical «Buttons»). Клики обрабатывает theme-custom/javascripts/status-filter.js.
-    filter_buttons = [f'[{STATUS_ICONS[s]} {STATUS_TITLES[s]}](#){{ .md-button data-filter="{s}" }}'
-                      for s in STATUS_ICONS]
-    filter_buttons.append('[Сбросить](#){ .md-button data-filter-reset="" }')
-    # Поле отбора по названию: обычный HTML-элемент `input` (Markdown пропускает его без изменений).
-    # Ввод обрабатывает тот же status-filter.js (атрибут data-feature-search), вид задаёт extra.css, раздел 6.
-    search_field = (f'<input type="search" class="feature-search" data-feature-search="" autocomplete="off" '
-                    f'placeholder="{SEARCH_PLACEHOLDER}" aria-label="{SEARCH_PLACEHOLDER}">')
-    counts = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {sum(1 for f in active if f.status == s)}"
-              for s in STATUS_ICONS if s != "archived"]
-    counts.append(f"    - {STATUS_ICONS['archived']} {STATUS_TITLES['archived']}: {len(archived)}")
 
     out: list[str] = [
         "# Перечень функциональностей продукта {#feature-map}",
@@ -372,29 +378,14 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
         "",
         PAGE_DESCRIPTION,
         "",
-        '!!! warning "Внимание"',
-        "",
-        "    Файл формируется автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку "
-        "`main`. Не редактируйте файл вручную: правки будут перезаписаны.",
-        "",
-        '!!! info "Статусы требований"',
-        "",
-        *legend,
-        "",
+        *warning_block(),
+        *legend_block(),
         "## Статистика функциональностей продукта в разрезе статусов {#statistics}",
         "",
-        f'!!! info status-cols "Всего спецификаций: {len(features)}"',
-        "",
-        *counts,
-        "",
+        *statistics_block(features),
         "## Отбор функциональностей продукта {#feature-selection}",
         "",
-        SELECTION_DESCRIPTION,
-        "",
-        *filter_buttons,
-        "",
-        search_field,
-        "",
+        *selection_block(),
         "## Актуальные функциональности {#active-features}",
         "",
     ]
@@ -430,36 +421,31 @@ def _folder_title(folder: Path, folder_features: list[Feature], docs_dir: Path) 
 
 
 def render_index(folder: Path, docs_dir: Path, features: list[Feature]) -> str:
-    """Содержимое index.md папки: описание и список вложенных папок либо спецификаций."""
-    rel = folder.relative_to(docs_dir).as_posix()
-    inside = [f for f in features if f.path.startswith(rel + "/")]
-    title = _folder_title(folder, inside, docs_dir)
+    """Содержимое index.md папки модуля: описание, статусы, статистика и отбор (только по этому модулю) и список спецификаций."""
+    direct = [f for f in features if (docs_dir / f.path).parent == folder]
+    title = _folder_title(folder, features, docs_dir)
     slug = re.sub(r"[^a-z0-9]+", "-", folder.name.lower()).strip("-") or "folder"
 
-    direct = [f for f in inside if Path(f.path).parent == Path(rel)]
-    subfolders = sorted({Path(f.path).relative_to(rel).parts[0] for f in inside if f not in direct})
-
-    lines = [f"# {_escape(title)} {{#{slug}}}", "", f"## Описание {{#{DESCRIPTION_ANCHOR}}}", ""]
-    if subfolders:
-        lines += [f"Раздел «{title}» содержит вложенные разделы. Счётчики показывают число спецификаций "
-                  "по статусам.", "", *INDEX_WARNING, f"## Разделы {{#sections}}", ""]
-        for name in subfolders:
-            sub = folder / name
-            sub_features = [f for f in inside if f.path.startswith(f"{rel}/{name}/")]
-            sub_title = _folder_title(sub, features, docs_dir)
-            lines.append(f"- [{_escape(sub_title)}]({name}/{INDEX_NAME}#{DESCRIPTION_ANCHOR})"
-                         f"{{data-preview}}: {status_counts(sub_features)}")
-    if direct:
-        lines += [f"Спецификации раздела «{title}»: всего {len(direct)}.", "",
-                  *([] if subfolders else INDEX_WARNING), "## Спецификации {#specs}", ""]
-        by_sub: dict[str, list[Feature]] = defaultdict(list)
-        for f in direct:
-            by_sub[f.submodule].append(f)
-        for sub in sorted(by_sub, key=_sort_key):
-            lines.append(f"- *{_escape(sub)}*: {status_counts(by_sub[sub])}")
-            for f in sorted(by_sub[sub], key=lambda x: _sort_key(x.name)):
-                lines.append(f"    - {f.icon} [{_escape(f.name)}]({Path(f.path).name}#{DESCRIPTION_ANCHOR})"
-                             + LINK_ATTRS_TEMPLATE.format(status=f.shown_status))
+    lines = [
+        f"# {_escape(title)} {{#{slug} data-module-page}}", "",   # data-module-page: название модуля участвует в отборе
+        f"## Описание {{#{DESCRIPTION_ANCHOR}}}", "",
+        f"Спецификации модуля «{title}».", "",
+        *warning_block(),
+        *legend_block(),
+        "## Статистика функциональностей модуля в разрезе статусов {#statistics}", "",
+        *statistics_block(direct),
+        "## Отбор функциональностей продукта {#feature-selection}", "",
+        *selection_block(),
+        "## Спецификации {#specs}", "",
+    ]
+    by_sub: dict[str, list[Feature]] = defaultdict(list)
+    for f in direct:
+        by_sub[f.submodule].append(f)
+    for sub in sorted(by_sub, key=_sort_key):
+        lines.append(f"- *{_escape(sub)}*: {status_counts(by_sub[sub])}")
+        for f in sorted(by_sub[sub], key=lambda x: _sort_key(x.name)):
+            lines.append(f"    - {f.icon} [{_escape(f.name)}]({Path(f.path).name}#{DESCRIPTION_ANCHOR})"
+                         + LINK_ATTRS_TEMPLATE.format(status=f.shown_status))
     return "\n".join(lines).rstrip() + "\n"
 
 
