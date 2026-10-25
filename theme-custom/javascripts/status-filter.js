@@ -21,6 +21,10 @@
    названию действуют одновременно: показываются функциональности, подходящие под оба условия.
    Текст попадает в адрес страницы (?q=...).
 
+   Если по условиям отбора ничего не найдено, под полем поиска появляется сообщение
+   «Нет данных, соответствующих условиям отбора» с кнопкой «Сбросить» (снимает фильтр по
+   статусам и очищает поле поиска).
+
    Скрытие делается инлайн-стилем (display:none), поэтому от extra.css скрипт не зависит.
 
    Почему обработчик клика повешен на весь документ, а не на кнопки. На сайте включена
@@ -111,6 +115,13 @@
       var inner = li.querySelectorAll("a[data-status]");
       if (inner.length) setVisible(li, Array.prototype.some.call(inner, matches));
     });
+
+    /* Пустой результат: под полем поиска показывается сообщение с кнопкой «Сбросить»
+       (блок [data-feature-empty] выводит генератор; кнопка внутри обрабатывается как обычный сброс) */
+    var links = root.querySelectorAll("a[data-status]");
+    var shown = Array.prototype.filter.call(links, matches).length;
+    var empty = root.querySelector("[data-feature-empty]");
+    if (empty) empty.hidden = !((any || query) && links.length && shown === 0);
 
     /* Раздел (заголовок h2 и всё до следующего заголовка) скрыт, если в нём не осталось фич */
     Array.prototype.forEach.call(root.querySelectorAll("h2"), function (h) {

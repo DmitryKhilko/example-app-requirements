@@ -39,6 +39,8 @@
 
 <input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию субмодуля или функциональности" aria-label="Отбор по названию субмодуля или функциональности">
 
+<div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p><p><a href="#" class="md-button" data-filter-reset="">Сбросить</a></p></div>
+
 ## Спецификации модуля {#specs}
 
 - *История заказов*: :lucide-file-check:: 1

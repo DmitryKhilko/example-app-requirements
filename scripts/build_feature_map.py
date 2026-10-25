@@ -125,6 +125,9 @@ SELECTION_DESCRIPTION = (
     "отображается то, что подходит под оба условия."
 )
 # Страница карты: отбор по продукту целиком; страница модуля (index.md): отбор внутри модуля.
+# Сообщение при пустом результате отбора: скрыто атрибутом `hidden`, показывает его status-filter.js.
+# Кнопка «Сбросить» внутри (атрибут data-filter-reset) снимает фильтр по статусам и очищает поле поиска.
+EMPTY_MESSAGE = "Нет данных, соответствующих условиям отбора"
 SELECTION_PRODUCT = dict(scope="продукта", names="модуля, субмодуля, функциональности",
                          placeholder="Отбор по названию модуля или субмодуля или функциональности")
 # Индекс архивного модуля: только отбор по названию, без кнопок статусов и «Сбросить»; свой текст раздела.
@@ -381,7 +384,10 @@ def selection_block(texts: dict = SELECTION_PRODUCT, statuses: list[str] | None 
     search_field = (f'<input type="search" class="feature-search" data-feature-search="" autocomplete="off" '
                     f'placeholder="{texts["placeholder"]}" aria-label="{texts["placeholder"]}">')
     description = texts.get("description") or SELECTION_DESCRIPTION.format(**texts)
-    return [description, "", *([*buttons, ""] if buttons else []), search_field, ""]
+    # Одной строкой: так Markdown передаёт HTML-блок без изменений.
+    empty = (f'<div class="feature-empty" data-feature-empty="" hidden><p>{EMPTY_MESSAGE}</p>'
+             f'<p><a href="#" class="md-button" data-filter-reset="">Сбросить</a></p></div>')
+    return [description, "", *([*buttons, ""] if buttons else []), search_field, "", empty, ""]
 
 
 def render_map(features: list[Feature], archive_dir_name: str) -> str:

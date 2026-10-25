@@ -42,6 +42,8 @@
 
 <input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию модуля или субмодуля или функциональности" aria-label="Отбор по названию модуля или субмодуля или функциональности">
 
+<div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p><p><a href="#" class="md-button" data-filter-reset="">Сбросить</a></p></div>
+
 ## Актуальные функциональности {#active-features}
 
 - **Каталог товаров**: :lucide-file:: 1, :lucide-file-pen-line:: 2, :lucide-file-braces:: 1, :lucide-file-text:: 3
