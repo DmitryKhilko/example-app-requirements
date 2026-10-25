@@ -1,24 +1,25 @@
 # О программном продукте
 
-Пример организации требований по подходу Docs as Code: спецификации фич хранятся в репозитории как Markdown-файлы,
-а карта фичей и сайт собираются автоматически.
+Пример организации требований для программного продукта с использованием подхода Docs as Code: спецификации 
+функциональностей продукта хранятся в репозитории как Markdown-файлы, а перечень функциональностей (продукта, модулей) и 
+сайт собираются автоматически.
 
 <div class="grid cards" markdown>
+
+- :lucide-book-open: [**Глоссарий**](glossary.md#article-overview){ data-preview }
+
+    Термины и правила оформления статей.
 
 - :lucide-map: [**Перечень функциональностей**](feature-map.md){ data-preview }
 
     Иерархический перечень всех спецификаций со статусами и ссылками. Формируется автоматически.
 
-- :lucide-files: [**Спецификации**](specifications/catalog/index.md#article-overview){ data-preview }
+- :lucide-files: [**Спецификации**](specifications/catalog/index.md#article-overview)
 
-    Действующие спецификации функциональностей по модулям: каталог, заказы, личный кабинет.
+    Действующие спецификации функциональностей по модулям.
 
-- :lucide-archive: [**Архив спецификаций**](archive/specifications/catalog/index.md#article-overview){ data-preview }
+- :lucide-archive: [**Архив спецификаций**](archive/specifications/catalog/index.md#article-overview)
 
     Отклонённые и устаревшие спецификации с сохранением структуры модулей.
-
-- :lucide-book-open: [**Глоссарий**](glossary.md#article-overview){ data-preview }
-
-    Термины и правила оформления статей.
 
 </div>
