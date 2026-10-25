@@ -3,33 +3,44 @@
 
    Страница docs/feature-map.md формируется скриптом scripts/build_feature_map.py.
    В ней:
-     * у каждой ссылки на спецификацию есть атрибут data-status="<код статуса>";
-     * в блоке «Обозначения» (<div class="admonition info status-cols">) название
-       каждого статуса обёрнуто в <span data-status="<код>">.
+     * над перечнем стоят кнопки темы (ссылки с классом .md-button, см. документацию
+       Zensical «Buttons») с атрибутом data-filter="<код статуса>" и кнопка «Сбросить»
+       с атрибутом data-filter-reset;
+     * у каждой ссылки на спецификацию есть атрибут data-status="<код статуса>".
 
-   Скрипт строит над перечнем панель кнопок (по одной на статус, значок и название
-   берутся из блока «Обозначения», в скобках — число фич) и скрывает фичи, чей статус
-   не выбран. Если выбрано несколько статусов, показываются фичи любого из них;
-   если не выбрано ни одного — все. Модули, субмодули и разделы без видимых фич
-   скрываются. Счётчики в заголовках модулей остаются полными (это итоги, а не
-   результат фильтра). Выбор попадает в адрес страницы (?status=ready,development),
-   поэтому им можно делиться. Без JavaScript страница показывает всё.
+   Скрипт реагирует на клики по кнопкам и скрывает фичи, чей статус не выбран.
+   Выбрано несколько статусов — показываются фичи любого из них; не выбрано ни одного —
+   все. Модули, субмодули и разделы без видимых фич скрываются. Выбранные кнопки
+   выделяются классом md-button--primary. Счётчики в заголовках модулей остаются
+   полными (это итоги по модулю, а не результат фильтра). Выбор попадает в адрес
+   страницы (?status=ready,development), поэтому им можно делиться.
 
-   Подключение: extra_javascript в zensical.toml. Стили панели — в extra.css, раздел 5.
+   Скрытие делается инлайн-стилем (display:none), поэтому от extra.css скрипт не зависит.
 
-   Почему скрипт сам следит за страницей. На сайте включена мгновенная навигация
-   (navigation.instant): страницы подгружаются без полной перезагрузки. Поэтому
-   наблюдатель MutationObserver повторно запускает init() при каждой смене содержимого;
-   init() безопасен для повторных вызовов (панель создаётся один раз на страницу).
+   Почему обработчик клика повешен на весь документ, а не на кнопки. На сайте включена
+   мгновенная навигация (navigation.instant): содержимое страниц подменяется без полной
+   перезагрузки, и кнопки каждый раз создаются заново. Обработчик на document создаётся
+   один раз и работает всегда (делегирование событий, как в tiles.js). Применение выбора
+   из адреса страницы выполняет init(): его запускает наблюдатель MutationObserver после
+   каждой смены содержимого; повторные вызовы безопасны.
    ========================================================================== */
 
 (function () {
   "use strict";
 
   var PARAM = "status";
-  var HIDDEN = "sf-hidden";
+  var ACTIVE_CLASS = "md-button--primary";
+  var active = {};   // выбранные статусы: { "ready": true, ... }
 
-  /* Читает выбранные статусы из адреса страницы */
+  function article() { return document.querySelector(".md-content__inner"); }
+
+  function codesOnPage(root) {
+    return Array.prototype.map.call(root.querySelectorAll("a[data-filter]"), function (a) {
+      return a.getAttribute("data-filter");
+    });
+  }
+
+  /* Читает выбранные статусы из адреса страницы (неизвестные коды отбрасываются) */
   function readUrl(known) {
     var result = {};
     try {
@@ -37,12 +48,12 @@
       raw.split(",").forEach(function (code) {
         if (known.indexOf(code) !== -1) result[code] = true;
       });
-    } catch (e) { /* адрес недоступен — фильтр просто пустой */ }
+    } catch (e) { /* адрес недоступен — фильтр пустой */ }
     return result;
   }
 
   /* Записывает выбор в адрес страницы, не создавая записи в истории браузера */
-  function writeUrl(active) {
+  function writeUrl() {
     try {
       var url = new URL(window.location.href);
       var codes = Object.keys(active);
@@ -52,117 +63,73 @@
     } catch (e) { /* не критично */ }
   }
 
-  function init() {
-    var article = document.querySelector(".md-content__inner");
-    if (!article || article.querySelector(".status-filter")) return;
+  function setVisible(el, visible) { el.style.display = visible ? "" : "none"; }
 
-    var links = article.querySelectorAll("a[data-status]");
-    var legendBlock = article.querySelector(".admonition.status-cols");
-    if (!links.length || !legendBlock) return;
+  function apply() {
+    var root = article();
+    if (!root) return;
+    var any = Object.keys(active).length > 0;
 
-    var legendItems = legendBlock.querySelectorAll("li span[data-status]");
-    var codes = Array.prototype.map.call(legendItems, function (el) {
-      return el.getAttribute("data-status");
-    });
-    var anchorHeading = article.querySelector("h2");
-    if (!codes.length || !anchorHeading) return;
+    function matches(a) { return !any || active[a.getAttribute("data-status")]; }
 
-    var active = readUrl(codes);
-
-    /* ---- Панель фильтра ---- */
-    var bar = document.createElement("div");
-    bar.className = "status-filter";
-    bar.setAttribute("role", "group");
-    bar.setAttribute("aria-label", "Фильтр по статусу");
-
-    var label = document.createElement("span");
-    label.className = "status-filter__label";
-    label.textContent = "Фильтр по статусу:";
-    bar.appendChild(label);
-
-    var buttons = {};
-    Array.prototype.forEach.call(legendItems, function (span) {
-      var code = span.getAttribute("data-status");
-      var count = article.querySelectorAll('a[data-status="' + code + '"]').length;
-
-      var button = document.createElement("button");
-      button.type = "button";
-      button.className = "status-filter__btn";
-      button.setAttribute("data-filter", code);
-
-      /* Значок и название копируются из пункта легенды (значок уже превращён темой в SVG) */
-      Array.prototype.forEach.call(span.parentNode.childNodes, function (node) {
-        var copy = node.cloneNode(true);
-        if (copy.removeAttribute) copy.removeAttribute("data-status");
-        button.appendChild(copy);
-      });
-      var badge = document.createElement("span");
-      badge.className = "status-filter__count";
-      badge.textContent = String(count);
-      button.appendChild(badge);
-
-      button.addEventListener("click", function () {
-        if (active[code]) delete active[code]; else active[code] = true;
-        apply();
-      });
-      buttons[code] = button;
-      bar.appendChild(button);
+    /* Фича и любой её родитель (субмодуль, модуль) скрыты, если ни одна из вложенных ссылок
+       не подходит под выбранные статусы */
+    Array.prototype.forEach.call(root.querySelectorAll("li"), function (li) {
+      var inner = li.querySelectorAll("a[data-status]");
+      if (inner.length) setVisible(li, Array.prototype.some.call(inner, matches));
     });
 
-    var reset = document.createElement("button");
-    reset.type = "button";
-    reset.className = "status-filter__reset";
-    reset.textContent = "Сбросить";
-    reset.addEventListener("click", function () { active = {}; apply(); });
-    bar.appendChild(reset);
-
-    anchorHeading.parentNode.insertBefore(bar, anchorHeading);
-
-    /* ---- Применение фильтра ---- */
-    function apply() {
-      var any = Object.keys(active).length > 0;
-
-      /* Фича (и любой её родитель — субмодуль, модуль) скрыта, если ни одна из вложенных
-         ссылок не подходит под выбранные статусы */
-      Array.prototype.forEach.call(article.querySelectorAll("li"), function (li) {
-        var inner = li.querySelectorAll("a[data-status]");
-        if (!inner.length) return;
-        var visible = !any || Array.prototype.some.call(inner, function (a) {
-          return active[a.getAttribute("data-status")];
-        });
-        li.classList.toggle(HIDDEN, !visible);
+    /* Раздел (заголовок h2 и всё до следующего заголовка) скрыт, если в нём не осталось фич */
+    Array.prototype.forEach.call(root.querySelectorAll("h2"), function (h) {
+      var section = [h];
+      for (var el = h.nextElementSibling; el && !/^H[1-6]$/.test(el.tagName); el = el.nextElementSibling) {
+        section.push(el);
+      }
+      var inSection = [];
+      section.forEach(function (el) {
+        Array.prototype.forEach.call(el.querySelectorAll("a[data-status]"), function (a) { inSection.push(a); });
       });
+      var show = !inSection.length || inSection.some(matches);
+      section.forEach(function (el) { setVisible(el, show); });
+    });
 
-      /* Раздел (заголовок h2 и всё до следующего заголовка) скрыт, если в нём не осталось фич */
-      var headings = article.querySelectorAll("h2");
-      Array.prototype.forEach.call(headings, function (h) {
-        var section = [h];
-        for (var el = h.nextElementSibling; el && !/^H[1-6]$/.test(el.tagName); el = el.nextElementSibling) {
-          section.push(el);
-        }
-        var inSection = [];
-        section.forEach(function (el) {
-          Array.prototype.forEach.call(el.querySelectorAll("a[data-status]"), function (a) { inSection.push(a); });
-        });
-        var show = !inSection.length || !any || inSection.some(function (a) {
-          return active[a.getAttribute("data-status")];
-        });
-        section.forEach(function (el) { el.classList.toggle(HIDDEN, !show); });
-      });
+    /* Состояние кнопок */
+    Array.prototype.forEach.call(root.querySelectorAll("a[data-filter]"), function (btn) {
+      var on = !!active[btn.getAttribute("data-filter")];
+      btn.classList.toggle(ACTIVE_CLASS, on);
+      btn.setAttribute("role", "button");
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    writeUrl();
+  }
 
-      codes.forEach(function (code) {
-        var on = !!active[code];
-        buttons[code].classList.toggle("is-active", on);
-        buttons[code].setAttribute("aria-pressed", on ? "true" : "false");
-      });
-      reset.disabled = !any;
-      writeUrl(active);
+  /* Клик по кнопке фильтра или «Сбросить» (захват события до обработчика мгновенной навигации) */
+  document.addEventListener("click", function (e) {
+    var target = e.target.closest ? e.target.closest("a[data-filter], a[data-filter-reset]") : null;
+    if (!target) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (target.hasAttribute("data-filter-reset")) {
+      active = {};
+    } else {
+      var code = target.getAttribute("data-filter");
+      if (active[code]) delete active[code]; else active[code] = true;
     }
+    apply();
+  }, true);
 
+  /* Применение выбора из адреса после загрузки страницы и после мгновенной навигации */
+  function init() {
+    var root = article();
+    if (!root) return;
+    var first = root.querySelector("a[data-filter]");
+    if (!first || first.hasAttribute("data-sf-init")) return;
+    first.setAttribute("data-sf-init", "");
+    active = readUrl(codesOnPage(root));
     apply();
   }
 
-  /* Запуск при загрузке и после каждой мгновенной навигации */
   var scheduled = false;
   function schedule() {
     if (scheduled) return;

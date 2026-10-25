@@ -59,12 +59,12 @@ DEFAULT_ARCHIVE_DIR_NAME = "archive"
 #   released    — реализовано, работает в эксплуатации
 #   archived    — выведена из эксплуатации (ставится автоматически для файлов из docs/archive/)
 STATUS_ICONS = {
-    "backlog": ":lucide-inbox:",
+    "backlog": ":lucide-file:",
     "analysis": ":lucide-file-pen-line:",
-    "ready": ":lucide-clipboard-check:",
-    "development": ":lucide-code-xml:",
-    "released": ":lucide-rocket:",
-    "archived": ":lucide-archive:",
+    "ready": ":lucide-file-check:",
+    "development": ":lucide-file-braces:",
+    "released": ":lucide-file-text:",
+    "archived": ":lucide-file-archive:",
 }
 STATUS_TITLES = {
     "backlog": "бэклог",
@@ -73,6 +73,15 @@ STATUS_TITLES = {
     "development": "разработка",
     "released": "реализовано",
     "archived": "архив",
+}
+# Пояснения к статусам — выводятся в блоке «Обозначения» на странице перечня.
+STATUS_DESCRIPTIONS = {
+    "backlog": "зафиксированное сырое требование или идея",
+    "analysis": "детализация и согласование требования",
+    "ready": "утверждённое требование, готовое к реализации",
+    "development": "требование в работе у команды разработки и тестирования",
+    "released": "код, связанный с требованием, успешно развёрнут на проде",
+    "archived": "отклонённое или устаревшее требование",
 }
 # Синонимы: допускаются русские названия статусов (регистр не важен).
 STATUS_ALIASES = {
@@ -92,7 +101,7 @@ DEFAULT_SUBMODULE = "Общее"
 # Пробела между `)` и `{` быть не должно: иначе attr_list атрибут не применит.
 DESCRIPTION_ANCHOR = "article-overview"
 # `data-status` — код статуса фичи: по нему скрипт theme-custom/javascripts/status-filter.js
-# фильтрует перечень на странице (кнопки фильтра строятся из легенды «Обозначения»).
+# фильтрует перечень на странице (кнопки фильтра `data-filter` выводятся над перечнем).
 LINK_ATTRS_TEMPLATE = '{{data-preview data-status="{status}"}}'
 
 # Блок метаданных обязан стоять в самом начале файла между строками `---`.
@@ -292,10 +301,14 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
     # Сводка выводится двумя обычными блоками admonition (`!!! info`) над разделом «Актуальные
     # функциональности»: сверху «Обозначения», под ним «Всего спецификаций». Тело блока — отступ 4 пробела.
     # Модификатор `inline` не используется: такие блоки «плавают» сбоку и сужают страницу.
-    # Класс `status-cols` (после типа блока) включает вывод списка в две колонки по 3 статуса:
-    # правило для него задано в theme-custom/stylesheets/extra.css, раздел 4.
-    # Название статуса в легенде обёрнуто в <span data-status>: из этих пунктов JS строит кнопки фильтра.
-    legend = [f'    - {STATUS_ICONS[s]} <span data-status="{s}">{STATUS_TITLES[s]}</span>' for s in STATUS_ICONS]
+    # «Обозначения» — одна колонка с пояснениями. «Всего спецификаций» — две колонки по 3 статуса: класс
+    # `status-cols` (после типа блока) включает их правилом из theme-custom/stylesheets/extra.css, раздел 4.
+    legend = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" for s in STATUS_ICONS]
+    # Кнопки фильтра по статусам: ссылки с классом `.md-button` (оформляет тема, см. документацию
+    # Zensical «Buttons»). Клики обрабатывает theme-custom/javascripts/status-filter.js.
+    filter_buttons = [f'[{STATUS_ICONS[s]} {STATUS_TITLES[s]}](#){{ .md-button data-filter="{s}" }}'
+                      for s in STATUS_ICONS]
+    filter_buttons.append('[Сбросить](#){ .md-button data-filter-reset="" }')
     counts = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {sum(1 for f in active if f.status == s)}"
               for s in STATUS_ICONS if s != "archived"]
     counts.append(f"    - {STATUS_ICONS['archived']} {STATUS_TITLES['archived']}: {len(archived)}")
@@ -307,13 +320,17 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
         "при слиянии изменений в ветку `main`. Не редактируйте его вручную: "
         "правки будут перезаписаны.",
         "",
-        '!!! info status-cols "Обозначения"',
+        '!!! info "Обозначения"',
         "",
         *legend,
         "",
         f'!!! info status-cols "Всего спецификаций: {len(features)}"',
         "",
         *counts,
+        "",
+        "**Фильтр по статусу:**",
+        "",
+        *filter_buttons,
         "",
         "## Актуальные функциональности",
         "",
