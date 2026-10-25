@@ -78,7 +78,7 @@ Workflow: `.github/workflows/deploy.yml`. Карта обновляется то
 Клики обрабатывает `theme-custom/javascripts/status-filter.js` (подключён в `zensical.toml`). Счётчики в заголовках
 модулей не меняются при фильтрации: это итоги по модулю. Без JavaScript страница показывает весь перечень.
 
-### Архив
+### Архив спецификаций
 
 Чтобы архивировать спецификацию, переместите файл в `docs/archive/` с сохранением подпапки
 (например, `docs/specifications/orders/order-cancel.md` → `docs/archive/specifications/orders/order-cancel.md`) — метаданные менять не нужно.

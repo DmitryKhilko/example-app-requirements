@@ -51,7 +51,7 @@ nav = [
             "specifications/profile/edit-data.md",
         ] },
     ] },
-    { "Архив" = [
+    { "Архив спецификаций" = [
         { "Каталог товаров" = [
             "archive/specifications/catalog/index.md",
             "archive/specifications/catalog/search-old.md",

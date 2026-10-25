@@ -141,7 +141,7 @@ SPEC_KEYS = ("module", "submodule", "feature_name")
 
 
 # Индексы папок (index.md): названия служебных папок для меню. Названия папок модулей берутся из поля `module`.
-FOLDER_TITLES = {"specifications": "Спецификации", "archive": "Архив"}
+FOLDER_TITLES = {"specifications": "Спецификации", "archive": "Архив спецификаций"}
 INDEX_NAME = "index.md"
 INDEX_MARKER = "scripts/build_feature_map.py"   # по этой строке скрипт узнаёт свои (сгенерированные) файлы
 # Навигация (меню сайта): Zensical берёт названия папок из имён папок, поэтому меню собирается скриптом
