@@ -12,24 +12,6 @@ edit_uri = "edit/main/docs/"
 extra_css = ["stylesheets/extra.css"]
 extra_javascript = ["javascripts/tiles.js", "javascripts/status-filter.js"]
 
-# Не публиковать служебные файлы (скрипты, схемы, таксономию)
-# exclude_docs = """
-#*.py
-#*.json
-#*.yml
-#"""
-
-# nav = [
-#    { "О базе знаний" = "index.md" },
-#    { "Глоссарий" = "glossary.md" },
-#    { "Архитектура базы знаний" = [
-#        { "Концепция системы управления базой знаний" = "kb-architecture/kb-concept.md" },
-#        { "Порядок действий по созданию статьи базы знаний" = "kb-architecture/kb-create-article.md" },
-#        { "Правила оформления статей базы знаний" = "kb-architecture/kb-markdown-rules.md" },
-#        { "Правила создания метаданных" = "kb-architecture/kb-article-metadata.md" }
-#    ]}
-#]
-
 # --- ТЕМА ---
 [project.theme]
 language = "ru"
