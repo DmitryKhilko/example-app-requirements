@@ -157,7 +157,9 @@ custom_checkbox = true
 # Настройки предварительного просмотра страниц
 [[project.markdown_extensions.zensical.extensions.preview.configurations]]
 targets.include = ["**/*.md"]
-sources.exclude = ["index.md"]
+# Страницы index.md (главная и индексы модулей) сами ссылок для предпросмотра не получают:
+# у ссылок на спецификации там явно задан data-preview, а кнопки фильтра предпросмотра не нужны.
+sources.exclude = ["index.md", "**/index.md"]
 
 # Отображение иконок эмодзи
 [project.markdown_extensions.pymdownx.emoji]

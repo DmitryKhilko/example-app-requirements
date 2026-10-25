@@ -97,9 +97,6 @@
     /* Совпадение с текстом отбора: название самой функциональности или любого из её родителей */
     function queryOk(a) {
       if (!query) return true;
-      /* На странице модуля (index.md) модуля в списке нет: его название — заголовок h1 с атрибутом data-module-page */
-      var h1 = root.querySelector("h1[data-module-page]");
-      if (h1 && h1.textContent.toLowerCase().indexOf(query) !== -1) return true;
       for (var li = a.closest("li"); li && root.contains(li); li = li.parentElement && li.parentElement.closest("li")) {
         if (label(li).indexOf(query) !== -1) return true;
       }
@@ -170,7 +167,7 @@
   function init() {
     var root = article();
     if (!root) return;
-    var first = root.querySelector("a[data-filter]");
+    var first = root.querySelector("a[data-filter], a[data-filter-reset], input[data-feature-search]");
     if (!first || first.hasAttribute("data-sf-init")) return;
     first.setAttribute("data-sf-init", "");
     active = readUrl(codesOnPage(root));

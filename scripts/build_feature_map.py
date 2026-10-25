@@ -120,11 +120,18 @@ PAGE_DESCRIPTION = (
 )
 # Текст раздела «Отбор функциональностей продукта» и подсказка в поле отбора.
 SELECTION_DESCRIPTION = (
-    "Отбор (фильтрация) функциональностей продукта как по текущему статусу функциональности, так и по названию "
-    "модуля, субмодуля, функциональности. При одновременном использовании отбора по статусу и названию "
+    "Отбор (фильтрация) функциональностей {scope} как по текущему статусу функциональности, так и по названию "
+    "{names}. При одновременном использовании отбора по статусу и названию "
     "отображается то, что подходит под оба условия."
 )
-SEARCH_PLACEHOLDER = "Отбор по названию модуля или субмодуля или функциональности"
+# Страница карты: отбор по продукту целиком; страница модуля (index.md): отбор внутри модуля.
+SELECTION_PRODUCT = dict(scope="продукта", names="модуля, субмодуля, функциональности",
+                         placeholder="Отбор по названию модуля или субмодуля или функциональности")
+# Индекс архивного модуля: только отбор по названию, без кнопок статусов и «Сбросить»; свой текст раздела.
+SELECTION_ARCHIVE = dict(description="Отбор (фильтрация) функциональностей модуля по названию субмодуля, функциональности.",
+                         placeholder="Отбор по названию субмодуля или функциональности", reset=False)
+SELECTION_MODULE = dict(scope="модуля", names="субмодуля, функциональности",
+                        placeholder="Отбор по названию субмодуля или функциональности")
 
 # Блок метаданных обязан стоять в самом начале файла между строками `---`.
 FRONT_MATTER_RE = re.compile(
@@ -333,9 +340,17 @@ def render_tree(features: list[Feature]) -> list[str]:
     return lines
 
 
-def legend_block() -> list[str]:
+def _statuses(only: list[str] | None = None, exclude: tuple[str, ...] = ()) -> list[str]:
+    """Статусы для легенды, статистики и кнопок в порядке STATUS_ICONS.
+
+    only — оставить только эти статусы, exclude — убрать указанные (в индексах модулей лишние статусы не выводятся).
+    """
+    return [s for s in STATUS_ICONS if (only is None or s in only) and s not in exclude]
+
+
+def legend_block(statuses: list[str] | None = None) -> list[str]:
     """Инфо-блок «Статусы требований» (одна колонка с пояснениями), общий для карты и индексов модулей."""
-    legend = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" for s in STATUS_ICONS]
+    legend = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" for s in _statuses(statuses)]
     return ['!!! info "Статусы требований"', "", *legend, ""]
 
 
@@ -346,25 +361,27 @@ def warning_block() -> list[str]:
             "`main`. Не редактируйте файл вручную: правки будут перезаписаны.", ""]
 
 
-def statistics_block(features: list[Feature]) -> list[str]:
+def statistics_block(features: list[Feature], statuses: list[str] | None = None) -> list[str]:
     """Блок «Всего спецификаций: N» — две колонки по 3 статуса (класс `status-cols`, см. extra.css, раздел 4)."""
     counts = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {sum(1 for f in features if f.shown_status == s)}"
-              for s in STATUS_ICONS]
+              for s in _statuses(statuses)]
     return [f'!!! info status-cols "Всего спецификаций: {len(features)}"', "", *counts, ""]
 
 
-def selection_block() -> list[str]:
+def selection_block(texts: dict = SELECTION_PRODUCT, statuses: list[str] | None = None) -> list[str]:
     """Текст раздела «Отбор функциональностей продукта», кнопки статусов и поле отбора по названию.
 
     Кнопки — ссылки с классом `.md-button` (оформляет тема, см. документацию Zensical «Buttons»), поле — обычный
     HTML-элемент `input` (Markdown пропускает его без изменений). Клики и ввод обрабатывает
     theme-custom/javascripts/status-filter.js, вид поля задаёт extra.css, раздел 6.
     """
-    buttons = [f'[{STATUS_ICONS[s]} {STATUS_TITLES[s]}](#){{ .md-button data-filter="{s}" }}' for s in STATUS_ICONS]
-    buttons.append('[Сбросить](#){ .md-button data-filter-reset="" }')
+    buttons = [f'[{STATUS_ICONS[s]} {STATUS_TITLES[s]}](#){{ .md-button data-filter="{s}" }}' for s in _statuses(statuses)]
+    if texts.get("reset", True):
+        buttons.append('[Сбросить](#){ .md-button data-filter-reset="" }')
     search_field = (f'<input type="search" class="feature-search" data-feature-search="" autocomplete="off" '
-                    f'placeholder="{SEARCH_PLACEHOLDER}" aria-label="{SEARCH_PLACEHOLDER}">')
-    return [SELECTION_DESCRIPTION, "", *buttons, "", search_field, ""]
+                    f'placeholder="{texts["placeholder"]}" aria-label="{texts["placeholder"]}">')
+    description = texts.get("description") or SELECTION_DESCRIPTION.format(**texts)
+    return [description, "", *([*buttons, ""] if buttons else []), search_field, ""]
 
 
 def render_map(features: list[Feature], archive_dir_name: str) -> str:
@@ -425,18 +442,24 @@ def render_index(folder: Path, docs_dir: Path, features: list[Feature]) -> str:
     direct = [f for f in features if (docs_dir / f.path).parent == folder]
     title = _folder_title(folder, features, docs_dir)
     slug = re.sub(r"[^a-z0-9]+", "-", folder.name.lower()).strip("-") or "folder"
+    # Индекс модуля в архиве: только статус «архив» и без кнопок статусов; в действующих спецификациях статус «архив» не выводится.
+    if DEFAULT_ARCHIVE_DIR_NAME in folder.relative_to(docs_dir).parts:
+        legend_statuses, button_statuses, selection = ["archived"], [], SELECTION_ARCHIVE
+    else:
+        legend_statuses = button_statuses = _statuses(exclude=("archived",))
+        selection = SELECTION_MODULE
 
     lines = [
-        f"# {_escape(title)} {{#{slug} data-module-page}}", "",   # data-module-page: название модуля участвует в отборе
+        f"# {_escape(title)} {{#{slug}}}", "",
         f"## Описание {{#{DESCRIPTION_ANCHOR}}}", "",
         f"Спецификации модуля «{title}».", "",
         *warning_block(),
-        *legend_block(),
+        *legend_block(legend_statuses),
         "## Статистика функциональностей модуля в разрезе статусов {#statistics}", "",
-        *statistics_block(direct),
-        "## Отбор функциональностей продукта {#feature-selection}", "",
-        *selection_block(),
-        "## Спецификации {#specs}", "",
+        *statistics_block(direct, legend_statuses),
+        "## Отбор функциональностей модуля {#feature-selection}", "",
+        *selection_block(selection, button_statuses),
+        "## Спецификации модуля {#specs}", "",
     ]
     by_sub: dict[str, list[Feature]] = defaultdict(list)
     for f in direct:
