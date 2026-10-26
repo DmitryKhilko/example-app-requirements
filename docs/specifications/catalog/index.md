@@ -6,7 +6,7 @@
 
 !!! warning "Внимание"
 
-    На странице отображается содержимое файла `docs/specifications/catalog/index.md`. Файл `docs/specifications/catalog/index.md` формируется автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку `main`. Не редактируйте файл вручную: правки будут перезаписаны.
+    На странице отображается содержимое файла `docs/specifications/catalog/index.md`. Файл `index.md` формируется автоматически скриптом `scripts/build_feature_map.py` при каждом внесении изменений в ветку `main`. Не редактируйте файл `index.md` вручную: правки будут перезаписаны.
 
 !!! info "Статусы требований"
 
@@ -21,8 +21,8 @@
 !!! info status-cols "Всего спецификаций: 7"
 
     - :lucide-file: бэклог: 1
-    - :lucide-file-pen-line: анализ: 1
-    - :lucide-file-check: готово к разработке: 1
+    - :lucide-file-pen-line: анализ: 2
+    - :lucide-file-check: готово к разработке: 0
     - :lucide-file-braces: разработка: 1
     - :lucide-file-text: реализовано: 3
 
@@ -46,8 +46,8 @@
 - *Карточка товара*: :lucide-file:: 1, :lucide-file-text:: 1
     - :lucide-file: [Блок похожих товаров (рекомендации)](product-recommendations.md#article-overview){data-preview data-status="backlog"}
     - :lucide-file-text: [Галерея изображений с зумом](product-gallery.md#article-overview){data-preview data-status="released"}
-- *Поиск и фильтрация*: :lucide-file-pen-line:: 1, :lucide-file-check:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 2
-    - :lucide-file-check: [Ещё одна новая фича](new-feature-copy.md#article-overview){data-preview data-status="ready"}
+- *Поиск и фильтрация*: :lucide-file-pen-line:: 2, :lucide-file-braces:: 1, :lucide-file-text:: 2
+    - :lucide-file-pen-line: [Ещё одна новая фича](new-feature-copy.md#article-overview){data-preview data-status="analysis"}
     - :lucide-file-pen-line: [Новая фича](new-feature.md#article-overview){data-preview data-status="analysis"}
     - :lucide-file-text: [Полнотекстовый поиск по названию](search-text.md#article-overview){data-preview data-status="released"}
     - :lucide-file-braces: [Фильтр по диапазону цен с ползунком](filter-price-slider.md#article-overview){data-preview data-status="development"}

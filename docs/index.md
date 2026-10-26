@@ -10,7 +10,7 @@
 
     Термины и правила оформления статей.
 
-- :lucide-map: [**Перечень функциональностей**](feature-map.md#article-overview){data-preview}
+- :lucide-map: [**Карта функциональностей**](feature-map.md#article-overview){data-preview}
 
     Иерархический перечень всех спецификаций со статусами и ссылками. Формируется автоматически.
 

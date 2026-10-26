@@ -1,12 +1,12 @@
-# Перечень функциональностей продукта {#feature-map}
+# Карта функциональностей {#feature-map}
 
 ## Описание {#article-overview}
 
-Перечень функциональностей - иерархическое оглавление спецификаций продукта: **модуль -> субмодуль -> функциональность**. Название каждой функциональности - ссылка на раздел «Описание» её спецификации (при наведении курсора показывается предпросмотр). Перед названием стоит значок статуса, а в заголовках модулей и субмодулей указано число функциональностей по статусам. Актуальные и архивные функциональности выведены отдельными разделами; нужные статусы можно выбрать кнопками фильтра в разделе «Отбор функциональностей продукта».
+Карта функциональностей - иерархическое оглавление спецификаций продукта: **модуль -> субмодуль -> функциональность**. Название каждой функциональности - ссылка на раздел «Описание» её спецификации (при наведении курсора показывается предпросмотр). Перед названием стоит значок статуса, а в заголовках модулей и субмодулей указано число функциональностей по статусам. Актуальные и архивные функциональности выведены отдельными разделами; нужные статусы можно выбрать кнопками фильтра в разделе «Отбор функциональностей продукта».
 
 !!! warning "Внимание"
 
-    На странице отображается содержимое файла `docs/feature-map.md`. Файл `docs/feature-map.md` формируется автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку `main`. Не редактируйте файл вручную: правки будут перезаписаны.
+    На странице отображается содержимое файла `docs/feature-map.md`. Файл `feature-map.md` формируется автоматически скриптом `scripts/build_feature_map.py` при каждом внесении изменений в ветку `main`. Не редактируйте файл `feature-map.md` вручную: правки будут перезаписаны.
 
 !!! info "Статусы требований"
 
@@ -22,8 +22,8 @@
 !!! info status-cols "Всего спецификаций: 18"
 
     - :lucide-file: бэклог: 3
-    - :lucide-file-pen-line: анализ: 1
-    - :lucide-file-check: готово к разработке: 2
+    - :lucide-file-pen-line: анализ: 2
+    - :lucide-file-check: готово к разработке: 1
     - :lucide-file-braces: разработка: 3
     - :lucide-file-text: реализовано: 6
     - :lucide-file-archive: архив: 3
@@ -46,12 +46,12 @@
 
 ## Актуальные функциональности {#active-features}
 
-- **Каталог товаров**: :lucide-file:: 1, :lucide-file-pen-line:: 1, :lucide-file-check:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 3
+- **Каталог товаров**: :lucide-file:: 1, :lucide-file-pen-line:: 2, :lucide-file-braces:: 1, :lucide-file-text:: 3
     - *Карточка товара*: :lucide-file:: 1, :lucide-file-text:: 1
         - :lucide-file: [Блок похожих товаров (рекомендации)](specifications/catalog/product-recommendations.md#article-overview){data-preview data-status="backlog"}
         - :lucide-file-text: [Галерея изображений с зумом](specifications/catalog/product-gallery.md#article-overview){data-preview data-status="released"}
-    - *Поиск и фильтрация*: :lucide-file-pen-line:: 1, :lucide-file-check:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 2
-        - :lucide-file-check: [Ещё одна новая фича](specifications/catalog/new-feature-copy.md#article-overview){data-preview data-status="ready"}
+    - *Поиск и фильтрация*: :lucide-file-pen-line:: 2, :lucide-file-braces:: 1, :lucide-file-text:: 2
+        - :lucide-file-pen-line: [Ещё одна новая фича](specifications/catalog/new-feature-copy.md#article-overview){data-preview data-status="analysis"}
         - :lucide-file-pen-line: [Новая фича](specifications/catalog/new-feature.md#article-overview){data-preview data-status="analysis"}
         - :lucide-file-text: [Полнотекстовый поиск по названию](specifications/catalog/search-text.md#article-overview){data-preview data-status="released"}
         - :lucide-file-braces: [Фильтр по диапазону цен с ползунком](specifications/catalog/filter-price-slider.md#article-overview){data-preview data-status="development"}

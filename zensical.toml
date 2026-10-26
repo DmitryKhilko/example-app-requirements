@@ -23,7 +23,7 @@ extra_javascript = ["javascripts/tiles.js", "javascripts/status-filter.js"]
 # BEGIN GENERATED NAV (scripts/build_feature_map.py) — не редактируйте вручную
 nav = [
     { "О программном продукте" = "index.md" },
-    { "Перечень функциональностей продукта" = "feature-map.md" },
+    { "Карта функциональностей" = "feature-map.md" },
     { "Глоссарий" = "glossary.md" },
     { "Спецификации" = [
         { "Каталог товаров" = [

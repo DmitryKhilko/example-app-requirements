@@ -6,7 +6,7 @@
 
 !!! warning "Внимание"
 
-    На странице отображается содержимое файла `docs/specifications/orders/index.md`. Файл `docs/specifications/orders/index.md` формируется автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку `main`. Не редактируйте файл вручную: правки будут перезаписаны.
+    На странице отображается содержимое файла `docs/specifications/orders/index.md`. Файл `index.md` формируется автоматически скриптом `scripts/build_feature_map.py` при каждом внесении изменений в ветку `main`. Не редактируйте файл `index.md` вручную: правки будут перезаписаны.
 
 !!! info "Статусы требований"
 
