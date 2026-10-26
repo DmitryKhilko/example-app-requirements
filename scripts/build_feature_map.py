@@ -357,11 +357,15 @@ def legend_block(statuses: list[str] | None = None) -> list[str]:
     return ['!!! info "Статусы требований"', "", *legend, ""]
 
 
-def warning_block() -> list[str]:
-    """Блок «Внимание» об автоматическом формировании файла (карта и индексы)."""
+def warning_block(page_file: str) -> list[str]:
+    """Блок «Внимание»: какой файл показан на странице и что он формируется автоматически.
+
+    page_file — путь к файлу относительно корня репозитория, например `docs/feature-map.md`.
+    """
     return ['!!! warning "Внимание"', "",
-            "    Файл формируется автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку "
-            "`main`. Не редактируйте файл вручную: правки будут перезаписаны.", ""]
+            f"    На странице отображается содержимое файла `{page_file}`. Файл `{page_file}` формируется "
+            "автоматически скриптом `scripts/build_feature_map.py` при слиянии изменений в ветку `main`. "
+            "Не редактируйте файл вручную: правки будут перезаписаны.", ""]
 
 
 def statistics_block(features: list[Feature], statuses: list[str] | None = None) -> list[str]:
@@ -401,7 +405,7 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
         "",
         PAGE_DESCRIPTION,
         "",
-        *warning_block(),
+        *warning_block(f"docs/{DEFAULT_OUTPUT.name}"),
         *legend_block(),
         "## Статистика функциональностей продукта в разрезе статусов {#statistics}",
         "",
@@ -459,7 +463,7 @@ def render_index(folder: Path, docs_dir: Path, features: list[Feature]) -> str:
         f"# {_escape(title)} {{#{slug}}}", "",
         f"## Описание {{#{DESCRIPTION_ANCHOR}}}", "",
         f"Спецификации модуля «{title}».", "",
-        *warning_block(),
+        *warning_block(f"docs/{(folder / INDEX_NAME).relative_to(docs_dir).as_posix()}"),
         *legend_block(legend_statuses),
         "## Статистика функциональностей модуля в разрезе статусов {#statistics}", "",
         *statistics_block(direct, legend_statuses),
