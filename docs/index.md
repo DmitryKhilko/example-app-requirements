@@ -6,12 +6,11 @@
 
 <div class="grid cards" markdown>
 
-- :lucide-book-open: [**Глоссарий**](glossary.md#article-overview)
+- :lucide-book-open: [**Глоссарий**](glossary.md#article-overview){data-preview}
 
-    Перечень терминов, описывающих предметную область программного продукта. Он необходим для того, чтобы вся команда 
-    одинаково понимала используемые понятия.
+    Термины и правила оформления статей.
 
-- :lucide-map: [**Карта функциональностей**](feature-map.md#article-overview)
+- :lucide-map: [**Карта функциональностей**](feature-map.md#article-overview){data-preview}
 
     Иерархический перечень всех спецификаций со статусами и ссылками. Формируется автоматически.
 

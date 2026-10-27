@@ -58,13 +58,6 @@
         - :lucide-file-text: [Полнотекстовый поиск по названию](specifications/catalog/search-text.md#article-overview){data-preview data-status="released"}
         - :lucide-file-braces: [Фильтр по диапазону цен с ползунком](specifications/catalog/filter-price-slider.md#article-overview){data-preview data-status="development"}
         - :lucide-file-text: [Фильтрация по категориям и тегам](specifications/catalog/filter-categories.md#article-overview){data-preview data-status="released"}
-- **Личный кабинет**: :lucide-file:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 2
-    - *Авторизация*: :lucide-file-braces:: 1, :lucide-file-text:: 1
-        - :lucide-file-text: [Вход по номеру телефона и SMS](specifications/profile/auth-sms.md#article-overview){data-preview data-status="released"}
-        - :lucide-file-braces: [Двухфакторная аутентификация (2FA)](specifications/profile/auth-2fa.md#article-overview){data-preview data-status="development"}
-    - *Профиль пользователя*: :lucide-file:: 1, :lucide-file-text:: 1
-        - :lucide-file: [Привязка профилей социальных сетей](specifications/profile/oauth.md#article-overview){data-preview data-status="backlog"}
-        - :lucide-file-text: [Редактирование персональных данных](specifications/profile/edit-data.md#article-overview){data-preview data-status="released"}
 - **Управление заказами**: :lucide-file:: 1, :lucide-file-check:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 1
     - *История заказов*: :lucide-file-check:: 1
         - :lucide-file-check: [Отмена заказа клиентом](specifications/orders/order-cancel.md#article-overview){data-preview data-status="ready"}
@@ -72,6 +65,13 @@
         - :lucide-file-braces: [Выбор адреса на интерактивной карте](specifications/orders/checkout-map.md#article-overview){data-preview data-status="development"}
         - :lucide-file-text: [Оплата через СБП / QR-код](specifications/orders/payment-sbp.md#article-overview){data-preview data-status="released"}
         - :lucide-file: [Покупка в рассрочку](specifications/orders/credit-pay.md#article-overview){data-preview data-status="backlog"}
+- **Личный кабинет**: :lucide-file:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 2
+    - *Авторизация*: :lucide-file-braces:: 1, :lucide-file-text:: 1
+        - :lucide-file-text: [Вход по номеру телефона и SMS](specifications/profile/auth-sms.md#article-overview){data-preview data-status="released"}
+        - :lucide-file-braces: [Двухфакторная аутентификация (2FA)](specifications/profile/auth-2fa.md#article-overview){data-preview data-status="development"}
+    - *Профиль пользователя*: :lucide-file:: 1, :lucide-file-text:: 1
+        - :lucide-file: [Привязка профилей социальных сетей](specifications/profile/oauth.md#article-overview){data-preview data-status="backlog"}
+        - :lucide-file-text: [Редактирование персональных данных](specifications/profile/edit-data.md#article-overview){data-preview data-status="released"}
 
 ## Архивные функциональности {#archived-features}
 
@@ -80,9 +80,9 @@
 - **Каталог товаров**: :lucide-file-archive:: 1
     - *Поиск и фильтрация*: :lucide-file-archive:: 1
         - :lucide-file-archive: [Старый текстовый поиск (устарел)](archive/specifications/catalog/search-old.md#article-overview){data-preview data-status="archived"}
-- **Личный кабинет**: :lucide-file-archive:: 1
-    - *Профиль пользователя*: :lucide-file-archive:: 1
-        - :lucide-file-archive: [Дисконтные карты старого образца](archive/specifications/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
 - **Управление заказами**: :lucide-file-archive:: 1
     - *История заказов*: :lucide-file-archive:: 1
         - :lucide-file-archive: [Выписка заказов в виде бумажного чека](archive/specifications/orders/print-receipt.md#article-overview){data-preview data-status="archived"}
+- **Личный кабинет**: :lucide-file-archive:: 1
+    - *Профиль пользователя*: :lucide-file-archive:: 1
+        - :lucide-file-archive: [Дисконтные карты старого образца](archive/specifications/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}

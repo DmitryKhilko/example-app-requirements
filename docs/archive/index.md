@@ -33,9 +33,9 @@
 - **Каталог товаров**: :lucide-file-archive:: 1
     - *Поиск и фильтрация*: :lucide-file-archive:: 1
         - :lucide-file-archive: [Старый текстовый поиск (устарел)](specifications/catalog/search-old.md#article-overview){data-preview data-status="archived"}
-- **Личный кабинет**: :lucide-file-archive:: 1
-    - *Профиль пользователя*: :lucide-file-archive:: 1
-        - :lucide-file-archive: [Дисконтные карты старого образца](specifications/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
 - **Управление заказами**: :lucide-file-archive:: 1
     - *История заказов*: :lucide-file-archive:: 1
         - :lucide-file-archive: [Выписка заказов в виде бумажного чека](specifications/orders/print-receipt.md#article-overview){data-preview data-status="archived"}
+- **Личный кабинет**: :lucide-file-archive:: 1
+    - *Профиль пользователя*: :lucide-file-archive:: 1
+        - :lucide-file-archive: [Дисконтные карты старого образца](specifications/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}

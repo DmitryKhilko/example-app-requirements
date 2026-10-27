@@ -55,13 +55,6 @@
         - :lucide-file-text: [Полнотекстовый поиск по названию](catalog/search-text.md#article-overview){data-preview data-status="released"}
         - :lucide-file-braces: [Фильтр по диапазону цен с ползунком](catalog/filter-price-slider.md#article-overview){data-preview data-status="development"}
         - :lucide-file-text: [Фильтрация по категориям и тегам](catalog/filter-categories.md#article-overview){data-preview data-status="released"}
-- **Личный кабинет**: :lucide-file:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 2
-    - *Авторизация*: :lucide-file-braces:: 1, :lucide-file-text:: 1
-        - :lucide-file-text: [Вход по номеру телефона и SMS](profile/auth-sms.md#article-overview){data-preview data-status="released"}
-        - :lucide-file-braces: [Двухфакторная аутентификация (2FA)](profile/auth-2fa.md#article-overview){data-preview data-status="development"}
-    - *Профиль пользователя*: :lucide-file:: 1, :lucide-file-text:: 1
-        - :lucide-file: [Привязка профилей социальных сетей](profile/oauth.md#article-overview){data-preview data-status="backlog"}
-        - :lucide-file-text: [Редактирование персональных данных](profile/edit-data.md#article-overview){data-preview data-status="released"}
 - **Управление заказами**: :lucide-file:: 1, :lucide-file-check:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 1
     - *История заказов*: :lucide-file-check:: 1
         - :lucide-file-check: [Отмена заказа клиентом](orders/order-cancel.md#article-overview){data-preview data-status="ready"}
@@ -69,3 +62,10 @@
         - :lucide-file-braces: [Выбор адреса на интерактивной карте](orders/checkout-map.md#article-overview){data-preview data-status="development"}
         - :lucide-file-text: [Оплата через СБП / QR-код](orders/payment-sbp.md#article-overview){data-preview data-status="released"}
         - :lucide-file: [Покупка в рассрочку](orders/credit-pay.md#article-overview){data-preview data-status="backlog"}
+- **Личный кабинет**: :lucide-file:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 2
+    - *Авторизация*: :lucide-file-braces:: 1, :lucide-file-text:: 1
+        - :lucide-file-text: [Вход по номеру телефона и SMS](profile/auth-sms.md#article-overview){data-preview data-status="released"}
+        - :lucide-file-braces: [Двухфакторная аутентификация (2FA)](profile/auth-2fa.md#article-overview){data-preview data-status="development"}
+    - *Профиль пользователя*: :lucide-file:: 1, :lucide-file-text:: 1
+        - :lucide-file: [Привязка профилей социальных сетей](profile/oauth.md#article-overview){data-preview data-status="backlog"}
+        - :lucide-file-text: [Редактирование персональных данных](profile/edit-data.md#article-overview){data-preview data-status="released"}

@@ -227,6 +227,11 @@ GENERATED_COMMENT = "<!-- generated: файл формируется автом�
 # Навигация (меню сайта): Zensical берёт названия папок из имён папок, поэтому меню собирается скриптом
 # и записывается в zensical.toml между маркерами NAV_BEGIN и NAV_END.
 DEFAULT_CONFIG = REPO_ROOT / "zensical.toml"
+# Порядок модулей в меню и картах: список названий модулей (поле `module`) в файле nav-order.yml рядом с zensical.toml.
+# Модули, которых нет в списке, идут в конце по алфавиту. Порядок спецификаций задаёт поле `order` в их метаданных.
+DEFAULT_NAV_ORDER = REPO_ROOT / "nav-order.yml"
+NAV_ORDER_KEY = "modules"
+ORDER_KEY = "order"
 NAV_BEGIN = "# BEGIN GENERATED NAV — не редактируйте вручную"
 NAV_END = "# END GENERATED NAV"
 # Служебные страницы в начале меню: (название, файл относительно docs). Отсутствующие файлы пропускаются.
@@ -258,6 +263,7 @@ class Feature:
     path: str = ""    # путь файла относительно папки docs (posix)
     slug: str = ""    # имя файла без расширения: по нему фичи ссылаются друг на друга
     relations: tuple[Relation, ...] = ()
+    order: int | None = None   # необязательное поле `order`: порядок в меню и картах (меньше — выше)
 
     @property
     def shown_status(self) -> str:
@@ -383,6 +389,32 @@ def parse_relations(meta: dict, path: Path, problems: Problems) -> tuple[Relatio
     return tuple(result)
 
 
+def parse_order(raw: object, path: Path, problems: Problems) -> int | None:
+    """Поле `order`: целое число (лучше с шагом 10). Не задано — спецификация идёт после пронумерованных."""
+    if raw is None or raw == "":
+        return None
+    if isinstance(raw, bool) or not isinstance(raw, int):
+        problems.error(path, f"`{ORDER_KEY}` должно быть целым числом, например 10 (указано: {raw!r})")
+        return None
+    return raw
+
+
+def load_module_order(path: Path, problems: Problems) -> list[str]:
+    """Список модулей из nav-order.yml (необязательный файл). Пустой список — порядок по алфавиту."""
+    if not path.exists():
+        return []
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError as exc:
+        problems.error(path, f"не удалось разобрать YAML: {exc}")
+        return []
+    modules = data.get(NAV_ORDER_KEY) if isinstance(data, dict) else None
+    if not isinstance(modules, list) or not all(isinstance(m, str) for m in modules):
+        problems.error(path, f"ожидается список названий модулей в ключе `{NAV_ORDER_KEY}`")
+        return []
+    return [clean(m) for m in modules]
+
+
 def collect_features(
     docs_dir: Path, output: Path, archive_dir_name: str, problems: Problems
 ) -> list[Feature]:
@@ -412,9 +444,11 @@ def collect_features(
         status = normalize_status(meta.get("status"), path, problems)
         archived = in_archive_dir or status == "archived"
 
+        order = parse_order(meta.get(ORDER_KEY), path, problems)
+
         link = quote(os.path.relpath(path, output.parent).replace(os.sep, "/")) + f"#{DESCRIPTION_ANCHOR}"
         features.append(Feature(module, submodule, name, link, status, archived,
-                                rel_to_docs.as_posix(), path.stem, parse_relations(meta, path, problems)))
+                                rel_to_docs.as_posix(), path.stem, parse_relations(meta, path, problems), order))
 
     check_relations(docs_dir, features, problems)
     return features
@@ -426,6 +460,22 @@ def collect_features(
 
 def _sort_key(text: str) -> str:
     return text.casefold()
+
+
+# Порядок модулей из nav-order.yml; заполняется в main().
+MODULE_ORDER: list[str] = []
+
+
+def _module_key(module: str) -> tuple[int, str]:
+    """Модули из nav-order.yml — в заданном порядке, остальные — после них по алфавиту."""
+    name = clean(module)
+    pos = MODULE_ORDER.index(name) if name in MODULE_ORDER else len(MODULE_ORDER)
+    return pos, _sort_key(name)
+
+
+def _feature_key(feature: Feature) -> tuple[bool, int, str]:
+    """Спецификации с `order` — по возрастанию номера, остальные — после них по алфавиту."""
+    return feature.order is None, feature.order or 0, _sort_key(feature.name)
 
 
 def _escape(text: str) -> str:
@@ -456,12 +506,12 @@ def render_tree(features: list[Feature], link=lambda f: f.link) -> list[str]:
         tree[feature.module][feature.submodule].append(feature)
 
     lines: list[str] = []
-    for module in sorted(tree, key=_sort_key):
+    for module in sorted(tree, key=_module_key):
         module_features = [f for subs in tree[module].values() for f in subs]
         lines.append(f"- **{_escape(module)}**: {status_counts(module_features)}")
         for submodule in sorted(tree[module], key=_sort_key):
             lines.append(f"    - *{_escape(submodule)}*: {status_counts(tree[module][submodule])}")
-            for feature in sorted(tree[module][submodule], key=lambda f: _sort_key(f.name)):
+            for feature in sorted(tree[module][submodule], key=_feature_key):
                 lines.append(
                     f"        - {feature.icon} [{_escape(feature.name)}]({link(feature)})"
                     + LINK_ATTRS_TEMPLATE.format(status=feature.shown_status)
@@ -605,7 +655,7 @@ def render_index(folder: Path, docs_dir: Path, features: list[Feature]) -> str:
         by_sub[f.submodule].append(f)
     for sub in sorted(by_sub, key=_sort_key):
         lines.append(f"- *{_escape(sub)}*: {status_counts(by_sub[sub])}")
-        for f in sorted(by_sub[sub], key=lambda x: _sort_key(x.name)):
+        for f in sorted(by_sub[sub], key=_feature_key):
             lines.append(f"    - {f.icon} [{_escape(f.name)}]({Path(f.path).name}#{DESCRIPTION_ANCHOR})"
                          + LINK_ATTRS_TEMPLATE.format(status=f.shown_status))
     return "\n".join(lines).rstrip() + "\n"
@@ -645,6 +695,25 @@ def section_tabs(features: list[Feature]) -> dict[str, list[Feature]]:
         if len(parts) > 1:
             tabs[parts[0]].append(f)
     return tabs
+
+
+def check_order(features: list[Feature], modules: list[str], docs_dir: Path, nav_order: Path, problems: Problems) -> None:
+    """Предупреждения: модуль из nav-order.yml не найден; повторяется модуль; два одинаковых `order` в одной папке."""
+    known = {clean(f.module) for f in features}
+    for name in dict.fromkeys(modules):
+        if name not in known:
+            problems.warning(nav_order, f"модуль «{name}» не найден ни в одной спецификации (опечатка?)")
+    for name in sorted({m for m in modules if modules.count(m) > 1}):
+        problems.warning(nav_order, f"модуль «{name}» указан в списке несколько раз")
+    seen: dict[tuple[Path, int], Feature] = {}
+    for f in features:
+        if f.order is None:
+            continue
+        key = ((docs_dir / f.path).parent, f.order)
+        if key in seen:
+            problems.warning(docs_dir / f.path, f"`{ORDER_KEY}: {f.order}` уже задан у `{seen[key].path}`: порядок этих страниц определит алфавит")
+        else:
+            seen[key] = f
 
 
 def build_indexes(docs_dir: Path, features: list[Feature], problems: Problems) -> dict[Path, str]:
@@ -691,6 +760,8 @@ def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Pat
     items = [f"    {{ {_toml(title)} = {_toml(page)} }}," for title, page in ROOT_PAGES if (docs_dir / page).exists()]
 
     folders = sorted({(docs_dir / f.path).parent for f in features})
+    # модули в меню — в порядке nav-order.yml (а не по именам папок); тот же порядок в «Спецификациях» и в архиве
+    folders.sort(key=lambda fo: _module_key(_folder_title(fo, features, docs_dir)))
     tabs: dict[str, list[Path]] = defaultdict(list)
     for folder in folders:
         tabs[folder.relative_to(docs_dir).parts[0]].append(folder)
@@ -706,7 +777,7 @@ def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Pat
             pages = [f for f in features if (docs_dir / f.path).parent == folder]
             title = _folder_title(folder, features, docs_dir)
             paths = ([f"{rel}/{INDEX_NAME}"] if (folder / INDEX_NAME) in wanted_indexes or (folder / INDEX_NAME).exists() else [])
-            paths += [f.path for f in sorted(pages, key=lambda x: _sort_key(x.name))]
+            paths += [f.path for f in sorted(pages, key=_feature_key)]
             body = ",\n".join(f"            {_toml(p)}" for p in paths)
             sections.append(f"        {{ {_toml(title)} = [\n{body},\n        ] }},")
         items.append(f"    {{ {_toml(FOLDER_TITLES.get(tab, tab))} = [\n" + "\n".join(sections) + "\n    ] },")
@@ -991,6 +1062,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="файл карты фичей")
     parser.add_argument("--archive-dir", default=DEFAULT_ARCHIVE_DIR_NAME, help="имя папки архива")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG, help="zensical.toml с блоком меню (nav)")
+    parser.add_argument("--nav-order", type=Path, default=DEFAULT_NAV_ORDER, help="nav-order.yml с порядком модулей в меню")
     parser.add_argument("--check", action="store_true", help="не писать файл, а проверить его актуальность")
     args = parser.parse_args(argv)
 
@@ -1001,6 +1073,8 @@ def main(argv: list[str] | None = None) -> int:
 
     problems = Problems()
     features = collect_features(docs_dir, args.output, args.archive_dir, problems)
+    MODULE_ORDER[:] = load_module_order(args.nav_order, problems)
+    check_order(features, MODULE_ORDER, docs_dir, args.nav_order, problems)
     if problems.errors:
         print(f"Карта не обновлена: ошибок в метаданных — {len(problems.errors)}.", file=sys.stderr)
         return 1
