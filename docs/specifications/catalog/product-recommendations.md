@@ -4,6 +4,7 @@ submodule: "Карточка товара"
 feature_name: "Блок похожих товаров (рекомендации)"
 status: "backlog"
 doc_version: "0.01"
+order: 40
 owner: "Дмитрий Хилько"
 relations:
   depends_on:

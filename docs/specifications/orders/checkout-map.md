@@ -4,6 +4,7 @@ submodule: "Оформление заказа"
 feature_name: "Выбор адреса на интерактивной карте"
 status: "development"
 doc_version: "0.01"
+order: 40
 owner: "Дмитрий Хилько"
 relations:
   related:

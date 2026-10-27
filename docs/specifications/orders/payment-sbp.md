@@ -3,6 +3,7 @@ module: "Управление заказами"
 submodule: "Оформление заказа"
 feature_name: "Оплата через СБП / QR-код"
 status: "released"
+order: 20
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 ---

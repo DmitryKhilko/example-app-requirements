@@ -4,6 +4,7 @@ submodule: "Поиск и фильтрация"
 feature_name: "Старый текстовый поиск (устарел)"
 status: "archived"
 doc_version: "0.01"
+order: 10
 owner: "Дмитрий Хилько"
 ---
 

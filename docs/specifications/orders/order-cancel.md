@@ -4,6 +4,7 @@ submodule: "История заказов"
 feature_name: "Отмена заказа клиентом"
 status: "ready"
 doc_version: "0.01"
+order: 30
 owner: "Дмитрий Хилько"
 relations:
   depends_on:

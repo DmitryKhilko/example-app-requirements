@@ -4,6 +4,7 @@ submodule: "Профиль пользователя"
 feature_name: "Привязка профилей социальных сетей"
 status: "backlog"
 doc_version: "0.01"
+order: 40
 owner: "Дмитрий Хилько"
 relations:
   related:

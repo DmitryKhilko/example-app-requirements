@@ -3,6 +3,7 @@ module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Полнотекстовый поиск по названию"
 status: "released"
+order: 50
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 relations:

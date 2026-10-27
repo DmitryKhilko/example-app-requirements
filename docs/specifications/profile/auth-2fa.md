@@ -4,6 +4,7 @@ submodule: "Авторизация"
 feature_name: "Двухфакторная аутентификация (2FA)"
 status: "development"
 doc_version: "0.01"
+order: 10
 owner: "Дмитрий Хилько"
 relations:
   extends:

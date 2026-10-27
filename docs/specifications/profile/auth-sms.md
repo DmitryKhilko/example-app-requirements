@@ -4,6 +4,7 @@ submodule: "Авторизация"
 feature_name: "Вход по номеру телефона и SMS"
 status: "released"
 doc_version: "0.01"
+order: 20
 owner: "Дмитрий Хилько"
 ---
 

@@ -4,6 +4,7 @@ submodule: "Оформление заказа"
 feature_name: "Покупка в рассрочку"
 status: "backlog"
 doc_version: "0.01"
+order: 10
 owner: "Дмитрий Хилько"
 relations:
   depends_on:
