@@ -14,11 +14,11 @@
 
     Иерархический перечень всех спецификаций со статусами и ссылками. Формируется автоматически.
 
-- :lucide-files: [**Спецификации**](specifications/catalog/index.md)
+- :lucide-files: [**Спецификации**](specifications/index.md)
 
     Действующие спецификации функциональностей по модулям.
 
-- :lucide-archive: [**Архив спецификаций**](archive/specifications/catalog/index.md)
+- :lucide-archive: [**Архив спецификаций**](archive/index.md)
 
     Отклонённые и устаревшие спецификации с сохранением структуры модулей.
 

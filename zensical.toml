@@ -26,6 +26,7 @@ nav = [
     { "Карта функциональностей" = "feature-map.md" },
     { "Глоссарий" = "glossary.md" },
     { "Спецификации" = [
+        "specifications/index.md",
         { "Каталог товаров" = [
             "specifications/catalog/index.md",
             "specifications/catalog/product-recommendations.md",
@@ -52,6 +53,7 @@ nav = [
         ] },
     ] },
     { "Архив спецификаций" = [
+        "archive/index.md",
         { "Каталог товаров" = [
             "archive/specifications/catalog/index.md",
             "archive/specifications/catalog/search-old.md",
@@ -81,9 +83,9 @@ features = [
     "navigation.tracking",
     "navigation.tabs",
     "navigation.tabs.sticky",
-    #"navigation.sections",      # группы в левом меню делает раскрытыми 
-    "navigation.prune",          # физическое удаление из HTML-кода странцы всех элементов из свёрнутой группы 
-    "navigation.path",          # «хлебные крошки»
+    #"navigation.sections",      # группы в левом меню делает раскрытыми
+    "navigation.prune",          # физическое удаление из HTML-кода страницы всех элементов из свёрнутой группы
+    "navigation.path",          # «хлебные крошки» (вместо неверного navigation.breadcrumbs)
     "navigation.indexes",
     "navigation.top",           # кнопка «Наверх»
     "navigation.footer",        # ссылки «Предыдущая / Следующая» внизу страницы
