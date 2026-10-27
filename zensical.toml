@@ -19,8 +19,8 @@ extra_javascript = ["javascripts/tiles.js", "javascripts/status-filter.js"]
 #*.yml
 #"""
 
-# Меню сайта формируется скриптом scripts/build_feature_map.py (названия папок по-русски).
-# BEGIN GENERATED NAV (scripts/build_feature_map.py) — не редактируйте вручную
+# Меню сайта формируется скриптом scripts/generate_docs.py (названия папок по-русски).
+# BEGIN GENERATED NAV — не редактируйте вручную
 nav = [
     { "О программном продукте" = "index.md" },
     { "Карта функциональностей" = "feature-map.md" },
