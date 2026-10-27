@@ -5,6 +5,13 @@ feature_name: "Блок похожих товаров (рекомендации)
 status: "backlog"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  depends_on:
+    - feature: filter-categories
+      note: "Похожие товары подбираются по категориям и тегам"
+  related:
+    - feature: product-gallery
+      note: "Соседние блоки карточки товара"
 ---
 
 # Блок похожих товаров (рекомендации) {#product-recommendations}
@@ -12,6 +19,35 @@ owner: "Дмитрий Хилько"
 ## Описание {#article-overview}
 
 Показ товаров, похожих на просматриваемый.
+
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Блок похожих товаров (рекомендации)</b><br/><i>бэклог</i>"]
+    n1["Фильтрация по категориям и тегам<br/><i>реализовано</i>"]
+    n2["Галерея изображений с зумом<br/><i>реализовано</i>"]
+    n0 -->|"зависит от"| n1
+    n0 -.-|"связана с"| n2
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+
+    click n1 "../filter-categories/"
+    click n2 "../product-gallery/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Зависит от | [Фильтрация по категориям и тегам](filter-categories.md#article-overview){data-preview} | :lucide-file-text: реализовано | Похожие товары подбираются по категориям и тегам |
+| Связана с | [Галерея изображений с зумом](product-gallery.md#article-overview){data-preview} | :lucide-file-text: реализовано | Соседние блоки карточки товара |
+
+<!-- relations:end -->
 
 ## Основной сценарий {#main-scenario}
 

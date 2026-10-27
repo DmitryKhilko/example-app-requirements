@@ -5,6 +5,10 @@ feature_name: "Двухфакторная аутентификация (2FA)"
 status: "development"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  extends:
+    - feature: auth-sms
+      note: "Добавляет второй шаг к входу по номеру телефона"
 ---
 
 # Двухфакторная аутентификация (2FA) {#auth-2fa}
@@ -12,6 +16,31 @@ owner: "Дмитрий Хилько"
 ## Описание {#article-overview}
 
 Дополнительное подтверждение входа одноразовым кодом из приложения-аутентификатора.
+
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Двухфакторная аутентификация (2FA)</b><br/><i>разработка</i>"]
+    n1["Вход по номеру телефона и SMS<br/><i>реализовано</i>"]
+    n0 -.->|"расширяет"| n1
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+
+    click n1 "../auth-sms/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Расширяет | [Вход по номеру телефона и SMS](auth-sms.md#article-overview){data-preview} | :lucide-file-text: реализовано | Добавляет второй шаг к входу по номеру телефона |
+
+<!-- relations:end -->
 
 ## Основной сценарий {#main-scenario}
 

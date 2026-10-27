@@ -13,6 +13,31 @@ owner: "Дмитрий Хилько"
 
 Пользователь ...
 
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Новая фича</b><br/><i>анализ</i>"]
+    n1["Ещё одна новая фича<br/><i>готово к разработке</i>"]
+    n0 -.-|"связана с"| n1
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+
+    click n1 "../new-feature-copy/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Связана с | [Ещё одна новая фича](new-feature-copy.md#article-overview){data-preview} | :lucide-file-check: готово к разработке | Копия-шаблон фичи |
+
+<!-- relations:end -->
+
 ## Основной сценарий {#main-scenario}
 
 1. ...

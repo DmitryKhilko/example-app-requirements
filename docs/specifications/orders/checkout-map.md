@@ -5,6 +5,10 @@ feature_name: "Выбор адреса на интерактивной карт�
 status: "development"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  related:
+    - feature: payment-sbp
+      note: "Соседние шаги оформления заказа: доставка и оплата"
 ---
 
 # Выбор адреса на интерактивной карте {#checkout-map}
@@ -12,6 +16,31 @@ owner: "Дмитрий Хилько"
 ## Описание {#article-overview}
 
 Выбор адреса доставки указанием точки на карте.
+
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Выбор адреса на интерактивной карте</b><br/><i>разработка</i>"]
+    n1["Оплата через СБП / QR-код<br/><i>реализовано</i>"]
+    n0 -.-|"связана с"| n1
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+
+    click n1 "../payment-sbp/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Связана с | [Оплата через СБП / QR-код](payment-sbp.md#article-overview){data-preview} | :lucide-file-text: реализовано | Соседние шаги оформления заказа: доставка и оплата |
+
+<!-- relations:end -->
 
 ## Основной сценарий {#main-scenario}
 

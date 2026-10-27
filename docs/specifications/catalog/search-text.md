@@ -5,6 +5,10 @@ feature_name: "Полнотекстовый поиск по названию"
 status: "released"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  replaces:
+    - feature: search-old
+      note: "Поиск по точному совпадению названия выведен из эксплуатации"
 ---
 
 # Полнотекстовый поиск по названию {#search-text}
@@ -12,6 +16,36 @@ owner: "Дмитрий Хилько"
 ## Описание {#article-overview}
 
 Пользователь находит товары, вводя часть названия в строку поиска.
+
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Полнотекстовый поиск по названию</b><br/><i>реализовано</i>"]
+    n1["Старый текстовый поиск (устарел)<br/><i>архив</i>"]
+    n2["Фильтр по диапазону цен с ползунком<br/><i>разработка</i>"]
+    n0 ==>|"заменяет"| n1
+    n0 -.-|"связана с"| n2
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+    class n1 archived
+
+    click n1 "../../../archive/specifications/catalog/search-old/"
+    click n2 "../filter-price-slider/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Заменяет | [Старый текстовый поиск (устарел)](../../archive/specifications/catalog/search-old.md#article-overview){data-preview} | :lucide-file-archive: архив | Поиск по точному совпадению названия выведен из эксплуатации |
+| Связана с | [Фильтр по диапазону цен с ползунком](filter-price-slider.md#article-overview){data-preview} | :lucide-file-braces: разработка | Границы диапазона цен вычисляются по текущей выдаче, в том числе поисковой |
+
+<!-- relations:end -->
 
 ## Основной сценарий {#main-scenario}
 

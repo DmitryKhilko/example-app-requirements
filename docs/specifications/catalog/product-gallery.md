@@ -13,6 +13,31 @@ owner: "Дмитрий Хилько"
 
 Просмотр изображений товара с увеличением.
 
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Галерея изображений с зумом</b><br/><i>реализовано</i>"]
+    n1["Блок похожих товаров (рекомендации)<br/><i>бэклог</i>"]
+    n0 -.-|"связана с"| n1
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+
+    click n1 "../product-recommendations/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Связана с | [Блок похожих товаров (рекомендации)](product-recommendations.md#article-overview){data-preview} | :lucide-file: бэклог | Соседние блоки карточки товара |
+
+<!-- relations:end -->
+
 ## Основной сценарий {#main-scenario}
 
 1. Пользователь выбирает миниатюру.

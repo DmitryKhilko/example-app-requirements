@@ -5,6 +5,13 @@ feature_name: "Фильтр по диапазону цен с ползунком
 status: "development"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  extends:
+    - feature: filter-categories
+      note: "Добавляет ещё один фильтр в ту же панель фильтров"
+  related:
+    - feature: search-text
+      note: "Границы диапазона цен вычисляются по текущей выдаче, в том числе поисковой"
 ---
 
 # Фильтр по диапазону цен с ползунком {#filter-price-slider}
@@ -12,6 +19,35 @@ owner: "Дмитрий Хилько"
 ## Описание {#article-overview}
 
 Ограничение выдачи по минимальной и максимальной цене.
+
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Фильтр по диапазону цен с ползунком</b><br/><i>разработка</i>"]
+    n1["Фильтрация по категориям и тегам<br/><i>реализовано</i>"]
+    n2["Полнотекстовый поиск по названию<br/><i>реализовано</i>"]
+    n0 -.->|"расширяет"| n1
+    n0 -.-|"связана с"| n2
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+
+    click n1 "../filter-categories/"
+    click n2 "../search-text/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Расширяет | [Фильтрация по категориям и тегам](filter-categories.md#article-overview){data-preview} | :lucide-file-text: реализовано | Добавляет ещё один фильтр в ту же панель фильтров |
+| Связана с | [Полнотекстовый поиск по названию](search-text.md#article-overview){data-preview} | :lucide-file-text: реализовано | Границы диапазона цен вычисляются по текущей выдаче, в том числе поисковой |
+
+<!-- relations:end -->
 
 ## Основной сценарий {#main-scenario}
 

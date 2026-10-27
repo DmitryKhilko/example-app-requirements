@@ -5,6 +5,10 @@ feature_name: "Отмена заказа клиентом"
 status: "ready"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  depends_on:
+    - feature: payment-sbp
+      note: "Возврат средств при отмене выполняется тем же способом, которым оплачен заказ"
 ---
 
 # Отмена заказа клиентом {#order-cancel}
@@ -12,6 +16,31 @@ owner: "Дмитрий Хилько"
 ## Описание {#article-overview}
 
 Клиент самостоятельно отменяет заказ, пока он не передан в доставку.
+
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Отмена заказа клиентом</b><br/><i>готово к разработке</i>"]
+    n1["Оплата через СБП / QR-код<br/><i>реализовано</i>"]
+    n0 -->|"зависит от"| n1
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+
+    click n1 "../payment-sbp/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Зависит от | [Оплата через СБП / QR-код](payment-sbp.md#article-overview){data-preview} | :lucide-file-text: реализовано | Возврат средств при отмене выполняется тем же способом, которым оплачен заказ |
+
+<!-- relations:end -->
 
 ## Основной сценарий {#main-scenario}
 

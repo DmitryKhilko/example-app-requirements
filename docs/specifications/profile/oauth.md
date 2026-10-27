@@ -5,6 +5,10 @@ feature_name: "Привязка профилей социальных сетей
 status: "backlog"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  related:
+    - feature: auth-sms
+      note: "Альтернативный способ входа"
 ---
 
 # Привязка профилей социальных сетей {#oauth}
@@ -12,6 +16,31 @@ owner: "Дмитрий Хилько"
 ## Описание {#article-overview}
 
 Привязка внешних аккаунтов для быстрого входа.
+
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Привязка профилей социальных сетей</b><br/><i>бэклог</i>"]
+    n1["Вход по номеру телефона и SMS<br/><i>реализовано</i>"]
+    n0 -.-|"связана с"| n1
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+
+    click n1 "../auth-sms/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Связана с | [Вход по номеру телефона и SMS](auth-sms.md#article-overview){data-preview} | :lucide-file-text: реализовано | Альтернативный способ входа |
+
+<!-- relations:end -->
 
 ## Основной сценарий {#main-scenario}
 

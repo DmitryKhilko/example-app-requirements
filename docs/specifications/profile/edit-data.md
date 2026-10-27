@@ -5,6 +5,10 @@ feature_name: "Редактирование персональных данны�
 status: "released"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  related:
+    - feature: auth-sms
+      note: "Смена номера телефона влияет на вход по SMS"
 ---
 
 # Редактирование персональных данных {#edit-data}
@@ -12,6 +16,35 @@ owner: "Дмитрий Хилько"
 ## Описание {#article-overview}
 
 Изменение имени, e-mail и контактных данных пользователя.
+
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Редактирование персональных данных</b><br/><i>реализовано</i>"]
+    n1["Покупка в рассрочку<br/><i>бэклог</i>"]
+    n2["Вход по номеру телефона и SMS<br/><i>реализовано</i>"]
+    n1 -->|"зависит от"| n0
+    n0 -.-|"связана с"| n2
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+
+    click n1 "../../orders/credit-pay/"
+    click n2 "../auth-sms/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Используется в | [Покупка в рассрочку](../orders/credit-pay.md#article-overview){data-preview} | :lucide-file: бэклог | Персональные данные клиента передаются в заявке банку-партнёру |
+| Связана с | [Вход по номеру телефона и SMS](auth-sms.md#article-overview){data-preview} | :lucide-file-text: реализовано | Смена номера телефона влияет на вход по SMS |
+
+<!-- relations:end -->
 
 ## Основной сценарий {#main-scenario}
 

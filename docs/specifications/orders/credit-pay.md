@@ -5,6 +5,13 @@ feature_name: "Покупка в рассрочку"
 status: "backlog"
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  depends_on:
+    - feature: edit-data
+      note: "Персональные данные клиента передаются в заявке банку-партнёру"
+  related:
+    - feature: payment-sbp
+      note: "Альтернативный способ оплаты при оформлении заказа"
 ---
 
 # Покупка в рассрочку {#credit-pay}
@@ -12,6 +19,35 @@ owner: "Дмитрий Хилько"
 ## Описание {#article-overview}
 
 Оплата заказа частями через банк-партнёр.
+
+<!-- relations:start — раздел формируется скриптом scripts/build_feature_map.py по полю `relations` метаданных, не редактируйте его вручную -->
+
+## Взаимосвязи {#relations}
+
+Схема и таблица показывают прямые связи этой функциональности с другими спецификациями.
+
+```mermaid
+flowchart LR
+    n0["<b>Покупка в рассрочку</b><br/><i>бэклог</i>"]
+    n1["Редактирование персональных данных<br/><i>реализовано</i>"]
+    n2["Оплата через СБП / QR-код<br/><i>реализовано</i>"]
+    n0 -->|"зависит от"| n1
+    n0 -.-|"связана с"| n2
+
+    classDef current stroke-width:3px
+    classDef archived stroke-dasharray:5 4
+    class n0 current
+
+    click n1 "../../profile/edit-data/"
+    click n2 "../payment-sbp/"
+```
+
+| Связь | Функциональность | Статус | Комментарий |
+|---|---|---|---|
+| Зависит от | [Редактирование персональных данных](../profile/edit-data.md#article-overview){data-preview} | :lucide-file-text: реализовано | Персональные данные клиента передаются в заявке банку-партнёру |
+| Связана с | [Оплата через СБП / QR-код](payment-sbp.md#article-overview){data-preview} | :lucide-file-text: реализовано | Альтернативный способ оплаты при оформлении заказа |
+
+<!-- relations:end -->
 
 ## Основной сценарий {#main-scenario}
 
