@@ -81,8 +81,9 @@ features = [
     "navigation.tracking",
     "navigation.tabs",
     "navigation.tabs.sticky",
-    "navigation.sections",
-    #"navigation.path",          # «хлебные крошки» (вместо неверного navigation.breadcrumbs)
+    #"navigation.sections",      # группы в левом меню делает раскрытыми 
+    "navigation.prune",          # физическое удаление из HTML-кода странцы всех элементов из свёрнутой группы 
+    "navigation.path",          # «хлебные крошки»
     "navigation.indexes",
     "navigation.top",           # кнопка «Наверх»
     "navigation.footer",        # ссылки «Предыдущая / Следующая» внизу страницы
