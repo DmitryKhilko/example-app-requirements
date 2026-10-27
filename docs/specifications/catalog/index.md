@@ -46,11 +46,11 @@
 ## Спецификации модуля {#specs}
 
 - *Карточка товара*: :lucide-file:: 1, :lucide-file-text:: 1
-    - :lucide-file: [Блок похожих товаров (рекомендации)](product-recommendations.md#article-overview){data-preview data-status="backlog"}
     - :lucide-file-text: [Галерея изображений с зумом](product-gallery.md#article-overview){data-preview data-status="released"}
+    - :lucide-file: [Блок похожих товаров (рекомендации)](product-recommendations.md#article-overview){data-preview data-status="backlog"}
 - *Поиск и фильтрация*: :lucide-file-pen-line:: 1, :lucide-file-check:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 2
-    - :lucide-file-check: [Ещё одна новая фича](new-feature-copy.md#article-overview){data-preview data-status="ready"}
-    - :lucide-file-pen-line: [Новая фича](new-feature.md#article-overview){data-preview data-status="analysis"}
-    - :lucide-file-text: [Полнотекстовый поиск по названию](search-text.md#article-overview){data-preview data-status="released"}
-    - :lucide-file-braces: [Фильтр по диапазону цен с ползунком](filter-price-slider.md#article-overview){data-preview data-status="development"}
     - :lucide-file-text: [Фильтрация по категориям и тегам](filter-categories.md#article-overview){data-preview data-status="released"}
+    - :lucide-file-braces: [Фильтр по диапазону цен с ползунком](filter-price-slider.md#article-overview){data-preview data-status="development"}
+    - :lucide-file-text: [Полнотекстовый поиск по названию](search-text.md#article-overview){data-preview data-status="released"}
+    - :lucide-file-pen-line: [Новая фича](new-feature.md#article-overview){data-preview data-status="analysis"}
+    - :lucide-file-check: [Ещё одна новая фича](new-feature-copy.md#article-overview){data-preview data-status="ready"}
