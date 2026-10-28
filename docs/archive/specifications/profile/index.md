@@ -14,17 +14,7 @@
 
 </div>
 
-<<<<<<< HEAD
 <div class="feature-filter" markdown>
-=======
-!!! info status-cols "Всего спецификаций: 1"
-
-    - :lucide-file-archive: архив: <span data-stat="archived">1</span>
-
-## Отбор функциональностей модуля {#feature-selection}
-
-Отбор (фильтрация) функциональностей модуля по названию субмодуля, функциональности.
->>>>>>> 246a4da50b1259642c7b29a410f7e3bdf7f83dfc
 
 <input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию субмодуля или функциональности" aria-label="Отбор по названию субмодуля или функциональности">
 
@@ -36,7 +26,6 @@
 
 ## Спецификации {#specs}
 
-<<<<<<< HEAD
 ???+ info "Информация"
 
     Спецификации из папки `docs/archive/` или со статусом `archived`.
@@ -47,7 +36,3 @@
 - :lucide-file-archive: [Дисконтные карты старого образца](legacy-cards.md#article-overview){data-preview data-status="archived"}
 
 </details>
-=======
-- *Профиль пользователя*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
-    - :lucide-file-archive: [Дисконтные карты старого образца](legacy-cards.md#article-overview){data-preview data-status="archived"}
->>>>>>> 246a4da50b1259642c7b29a410f7e3bdf7f83dfc

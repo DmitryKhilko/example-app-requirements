@@ -18,28 +18,7 @@
 
 </div>
 
-<<<<<<< HEAD
 <div class="feature-filter" markdown>
-=======
-!!! info status-cols "Всего спецификаций: 4"
-
-    - :lucide-file: бэклог: <span data-stat="backlog">1</span>
-    - :lucide-file-pen-line: анализ: <span data-stat="analysis">0</span>
-    - :lucide-file-check: готово к разработке: <span data-stat="ready">0</span>
-    - :lucide-file-braces: разработка: <span data-stat="development">1</span>
-    - :lucide-file-text: реализовано: <span data-stat="released">2</span>
-
-## Отбор функциональностей модуля {#feature-selection}
-
-Отбор (фильтрация) функциональностей модуля как по текущему статусу функциональности, так и по названию субмодуля, функциональности. При одновременном использовании отбора по статусу и названию отображается то, что подходит под оба условия. При этом автоматически обновляются итоги в разделе статистики функциональностей.
-
-[:lucide-file: бэклог](#){ .md-button data-filter="backlog" }
-[:lucide-file-pen-line: анализ](#){ .md-button data-filter="analysis" }
-[:lucide-file-check: готово к разработке](#){ .md-button data-filter="ready" }
-[:lucide-file-braces: разработка](#){ .md-button data-filter="development" }
-[:lucide-file-text: реализовано](#){ .md-button data-filter="released" }
-[Сбросить](#){ .md-button data-filter-reset="" }
->>>>>>> 246a4da50b1259642c7b29a410f7e3bdf7f83dfc
 
 <input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию субмодуля или функциональности" aria-label="Отбор по названию субмодуля или функциональности">
 
@@ -51,7 +30,6 @@
 
 ## Спецификации {#specs}
 
-<<<<<<< HEAD
 <details class="feature-block feature-submodule" markdown="block">
 <summary markdown="span">*Авторизация*: <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></summary>
 
@@ -67,11 +45,3 @@
 - :lucide-file: [Привязка профилей социальных сетей](oauth.md#article-overview){data-preview data-status="backlog"}
 
 </details>
-=======
-- *Авторизация*: <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span>
-    - :lucide-file-braces: [Двухфакторная аутентификация (2FA)](auth-2fa.md#article-overview){data-preview data-status="development"}
-    - :lucide-file-text: [Вход по номеру телефона и SMS](auth-sms.md#article-overview){data-preview data-status="released"}
-- *Профиль пользователя*: <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span>
-    - :lucide-file-text: [Редактирование персональных данных](edit-data.md#article-overview){data-preview data-status="released"}
-    - :lucide-file: [Привязка профилей социальных сетей](oauth.md#article-overview){data-preview data-status="backlog"}
->>>>>>> 246a4da50b1259642c7b29a410f7e3bdf7f83dfc
