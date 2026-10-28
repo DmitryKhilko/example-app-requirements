@@ -14,7 +14,17 @@
 
 </div>
 
+<<<<<<< HEAD
 <div class="feature-filter" markdown>
+=======
+!!! info status-cols "Всего спецификаций: 3"
+
+    - :lucide-file-archive: архив: <span data-stat="archived">3</span>
+
+## Отбор функциональностей раздела {#feature-selection}
+
+Отбор (фильтрация) функциональностей раздела по названию модуля, субмодуля, функциональности.
+>>>>>>> 246a4da50b1259642c7b29a410f7e3bdf7f83dfc
 
 <input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию модуля или субмодуля или функциональности" aria-label="Отбор по названию модуля или субмодуля или функциональности">
 
@@ -26,6 +36,7 @@
 
 ## Спецификации {#specs}
 
+<<<<<<< HEAD
 ???+ info "Информация"
 
     Спецификации из папки `docs/archive/` или со статусом `archived`.
@@ -68,3 +79,14 @@
 
 
 </details>
+=======
+- **Каталог товаров**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
+    - *Поиск и фильтрация*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
+        - :lucide-file-archive: [Старый текстовый поиск (устарел)](specifications/catalog/search-old.md#article-overview){data-preview data-status="archived"}
+- **Управление заказами**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
+    - *История заказов*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
+        - :lucide-file-archive: [Выписка заказов в виде бумажного чека](specifications/orders/print-receipt.md#article-overview){data-preview data-status="archived"}
+- **Личный кабинет**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
+    - *Профиль пользователя*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
+        - :lucide-file-archive: [Дисконтные карты старого образца](specifications/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
+>>>>>>> 246a4da50b1259642c7b29a410f7e3bdf7f83dfc

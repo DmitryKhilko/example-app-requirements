@@ -29,8 +29,13 @@
    Текст попадает в адрес страницы (?q=...).
 
    Итоги пересчитываются при каждом изменении отбора и всегда показывают то, что подходит под оба условия
+<<<<<<< HEAD
    (выбранные статусы и текст). Плитки (числа в `<span data-stat>`): число по каждому статусу.
    Счётчики в заголовках блоков модулей и субмодулей (`<span data-count-item>`) — то, что осталось
+=======
+   (выбранные статусы и текст). Раздел «Статистика» (числа в `<span data-stat>`): число по каждому статусу и
+   «Всего спецификаций». Счётчики в заголовках модулей и субмодулей (`<span data-count-item>`) — то, что осталось
+>>>>>>> 246a4da50b1259642c7b29a410f7e3bdf7f83dfc
    в списке под заголовком; статусы с нулём там скрываются.
 
    Если по условиям отбора ничего не найдено, под полем поиска появляется сообщение
@@ -184,6 +189,40 @@
       if (!items.length) return;
       var counts = {};
       Array.prototype.forEach.call(block.querySelectorAll("a[data-status]"), function (a) {
+        if (matches(a)) counts[a.getAttribute("data-status")] = (counts[a.getAttribute("data-status")] || 0) + 1;
+      });
+      var last = null;
+      items.forEach(function (item) {
+        var n = counts[item.getAttribute("data-count-item")] || 0;
+        item.querySelector("[data-count]").textContent = n;
+        item.hidden = n === 0;
+        item.classList.remove("is-last");
+        if (n) last = item;
+      });
+      if (last) last.classList.add("is-last");   /* после последнего видимого счётчика запятой нет */
+    });
+
+    /* Итоги в разделе «Статистика»: по каждому статусу и «Всего» — то, что подходит под оба условия отбора */
+    var byStatus = {}, total = 0;
+    Array.prototype.forEach.call(links, function (a) {
+      if (!matches(a)) return;
+      var code = a.getAttribute("data-status");
+      byStatus[code] = (byStatus[code] || 0) + 1;
+      total++;
+    });
+    var stats = root.querySelectorAll("[data-stat]");
+    Array.prototype.forEach.call(stats, function (el) { el.textContent = byStatus[el.getAttribute("data-stat")] || 0; });
+    if (stats.length) {
+      var title = stats[0].closest(".admonition") && stats[0].closest(".admonition").querySelector(".admonition-title");
+      if (title) title.textContent = title.textContent.replace(/\d+\s*$/, total);
+    }
+
+    /* Счётчики в заголовках модулей и субмодулей: что осталось в списке под заголовком */
+    Array.prototype.forEach.call(root.querySelectorAll("li"), function (li) {
+      var items = Array.prototype.filter.call(li.children, function (el) { return el.hasAttribute("data-count-item"); });
+      if (!items.length) return;
+      var counts = {};
+      Array.prototype.forEach.call(li.querySelectorAll("a[data-status]"), function (a) {
         if (matches(a)) counts[a.getAttribute("data-status")] = (counts[a.getAttribute("data-status")] || 0) + 1;
       });
       var last = null;
