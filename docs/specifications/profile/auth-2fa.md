@@ -3,6 +3,7 @@ module: "Личный кабинет"
 submodule: "Авторизация"
 feature_name: "Двухфакторная аутентификация (2FA)"
 status: "development"
+icon: lucide/file-braces
 doc_version: "0.01"
 order: 10
 owner: "Дмитрий Хилько"

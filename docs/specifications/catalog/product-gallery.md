@@ -3,6 +3,7 @@ module: "Каталог товаров"
 submodule: "Карточка товара"
 feature_name: "Галерея изображений с зумом"
 status: "released"
+icon: lucide/file-text
 order: 30
 doc_version: "0.01"
 owner: "Дмитрий Хилько"

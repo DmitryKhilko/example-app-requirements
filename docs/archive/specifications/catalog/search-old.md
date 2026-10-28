@@ -3,6 +3,7 @@ module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Старый текстовый поиск (устарел)"
 status: "archived"
+icon: lucide/file-archive
 doc_version: "0.01"
 order: 10
 owner: "Дмитрий Хилько"

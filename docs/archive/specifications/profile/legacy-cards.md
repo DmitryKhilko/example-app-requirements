@@ -3,6 +3,7 @@ module: "Личный кабинет"
 submodule: "Профиль пользователя"
 feature_name: "Дисконтные карты старого образца"
 status: "archived"
+icon: lucide/file-archive
 order: 10
 doc_version: "0.01"
 owner: "Дмитрий Хилько"

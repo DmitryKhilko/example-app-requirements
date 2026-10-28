@@ -3,6 +3,7 @@ module: "Личный кабинет"
 submodule: "Авторизация"
 feature_name: "Вход по номеру телефона и SMS"
 status: "released"
+icon: lucide/file-text
 doc_version: "0.01"
 order: 20
 owner: "Дмитрий Хилько"

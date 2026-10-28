@@ -3,6 +3,7 @@ module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Ещё одна новая фича"
 status: "ready"
+icon: lucide/file-check
 order: 70
 doc_version: "0.02"
 owner: "Дмитрий Хилько"

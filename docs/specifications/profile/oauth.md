@@ -3,6 +3,7 @@ module: "Личный кабинет"
 submodule: "Профиль пользователя"
 feature_name: "Привязка профилей социальных сетей"
 status: "backlog"
+icon: lucide/file
 doc_version: "0.01"
 order: 40
 owner: "Дмитрий Хилько"

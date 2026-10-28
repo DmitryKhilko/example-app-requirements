@@ -3,6 +3,7 @@ module: "Управление заказами"
 submodule: "История заказов"
 feature_name: "Отмена заказа клиентом"
 status: "ready"
+icon: lucide/file-check
 doc_version: "0.01"
 order: 30
 owner: "Дмитрий Хилько"

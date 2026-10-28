@@ -3,6 +3,7 @@ module: "Личный кабинет"
 submodule: "Профиль пользователя"
 feature_name: "Редактирование персональных данных"
 status: "released"
+icon: lucide/file-text
 doc_version: "0.01"
 order: 30
 owner: "Дмитрий Хилько"

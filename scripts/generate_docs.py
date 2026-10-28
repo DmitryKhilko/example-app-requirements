@@ -49,7 +49,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import posixpath
 import re
@@ -233,9 +232,9 @@ DEFAULT_CONFIG = REPO_ROOT / "zensical.toml"
 DEFAULT_NAV_ORDER = REPO_ROOT / "nav-order.yml"
 NAV_ORDER_KEY = "modules"
 ORDER_KEY = "order"
-# Статусы страниц для значков в левом меню: `docs/nav-status.json` ({"specifications/catalog/search-text/": "released", ...}).
-# Файл читает theme-custom/javascripts/nav-status.js; он формируется скриптом и вручную не правится.
-NAV_STATUS_FILE = "nav-status.json"
+# Значок статуса в левом меню: поле `icon` метаданных спецификации (значок из набора lucide, встроенного в Zensical).
+# Скрипт сам ведёт это поле по `status`; вручную его не заполняют.
+ICON_KEY = "icon"
 NAV_BEGIN = "# BEGIN GENERATED NAV — не редактируйте вручную"
 NAV_BEGIN_PREFIX = "# BEGIN GENERATED NAV"
 NAV_END = "# END GENERATED NAV"
@@ -809,25 +808,6 @@ def sync_nav(config: Path, nav: str, check: bool, problems: Problems) -> bool:
     return True
 
 
-def render_nav_status(features: list[Feature]) -> str:
-    """JSON «адрес страницы -> статус» для значков статусов в левом меню (адреса — как на сайте, с `/` на конце)."""
-    data = {}
-    for f in features:
-        page = f.path.removesuffix(".md")
-        data[page + "/" if DIRECTORY_URLS else page + ".html"] = f.shown_status
-    return json.dumps(data, ensure_ascii=False, indent=1, sort_keys=True) + "\n"
-
-
-def sync_file(path: Path, content: str, check: bool) -> bool:
-    """Записывает файл, если содержимое изменилось (или только проверяет). Возвращает True, если он изменился/устарел."""
-    current = path.read_text(encoding="utf-8") if path.exists() else None
-    if current == content:
-        return False
-    if not check:
-        path.write_text(content, encoding="utf-8", newline="\n")
-    return True
-
-
 def sync_indexes(indexes: dict[Path, str], check: bool, stale: list[Path] = ()) -> tuple[int, int]:
     """Записывает индексы, удаляет лишние (или только проверяет). Возвращает (изменено, всего)."""
     changed = 0
@@ -1063,6 +1043,40 @@ def place_relations_block(text: str, block: str) -> str | None:
     return head + "\n\n" + block + "\n\n" + "\n".join(lines[position:])
 
 
+def status_icon(feature: Feature) -> str:
+    """Значок статуса для поля `icon`: `:lucide-file-check:` -> `lucide/file-check` (тот же рисунок, что в карте)."""
+    return "lucide/" + STATUS_ICONS[feature.shown_status].strip(":").removeprefix("lucide-")
+
+
+def set_icon(text: str, icon: str) -> str | None:
+    """Ставит поле `icon` в метаданные: заменяет имеющееся или вставляет после `status`. None — метаданных нет."""
+    match = FRONT_MATTER_RE.match(text)
+    if not match:
+        return None
+    block, line = match.group(1), f"{ICON_KEY}: {icon}"
+    if re.search(rf"(?m)^{ICON_KEY}:.*$", block):
+        block = re.sub(rf"(?m)^{ICON_KEY}:.*$", lambda _: line, block, count=1)
+    elif re.search(r"(?m)^status:.*$", block):
+        block = re.sub(r"(?m)^(status:.*)$", lambda m: f"{m.group(1)}\n{line}", block, count=1)
+    else:
+        block = f"{block}\n{line}"
+    return text[:match.start(1)] + block + text[match.end(1):]
+
+
+def sync_icons(docs_dir: Path, features: list[Feature], check: bool) -> int:
+    """Приводит поле `icon` в спецификациях в соответствие со статусом (или только проверяет). Возвращает число файлов."""
+    changed = 0
+    for f in features:
+        path = docs_dir / f.path
+        text = path.read_text(encoding="utf-8")
+        new = set_icon(text, status_icon(f))
+        if new is not None and new != text:
+            changed += 1
+            if not check:
+                path.write_text(new, encoding="utf-8", newline="\n")
+    return changed
+
+
 def sync_relations(docs_dir: Path, features: list[Feature], check: bool, problems: Problems) -> int:
     """Обновляет раздел «Взаимосвязи» во всех спецификациях (или только проверяет). Возвращает число изменённых файлов."""
     by_slug, incoming = relation_index(features)
@@ -1110,8 +1124,6 @@ def main(argv: list[str] | None = None) -> int:
     indexes = build_indexes(docs_dir, features, problems)
     stale = stale_indexes(docs_dir, indexes)
     nav = render_nav(docs_dir, features, indexes)
-    status_file = docs_dir / NAV_STATUS_FILE
-    status_json = render_nav_status(features)
 
     if args.check:
         stale_idx, _ = sync_indexes(indexes, check=True, stale=stale)
@@ -1119,13 +1131,13 @@ def main(argv: list[str] | None = None) -> int:
         if problems.errors:
             return 1
         rel_stale = sync_relations(docs_dir, features, True, problems)
-        status_stale = sync_file(status_file, status_json, True)
-        if current != content or stale_idx or nav_stale or rel_stale or status_stale:
+        icon_stale = sync_icons(docs_dir, features, True)
+        if current != content or stale_idx or nav_stale or rel_stale or icon_stale:
             print("Карта фичей, индексы папок, меню или разделы «Взаимосвязи» устарели: запустите "
                   "scripts/generate_docs.py "
                   f"(карта: {'устарела' if current != content else 'ок'}, индексов: {stale_idx}, "
                   f"меню: {'устарело' if nav_stale else 'ок'}, взаимосвязей в спецификациях: {rel_stale}, "
-                  f"статусы меню: {'устарели' if status_stale else 'ок'}).",
+                  f"значков статуса в метаданных: {icon_stale}).",
                   file=sys.stderr)
             return 1
         print("Карта фичей, индексы папок, меню и разделы «Взаимосвязи» актуальны.")
@@ -1142,8 +1154,7 @@ def main(argv: list[str] | None = None) -> int:
     if problems.errors:
         return 1
     print("Меню (nav) обновлено." if nav_changed else "Меню (nav) без изменений.")
-    print(f"Статусы для значков меню ({NAV_STATUS_FILE}) " +
-          ("обновлены." if sync_file(status_file, status_json, False) else "без изменений."))
+    print(f"Значки статуса (`{ICON_KEY}`) в метаданных спецификаций: изменено {sync_icons(docs_dir, features, False)}.")
     rel_changed = sync_relations(docs_dir, features, False, problems)
     print(f"Разделы «{RELATIONS_TITLE}» в спецификациях: изменено {rel_changed} (всего {len(features)}).")
     return 0

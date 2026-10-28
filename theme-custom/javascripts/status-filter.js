@@ -30,9 +30,9 @@
    Почему обработчик клика повешен на весь документ, а не на кнопки. На сайте включена
    мгновенная навигация (navigation.instant): содержимое страниц подменяется без полной
    перезагрузки, и кнопки каждый раз создаются заново. Обработчик на document создаётся
-   один раз и работает всегда (делегирование событий, как в tiles.js). Применение выбора
-   из адреса страницы выполняет init(): его запускает наблюдатель MutationObserver после
-   каждой смены содержимого; повторные вызовы безопасны.
+   один раз и работает всегда (делегирование событий). Применение выбора
+   из адреса страницы выполняет init(): его запускает событие темы document$ после загрузки и
+   после каждой мгновенной навигации; повторные вызовы безопасны.
    ========================================================================== */
 
 (function () {
@@ -189,14 +189,12 @@
     apply();
   }
 
-  var scheduled = false;
-  function schedule() {
-    if (scheduled) return;
-    scheduled = true;
-    window.requestAnimationFrame(function () { scheduled = false; init(); });
+  /* document$ — событие темы: срабатывает после загрузки страницы и после каждой мгновенной навигации */
+  if (typeof document$ !== "undefined") {
+    document$.subscribe(init);
+  } else if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
   }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
-  else init();
-  new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true });
 })();
