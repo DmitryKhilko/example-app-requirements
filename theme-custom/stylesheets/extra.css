@@ -271,3 +271,12 @@
 .md-nav__link[data-status]::after {
   display: none !important;
 }
+
+/* Правое оглавление страницы («Содержание»): значков статуса нет. Тема добавляет значок статуса страницы
+   к каждому пункту оглавления, поэтому он скрыт здесь (в том числе в выдвижном меню на узких экранах). */
+.md-sidebar--secondary .md-status,
+.md-nav--secondary .md-status,
+.md-sidebar--secondary .nav-status-icon,
+.md-nav--secondary .nav-status-icon {
+  display: none !important;
+}

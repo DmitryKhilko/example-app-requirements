@@ -11,6 +11,7 @@
    2. Этот скрипт загружает файл, находит в левом меню ссылки на эти страницы, ставит перед названием
       <span class="nav-status-icon" data-status="…"> (рисунок — в extra.css, разделы 8 и 9), а все прочие
       вложенные элементы ссылки, кроме названия, прячет (штатный значок темы).
+   Правое оглавление страницы («Содержание») значков не имеет.
    Скрипт не зависит от разметки конкретной версии темы. Если файл статусов не загрузился,
    ничего не меняется и работает штатное отображение темы.
 
@@ -40,6 +41,8 @@
     if (!map) return;
     var links = document.querySelectorAll("a.md-nav__link[href]");
     Array.prototype.forEach.call(links, function (a) {
+      // Правое оглавление страницы («Содержание») и якорные ссылки значков статуса не получают
+      if (a.closest(".md-nav--secondary, .md-sidebar--secondary") || a.getAttribute("href").charAt(0) === "#") return;
       var status = map[pageKey(a.href)];
       if (!status || a.getAttribute("data-status") === status) return;
       if (a.querySelector("nav, ul")) return;            // ссылка-группа с вложенными страницами
