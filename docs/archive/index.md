@@ -18,7 +18,7 @@
 
 !!! info status-cols "Всего спецификаций: 3"
 
-    - :lucide-file-archive: архив: 3
+    - :lucide-file-archive: архив: <span data-stat="archived">3</span>
 
 ## Отбор функциональностей раздела {#feature-selection}
 
@@ -30,12 +30,12 @@
 
 ## Спецификации раздела {#specs}
 
-- **Каталог товаров**: :lucide-file-archive:: 1
-    - *Поиск и фильтрация*: :lucide-file-archive:: 1
+- **Каталог товаров**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
+    - *Поиск и фильтрация*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
         - :lucide-file-archive: [Старый текстовый поиск (устарел)](specifications/catalog/search-old.md#article-overview){data-preview data-status="archived"}
-- **Управление заказами**: :lucide-file-archive:: 1
-    - *История заказов*: :lucide-file-archive:: 1
+- **Управление заказами**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
+    - *История заказов*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
         - :lucide-file-archive: [Выписка заказов в виде бумажного чека](specifications/orders/print-receipt.md#article-overview){data-preview data-status="archived"}
-- **Личный кабинет**: :lucide-file-archive:: 1
-    - *Профиль пользователя*: :lucide-file-archive:: 1
+- **Личный кабинет**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
+    - *Профиль пользователя*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
         - :lucide-file-archive: [Дисконтные карты старого образца](specifications/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}

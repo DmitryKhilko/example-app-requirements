@@ -21,6 +21,12 @@
    названию действуют одновременно: показываются функциональности, подходящие под оба условия.
    Текст попадает в адрес страницы (?q=...).
 
+   Итоги пересчитываются при каждом изменении отбора. Раздел «Статистика» (числа в `<span data-stat>`):
+   по каждому статусу — сколько функциональностей подходит под ТЕКСТ отбора независимо от выбранных кнопок
+   (видно, сколько даст каждая кнопка), «Всего спецификаций» — сколько подходит под оба условия.
+   Счётчики в заголовках модулей и субмодулей (`<span data-count-item>`) показывают то, что осталось в списке под
+   заголовком (оба условия); статусы с нулём скрываются.
+
    Если по условиям отбора ничего не найдено, под полем поиска появляется сообщение
    «Нет данных, соответствующих условиям отбора» с кнопкой «Сбросить» (снимает фильтр по
    статусам и очищает поле поиска).
@@ -135,6 +141,40 @@
       });
       var show = !inSection.length || inSection.some(matches);
       section.forEach(function (el) { setVisible(el, show); });
+    });
+
+    /* Итоги в разделе «Статистика»: по статусам — только по тексту отбора, «Всего» — по обоим условиям */
+    var byStatus = {}, total = 0;
+    Array.prototype.forEach.call(links, function (a) {
+      if (!queryOk(a)) return;
+      var code = a.getAttribute("data-status");
+      byStatus[code] = (byStatus[code] || 0) + 1;
+      if (statusOk(a)) total++;
+    });
+    var stats = root.querySelectorAll("[data-stat]");
+    Array.prototype.forEach.call(stats, function (el) { el.textContent = byStatus[el.getAttribute("data-stat")] || 0; });
+    if (stats.length) {
+      var title = stats[0].closest(".admonition") && stats[0].closest(".admonition").querySelector(".admonition-title");
+      if (title) title.textContent = title.textContent.replace(/\d+\s*$/, total);
+    }
+
+    /* Счётчики в заголовках модулей и субмодулей: что осталось в списке под заголовком */
+    Array.prototype.forEach.call(root.querySelectorAll("li"), function (li) {
+      var items = Array.prototype.filter.call(li.children, function (el) { return el.hasAttribute("data-count-item"); });
+      if (!items.length) return;
+      var counts = {};
+      Array.prototype.forEach.call(li.querySelectorAll("a[data-status]"), function (a) {
+        if (matches(a)) counts[a.getAttribute("data-status")] = (counts[a.getAttribute("data-status")] || 0) + 1;
+      });
+      var last = null;
+      items.forEach(function (item) {
+        var n = counts[item.getAttribute("data-count-item")] || 0;
+        item.querySelector("[data-count]").textContent = n;
+        item.hidden = n === 0;
+        item.classList.remove("is-last");
+        if (n) last = item;
+      });
+      if (last) last.classList.add("is-last");   /* после последнего видимого счётчика запятой нет */
     });
 
     /* Состояние кнопок */

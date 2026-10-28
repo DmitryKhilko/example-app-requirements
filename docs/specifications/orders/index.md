@@ -22,11 +22,11 @@
 
 !!! info status-cols "Всего спецификаций: 4"
 
-    - :lucide-file: бэклог: 1
-    - :lucide-file-pen-line: анализ: 0
-    - :lucide-file-check: готово к разработке: 1
-    - :lucide-file-braces: разработка: 1
-    - :lucide-file-text: реализовано: 1
+    - :lucide-file: бэклог: <span data-stat="backlog">1</span>
+    - :lucide-file-pen-line: анализ: <span data-stat="analysis">0</span>
+    - :lucide-file-check: готово к разработке: <span data-stat="ready">1</span>
+    - :lucide-file-braces: разработка: <span data-stat="development">1</span>
+    - :lucide-file-text: реализовано: <span data-stat="released">1</span>
 
 ## Отбор функциональностей модуля {#feature-selection}
 
@@ -45,9 +45,9 @@
 
 ## Спецификации модуля {#specs}
 
-- *История заказов*: :lucide-file-check:: 1
+- *История заказов*: <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span>
     - :lucide-file-check: [Отмена заказа клиентом](order-cancel.md#article-overview){data-preview data-status="ready"}
-- *Оформление заказа*: :lucide-file:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 1
+- *Оформление заказа*: <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span>
     - :lucide-file: [Покупка в рассрочку](credit-pay.md#article-overview){data-preview data-status="backlog"}
     - :lucide-file-text: [Оплата через СБП / QR-код](payment-sbp.md#article-overview){data-preview data-status="released"}
     - :lucide-file-braces: [Выбор адреса на интерактивной карте](checkout-map.md#article-overview){data-preview data-status="development"}

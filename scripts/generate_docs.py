@@ -489,14 +489,16 @@ def _escape(text: str) -> str:
 def status_counts(features: list[Feature]) -> str:
     """Счётчики фич по значкам статусов, например `:lucide-inbox:: 3, :lucide-rocket:: 6`.
 
-    Порядок — как в STATUS_ICONS; статусы без фич не выводятся.
+    Порядок — как в STATUS_ICONS; статусы без фич не выводятся. Каждый счётчик — `<span data-count-item>` с числом
+    в `<span data-count>`: при отборе их пересчитывает status-filter.js (запятые между счётчиками рисует
+    extra.css, раздел 9; без JavaScript страница показывает итоги без отбора).
     """
     parts = []
     for status, icon in STATUS_ICONS.items():
         count = sum(1 for f in features if f.shown_status == status)
         if count:
-            parts.append(f"{icon}: {count}")
-    return ", ".join(parts)
+            parts.append(f'<span data-count-item="{status}">{icon}: <span data-count>{count}</span></span>')
+    return " ".join(parts)
 
 
 def render_tree(features: list[Feature], link=lambda f: f.link) -> list[str]:
@@ -551,7 +553,8 @@ def warning_block(page_file: str) -> list[str]:
 
 def statistics_block(features: list[Feature], statuses: list[str] | None = None) -> list[str]:
     """Блок «Всего спецификаций: N» — две колонки по 3 статуса (класс `status-cols`, см. extra.css, раздел 4)."""
-    counts = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {sum(1 for f in features if f.shown_status == s)}"
+    # Числа в <span data-stat>: при отборе их пересчитывает status-filter.js (по тексту отбора, без учёта выбранных статусов)
+    counts = [f'    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: <span data-stat="{s}">{sum(1 for f in features if f.shown_status == s)}</span>'
               for s in _statuses(statuses)]
     return [f'!!! info status-cols "Всего спецификаций: {len(features)}"', "", *counts, ""]
 

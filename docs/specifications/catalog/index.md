@@ -22,11 +22,11 @@
 
 !!! info status-cols "Всего спецификаций: 7"
 
-    - :lucide-file: бэклог: 1
-    - :lucide-file-pen-line: анализ: 1
-    - :lucide-file-check: готово к разработке: 1
-    - :lucide-file-braces: разработка: 1
-    - :lucide-file-text: реализовано: 3
+    - :lucide-file: бэклог: <span data-stat="backlog">1</span>
+    - :lucide-file-pen-line: анализ: <span data-stat="analysis">1</span>
+    - :lucide-file-check: готово к разработке: <span data-stat="ready">1</span>
+    - :lucide-file-braces: разработка: <span data-stat="development">1</span>
+    - :lucide-file-text: реализовано: <span data-stat="released">3</span>
 
 ## Отбор функциональностей модуля {#feature-selection}
 
@@ -45,10 +45,10 @@
 
 ## Спецификации модуля {#specs}
 
-- *Карточка товара*: :lucide-file:: 1, :lucide-file-text:: 1
+- *Карточка товара*: <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span>
     - :lucide-file-text: [Галерея изображений с зумом](product-gallery.md#article-overview){data-preview data-status="released"}
     - :lucide-file: [Блок похожих товаров (рекомендации)](product-recommendations.md#article-overview){data-preview data-status="backlog"}
-- *Поиск и фильтрация*: :lucide-file-pen-line:: 1, :lucide-file-check:: 1, :lucide-file-braces:: 1, :lucide-file-text:: 2
+- *Поиск и фильтрация*: <span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span>
     - :lucide-file-text: [Фильтрация по категориям и тегам](filter-categories.md#article-overview){data-preview data-status="released"}
     - :lucide-file-braces: [Фильтр по диапазону цен с ползунком](filter-price-slider.md#article-overview){data-preview data-status="development"}
     - :lucide-file-text: [Полнотекстовый поиск по названию](search-text.md#article-overview){data-preview data-status="released"}

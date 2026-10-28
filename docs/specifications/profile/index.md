@@ -22,11 +22,11 @@
 
 !!! info status-cols "Всего спецификаций: 4"
 
-    - :lucide-file: бэклог: 1
-    - :lucide-file-pen-line: анализ: 0
-    - :lucide-file-check: готово к разработке: 0
-    - :lucide-file-braces: разработка: 1
-    - :lucide-file-text: реализовано: 2
+    - :lucide-file: бэклог: <span data-stat="backlog">1</span>
+    - :lucide-file-pen-line: анализ: <span data-stat="analysis">0</span>
+    - :lucide-file-check: готово к разработке: <span data-stat="ready">0</span>
+    - :lucide-file-braces: разработка: <span data-stat="development">1</span>
+    - :lucide-file-text: реализовано: <span data-stat="released">2</span>
 
 ## Отбор функциональностей модуля {#feature-selection}
 
@@ -45,9 +45,9 @@
 
 ## Спецификации модуля {#specs}
 
-- *Авторизация*: :lucide-file-braces:: 1, :lucide-file-text:: 1
+- *Авторизация*: <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span>
     - :lucide-file-braces: [Двухфакторная аутентификация (2FA)](auth-2fa.md#article-overview){data-preview data-status="development"}
     - :lucide-file-text: [Вход по номеру телефона и SMS](auth-sms.md#article-overview){data-preview data-status="released"}
-- *Профиль пользователя*: :lucide-file:: 1, :lucide-file-text:: 1
+- *Профиль пользователя*: <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span>
     - :lucide-file-text: [Редактирование персональных данных](edit-data.md#article-overview){data-preview data-status="released"}
     - :lucide-file: [Привязка профилей социальных сетей](oauth.md#article-overview){data-preview data-status="backlog"}

@@ -18,7 +18,7 @@
 
 !!! info status-cols "Всего спецификаций: 1"
 
-    - :lucide-file-archive: архив: 1
+    - :lucide-file-archive: архив: <span data-stat="archived">1</span>
 
 ## Отбор функциональностей модуля {#feature-selection}
 
@@ -30,5 +30,5 @@
 
 ## Спецификации модуля {#specs}
 
-- *История заказов*: :lucide-file-archive:: 1
+- *История заказов*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span>
     - :lucide-file-archive: [Выписка заказов в виде бумажного чека](print-receipt.md#article-overview){data-preview data-status="archived"}
