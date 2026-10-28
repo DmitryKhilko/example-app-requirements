@@ -29,7 +29,7 @@
    Текст попадает в адрес страницы (?q=...).
 
    Итоги пересчитываются при каждом изменении отбора и всегда показывают то, что подходит под оба условия
-   (выбранные статусы и текст). Плитки (числа в `<span data-stat>`): число по каждому статусу.
+   (выбранные статусы и текст). Плитки (числа в `<span data-stat>`): число по каждому статусу; плитка «Всего» (`<span data-stat-total>`) — общий итог.
    Счётчики в заголовках блоков модулей и субмодулей (`<span data-count-item>`) — то, что осталось
    в списке под заголовком; статусы с нулём там скрываются.
 
@@ -176,6 +176,7 @@
     Array.prototype.forEach.call(root.querySelectorAll("[data-stat]"), function (el) {
       el.textContent = byStatus[el.getAttribute("data-stat")] || 0;
     });
+    Array.prototype.forEach.call(root.querySelectorAll("[data-stat-total]"), function (el) { el.textContent = total; });
 
     /* Счётчики в заголовках блоков модулей и субмодулей: что осталось в списке под заголовком */
     Array.prototype.forEach.call(root.querySelectorAll("details.feature-block"), function (block) {

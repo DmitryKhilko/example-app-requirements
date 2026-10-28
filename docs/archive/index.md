@@ -1,16 +1,18 @@
+---
+hide:
+  - toc
+---
+
 # Архив спецификаций {#archive}
 
 <!-- generated: файл формируется автоматически, не редактируйте его вручную -->
 
 ## Статистика {#statistics}
 
-??? warning "Внимание"
-
-    На странице отображается содержимое файла `docs/archive/index.md`. Файл `index.md` формируется автоматически скриптом `scripts/generate_docs.py` при каждом внесении изменений в ветку `main`. Не редактируйте файл `index.md` вручную: правки будут перезаписаны.
-
 <div class="status-tiles" markdown>
 
-[:lucide-file-archive: <span data-stat="archived">3</span>](#){ .status-tile data-filter="archived" title="отклонённое или устаревшее требование" aria-label="архив: отклонённое или устаревшее требование" }
+<span class="status-total">:lucide-files: <span class="status-name">Всего</span> <span data-stat-total>3</span></span>
+[:lucide-file-archive: <span class="status-name">архив</span> <span data-stat="archived">3</span>](#){ .status-tile data-filter="archived" title="отклонённое или устаревшее требование" aria-label="архив: отклонённое или устаревшее требование" }
 
 </div>
 

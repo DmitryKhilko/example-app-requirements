@@ -14,7 +14,7 @@
   т. п.) в карту не попадают.
 * Архивная спецификация — файл внутри docs/archive/ ИЛИ файл со статусом
   `archived`. В карте такие фичи выводятся в отдельном разделе со значком коробки.
-* Страница карты состоит из разделов: «Статистика» (свёрнутая панель «Внимание», плитки со статусами и числами —
+* Страница карты состоит из разделов: «Статистика» (плитки со статусами и числами —
   они же кнопки фильтра, строка отбора по названию и кнопка «Сбросить»), «Действующие спецификации» и «Архив
   спецификаций». Списки спецификаций — вложенные сворачиваемые блоки «Модуль» → «Субмодуль». У всех заголовков страницы
   заданы явные якоря, как в спецификациях: `{#feature-map}`, `{#statistics}`, `{#active-features}`, `{#archived-features}`.
@@ -196,6 +196,9 @@ INDEX_NAME = "index.md"
 # Нейтральный маркер сгенерированных файлов: по нему скрипт узнаёт свои index.md и не трогает созданные вручную.
 # Он не привязан к имени скрипта, поэтому скрипт можно переименовывать без перегенерации индексов.
 INDEX_MARKER = "<!-- generated:"
+# Front matter сформированных страниц (карта, индексы): `hide: toc` убирает правое меню («Содержание»): на этих страницах
+# мало заголовков, а список спецификаций получает всю ширину. У страниц-спецификаций правое меню остаётся.
+PAGE_FRONT_MATTER = ["---", "hide:", "  - toc", "---", ""]
 GENERATED_COMMENT = "<!-- generated: файл формируется автоматически, не редактируйте его вручную -->"
 # Навигация (меню сайта): Zensical берёт названия папок из имён папок, поэтому меню собирается скриптом
 # и записывается в zensical.toml между маркерами NAV_BEGIN и NAV_END.
@@ -524,29 +527,21 @@ def _statuses(only: list[str] | None = None, exclude: tuple[str, ...] = ()) -> l
     return [s for s in STATUS_ICONS if (only is None or s in only) and s not in exclude]
 
 
-def warning_block(page_file: str) -> list[str]:
-    """Свёрнутая панель «Внимание»: какой файл показан на странице и что он формируется автоматически.
-
-    page_file — путь к файлу относительно корня репозитория, например `docs/feature-map.md`.
-    """
-    name = page_file.rsplit("/", 1)[-1]
-    return ['??? warning "Внимание"', "",
-            f"    На странице отображается содержимое файла `{page_file}`. Файл `{name}` формируется "
-            "автоматически скриптом `scripts/generate_docs.py` при каждом внесении изменений в ветку `main`. "
-            f"Не редактируйте файл `{name}` вручную: правки будут перезаписаны.", ""]
-
-
 def tiles_block(features: list[Feature], statuses: list[str]) -> list[str]:
-    """Плитки статистики: значок статуса и число спецификаций, без надписей.
+    """Плитки статистики: первой идёт плитка «Всего» (общий итог, не кнопка), далее — значок, название статуса и число.
 
     Плитка — кнопка фильтра по статусу (атрибут data-filter; выбор нескольких, выбранные подсвечиваются). Пояснение статуса
     показывает подсказка (атрибут title; тема выводит его стилизованной подсказкой, функция content.tooltips). Число в
     `<span data-stat>` пересчитывает status-filter.js при отборе. Вид плиток — extra.css, раздел 4.
     """
-    tiles = [f'[{STATUS_ICONS[s]} <span data-stat="{s}">{sum(1 for f in features if f.shown_status == s)}</span>](#)'
+    tiles = [f'[{STATUS_ICONS[s]} <span class="status-name">{STATUS_TITLES[s]}</span> '
+             f'<span data-stat="{s}">{sum(1 for f in features if f.shown_status == s)}</span>](#)'
              f'{{ .status-tile data-filter="{s}" title="{STATUS_DESCRIPTIONS[s]}" '
              f'aria-label="{STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" }}' for s in statuses]
-    return ['<div class="status-tiles" markdown>', "", *tiles, "", "</div>", ""]
+    # Общий итог — обычный элемент (не ссылка), поэтому фильтром не является; число пересчитывает status-filter.js.
+    total = (f'<span class="status-total">:lucide-files: <span class="status-name">Всего</span> '
+             f'<span data-stat-total>{len(features)}</span></span>')
+    return ['<div class="status-tiles" markdown>', "", total, *tiles, "", "</div>", ""]
 
 
 def filter_block(placeholder: str) -> list[str]:
@@ -569,10 +564,9 @@ def archive_note(archive_dir_name: str) -> list[str]:
     return [f'???+ info "{ARCHIVE_NOTE_TITLE}"', "", f"    {ARCHIVE_NOTE.format(archive=archive_dir_name)}", ""]
 
 
-def statistics_section(page_file: str, features: list[Feature], statuses: list[str], placeholder: str) -> list[str]:
-    """Раздел «Статистика»: панель «Внимание» (свёрнута), плитки-фильтры, строка отбора и «Сбросить»."""
-    return ["## Статистика {#statistics}", "", *warning_block(page_file), *tiles_block(features, statuses),
-            *filter_block(placeholder)]
+def statistics_section(features: list[Feature], statuses: list[str], placeholder: str) -> list[str]:
+    """Раздел «Статистика»: плитки-фильтры, строка отбора и «Сбросить»."""
+    return ["## Статистика {#statistics}", "", *tiles_block(features, statuses), *filter_block(placeholder)]
 
 
 def render_map(features: list[Feature], archive_dir_name: str) -> str:
@@ -580,11 +574,12 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
     archived = [f for f in features if f.archived]
 
     out: list[str] = [
+        *PAGE_FRONT_MATTER,
         "# Карта функциональностей продукта {#feature-map}",
         "",
         GENERATED_COMMENT,
         "",
-        *statistics_section(f"docs/{DEFAULT_OUTPUT.name}", features, _statuses(), PLACEHOLDER_PRODUCT),
+        *statistics_section(features, _statuses(), PLACEHOLDER_PRODUCT),
         "## Действующие спецификации {#active-features}",
         "",
     ]
@@ -624,11 +619,11 @@ def render_index(folder: Path, docs_dir: Path, features: list[Feature]) -> str:
     title = _folder_title(folder, features, docs_dir)
     slug = re.sub(r"[^a-z0-9]+", "-", folder.name.lower()).strip("-") or "folder"
     archive = DEFAULT_ARCHIVE_DIR_NAME in folder.relative_to(docs_dir).parts
-    page_file = f"docs/{(folder / INDEX_NAME).relative_to(docs_dir).as_posix()}"
 
     lines = [
+        *PAGE_FRONT_MATTER,
         f"# {_escape(title)} {{#{slug}}}", "", GENERATED_COMMENT, "",
-        *statistics_section(page_file, direct, _page_statuses(archive), PLACEHOLDER_MODULE),
+        *statistics_section(direct, _page_statuses(archive), PLACEHOLDER_MODULE),
         "## Спецификации {#specs}", "",
         *(archive_note(DEFAULT_ARCHIVE_DIR_NAME) if archive else []),
         *render_tree(direct, lambda f: f"{Path(f.path).name}#{DESCRIPTION_ANCHOR}", with_modules=False),
@@ -643,8 +638,9 @@ def render_section_index(tab: str, tab_features: list[Feature]) -> str:
     archive = tab == DEFAULT_ARCHIVE_DIR_NAME
     to_spec = lambda f: quote(posixpath.relpath(f.path, tab)) + f"#{DESCRIPTION_ANCHOR}"
     lines = [
+        *PAGE_FRONT_MATTER,
         f"# {_escape(title)} {{#{slug}}}", "", GENERATED_COMMENT, "",
-        *statistics_section(f"docs/{tab}/{INDEX_NAME}", tab_features, _page_statuses(archive), PLACEHOLDER_PRODUCT),
+        *statistics_section(tab_features, _page_statuses(archive), PLACEHOLDER_PRODUCT),
         "## Спецификации {#specs}", "",
         *(archive_note(DEFAULT_ARCHIVE_DIR_NAME) if archive else []),
         *render_tree(tab_features, to_spec),
