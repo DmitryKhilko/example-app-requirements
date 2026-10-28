@@ -1,7 +1,7 @@
 # example-app-requirements
 Пример организации требований с использованием подхода "Documentation as Code"
 
-Адрес сайта задан параметром `site_url` в `zensical.toml`.
+Адрес сайта: https://dmitrykhilko.github.io/example-app-requirements/.
 
 ## Как устроена карта фичей
 
