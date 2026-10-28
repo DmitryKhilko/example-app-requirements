@@ -3,6 +3,7 @@ module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Фильтр по диапазону цен с ползунком"
 status: "development"
+icon: lucide/file-braces
 order: 20
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
@@ -60,3 +61,7 @@ flowchart LR
 
 - Минимальная цена не может превышать максимальную.
 - Границы диапазона вычисляются по текущей выдаче.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

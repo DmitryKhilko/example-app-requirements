@@ -3,6 +3,7 @@ module: "Личный кабинет"
 submodule: "Авторизация"
 feature_name: "Двухфакторная аутентификация (2FA)"
 status: "development"
+icon: lucide/file-braces
 doc_version: "0.01"
 order: 10
 owner: "Дмитрий Хилько"
@@ -54,3 +55,7 @@ flowchart LR
 
 - Резервные коды показываются один раз.
 - Отключение 2FA требует повторного подтверждения.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

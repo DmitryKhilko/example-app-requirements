@@ -3,6 +3,7 @@ module: "Управление заказами"
 submodule: "История заказов"
 feature_name: "Выписка заказов в виде бумажного чека"
 status: "archived"
+icon: lucide/file-archive
 order: 10
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
@@ -29,3 +30,7 @@ owner: "Дмитрий Хилько"
 ## Критерии приёмки {#acceptance-criteria}
 
 - Фича выведена из эксплуатации.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

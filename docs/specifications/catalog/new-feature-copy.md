@@ -3,6 +3,7 @@ module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Ещё одна новая фича"
 status: "ready"
+icon: lucide/file-check
 order: 70
 doc_version: "0.02"
 owner: "Дмитрий Хилько"
@@ -54,3 +55,7 @@ flowchart LR
 
 - ...
 - ...
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

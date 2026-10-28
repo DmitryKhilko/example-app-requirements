@@ -3,6 +3,7 @@ module: "Личный кабинет"
 submodule: "Профиль пользователя"
 feature_name: "Привязка профилей социальных сетей"
 status: "backlog"
+icon: lucide/file
 doc_version: "0.01"
 order: 40
 owner: "Дмитрий Хилько"
@@ -52,3 +53,7 @@ flowchart LR
 ## Критерии приёмки {#acceptance-criteria}
 
 - К одному профилю можно привязать не более одного аккаунта каждой сети.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

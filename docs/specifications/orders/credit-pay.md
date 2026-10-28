@@ -3,6 +3,7 @@ module: "Управление заказами"
 submodule: "Оформление заказа"
 feature_name: "Покупка в рассрочку"
 status: "backlog"
+icon: lucide/file
 doc_version: "0.01"
 order: 10
 owner: "Дмитрий Хилько"
@@ -59,3 +60,7 @@ flowchart LR
 ## Критерии приёмки {#acceptance-criteria}
 
 - Доступно для заказов от 10 000 ₽.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

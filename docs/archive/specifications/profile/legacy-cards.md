@@ -3,6 +3,7 @@ module: "Личный кабинет"
 submodule: "Профиль пользователя"
 feature_name: "Дисконтные карты старого образца"
 status: "archived"
+icon: lucide/file-archive
 order: 10
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
@@ -30,3 +31,7 @@ owner: "Дмитрий Хилько"
 ## Критерии приёмки {#acceptance-criteria}
 
 - Фича выведена из эксплуатации.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

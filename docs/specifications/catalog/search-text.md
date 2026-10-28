@@ -3,6 +3,7 @@ module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Полнотекстовый поиск по названию"
 status: "released"
+icon: lucide/file-text
 order: 50
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
@@ -59,3 +60,7 @@ flowchart LR
 
 - Поиск не зависит от регистра и учитывает опечатки в один символ.
 - При отсутствии результатов показывается сообщение и рекомендации.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

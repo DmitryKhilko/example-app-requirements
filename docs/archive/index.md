@@ -2,40 +2,69 @@
 
 <!-- generated: файл формируется автоматически, не редактируйте его вручную -->
 
-## Описание {#article-overview}
+## Статистика {#statistics}
 
-Архивные спецификации: отклонённые и устаревшие функциональности продукта по модулям и субмодулям.
-
-!!! warning "Внимание"
+??? warning "Внимание"
 
     На странице отображается содержимое файла `docs/archive/index.md`. Файл `index.md` формируется автоматически скриптом `scripts/generate_docs.py` при каждом внесении изменений в ветку `main`. Не редактируйте файл `index.md` вручную: правки будут перезаписаны.
 
-!!! info "Статусы требований"
+<div class="status-tiles" markdown>
 
-    - :lucide-file-archive: архив: отклонённое или устаревшее требование
+[:lucide-file-archive: <span data-stat="archived">3</span>](#){ .status-tile data-filter="archived" title="отклонённое или устаревшее требование" aria-label="архив: отклонённое или устаревшее требование" }
 
-## Статистика функциональностей раздела в разрезе статусов {#statistics}
+</div>
 
-!!! info status-cols "Всего спецификаций: 3"
-
-    - :lucide-file-archive: архив: 3
-
-## Отбор функциональностей раздела {#feature-selection}
-
-Отбор (фильтрация) функциональностей раздела по названию модуля, субмодуля, функциональности.
+<div class="feature-filter" markdown>
 
 <input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию модуля или субмодуля или функциональности" aria-label="Отбор по названию модуля или субмодуля или функциональности">
 
+[Сбросить](#){ .md-button data-filter-reset="" }
+
+</div>
+
 <div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p><p><a href="#" class="md-button" data-filter-reset="">Сбросить</a></p></div>
 
-## Спецификации раздела {#specs}
+## Спецификации {#specs}
 
-- **Каталог товаров**: :lucide-file-archive:: 1
-    - *Поиск и фильтрация*: :lucide-file-archive:: 1
-        - :lucide-file-archive: [Старый текстовый поиск (устарел)](specifications/catalog/search-old.md#article-overview){data-preview data-status="archived"}
-- **Управление заказами**: :lucide-file-archive:: 1
-    - *История заказов*: :lucide-file-archive:: 1
-        - :lucide-file-archive: [Выписка заказов в виде бумажного чека](specifications/orders/print-receipt.md#article-overview){data-preview data-status="archived"}
-- **Личный кабинет**: :lucide-file-archive:: 1
-    - *Профиль пользователя*: :lucide-file-archive:: 1
-        - :lucide-file-archive: [Дисконтные карты старого образца](specifications/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
+???+ info "Информация"
+
+    Спецификации из папки `docs/archive/` или со статусом `archived`.
+
+<details class="feature-block feature-module" markdown="block">
+<summary markdown="span">**Каталог товаров**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+
+<details class="feature-block feature-submodule" markdown="block">
+<summary markdown="span">*Поиск и фильтрация*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+
+- :lucide-file-archive: [Старый текстовый поиск (устарел)](specifications/catalog/search-old.md#article-overview){data-preview data-status="archived"}
+
+</details>
+
+
+</details>
+
+<details class="feature-block feature-module" markdown="block">
+<summary markdown="span">**Управление заказами**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+
+<details class="feature-block feature-submodule" markdown="block">
+<summary markdown="span">*История заказов*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+
+- :lucide-file-archive: [Выписка заказов в виде бумажного чека](specifications/orders/print-receipt.md#article-overview){data-preview data-status="archived"}
+
+</details>
+
+
+</details>
+
+<details class="feature-block feature-module" markdown="block">
+<summary markdown="span">**Личный кабинет**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+
+<details class="feature-block feature-submodule" markdown="block">
+<summary markdown="span">*Профиль пользователя*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+
+- :lucide-file-archive: [Дисконтные карты старого образца](specifications/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
+
+</details>
+
+
+</details>

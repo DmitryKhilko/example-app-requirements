@@ -3,6 +3,7 @@ module: "Управление заказами"
 submodule: "Оформление заказа"
 feature_name: "Оплата через СБП / QR-код"
 status: "released"
+icon: lucide/file-text
 order: 20
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
@@ -58,3 +59,7 @@ flowchart LR
 
 - Срок действия QR-кода — 10 минут.
 - Статус оплаты обновляется без перезагрузки страницы.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

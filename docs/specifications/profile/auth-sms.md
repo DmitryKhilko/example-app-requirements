@@ -3,6 +3,7 @@ module: "Личный кабинет"
 submodule: "Авторизация"
 feature_name: "Вход по номеру телефона и SMS"
 status: "released"
+icon: lucide/file-text
 doc_version: "0.01"
 order: 20
 owner: "Дмитрий Хилько"
@@ -58,3 +59,7 @@ flowchart LR
 
 - Код действует 5 минут.
 - После 3 неверных попыток ввод блокируется на 15 минут.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

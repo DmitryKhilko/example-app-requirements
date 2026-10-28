@@ -3,6 +3,7 @@ module: "Каталог товаров"
 submodule: "Карточка товара"
 feature_name: "Блок похожих товаров (рекомендации)"
 status: "backlog"
+icon: lucide/file
 doc_version: "0.01"
 order: 40
 owner: "Дмитрий Хилько"
@@ -59,3 +60,7 @@ flowchart LR
 ## Критерии приёмки {#acceptance-criteria}
 
 - Блок не показывается, если подходящих товаров меньше 3.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

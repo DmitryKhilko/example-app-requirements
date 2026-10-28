@@ -3,6 +3,7 @@ module: "Личный кабинет"
 submodule: "Профиль пользователя"
 feature_name: "Редактирование персональных данных"
 status: "released"
+icon: lucide/file-text
 doc_version: "0.01"
 order: 30
 owner: "Дмитрий Хилько"
@@ -56,3 +57,7 @@ flowchart LR
 ## Критерии приёмки {#acceptance-criteria}
 
 - Смена e-mail требует подтверждения по ссылке из письма.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

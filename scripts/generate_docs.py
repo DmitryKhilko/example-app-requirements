@@ -14,11 +14,11 @@
   т. п.) в карту не попадают.
 * Архивная спецификация — файл внутри docs/archive/ ИЛИ файл со статусом
   `archived`. В карте такие фичи выводятся в отдельном разделе со значком коробки.
-* Страница карты состоит из разделов: «Описание» (краткое пояснение, служебная заметка и блок
-  «Обозначения»), «Статистика» (блок «Всего спецификаций» и кнопки фильтра по статусам),
-  «Актуальные функциональности» и «Архивные функциональности». Текст описания — в константе
-  PAGE_DESCRIPTION. У всех заголовков страницы заданы явные якоря, как в спецификациях:
-  `{#feature-map}`, `{#article-overview}`, `{#statistics}`, `{#active-features}`, `{#archived-features}`.
+* Страница карты состоит из разделов: «Статистика» (свёрнутая панель «Внимание», плитки со статусами и числами —
+  они же кнопки фильтра, строка отбора по названию и кнопка «Сбросить»), «Действующие спецификации» и «Архив
+  спецификаций». Списки спецификаций — вложенные сворачиваемые блоки «Модуль» → «Субмодуль». У всех заголовков страницы
+  заданы явные якоря, как в спецификациях: `{#feature-map}`, `{#statistics}`, `{#active-features}`, `{#archived-features}`.
+  Индексы разделов и модулей устроены так же (разделы «Статистика» и «Спецификации»), но показывают только свою часть.
 * Каждая ссылка ведёт на раздел «Описание» (`#article-overview`) и снабжена атрибутами
   `data-preview` (окно предпросмотра) и `data-status` (код статуса для фильтра на странице).
 * В файле карты нет даты и времени, поэтому без реальных изменений в
@@ -123,32 +123,14 @@ DESCRIPTION_ANCHOR = "article-overview"
 # фильтрует перечень на странице (кнопки фильтра `data-filter` выводятся над перечнем).
 LINK_ATTRS_TEMPLATE = '{{data-preview data-status="{status}"}}'
 
-# Краткое описание страницы — первый абзац раздела «Описание» (поддерживается Markdown).
-PAGE_DESCRIPTION = (
-    "Карта функциональностей - иерархическое оглавление спецификаций продукта: "
-    "**модуль -> субмодуль -> функциональность**. Название каждой функциональности - ссылка на раздел "
-    "«Описание» её спецификации (при наведении курсора показывается предпросмотр). Перед названием стоит "
-    "значок статуса, а в заголовках модулей и субмодулей указано число функциональностей по статусам. "
-    "Актуальные и архивные функциональности выведены отдельными разделами; нужные статусы можно выбрать "
-    "кнопками фильтра в разделе «Отбор функциональностей продукта»."
-)
-# Текст раздела «Отбор функциональностей продукта» и подсказка в поле отбора.
-SELECTION_DESCRIPTION = (
-    "Отбор (фильтрация) функциональностей {scope} как по текущему статусу функциональности, так и по названию "
-    "{names}. При одновременном использовании отбора по статусу и названию "
-    "отображается то, что подходит под оба условия."
-)
-# Страница карты: отбор по продукту целиком; страница модуля (index.md): отбор внутри модуля.
-# Сообщение при пустом результате отбора: скрыто атрибутом `hidden`, показывает его status-filter.js.
-# Кнопка «Сбросить» внутри (атрибут data-filter-reset) снимает фильтр по статусам и очищает поле поиска.
+# Подсказки в строке отбора по названию: на карте и в индексах разделов в отбор входят названия модулей,
+# на странице модуля — только субмодули и функциональности.
 EMPTY_MESSAGE = "Нет данных, соответствующих условиям отбора"
-SELECTION_PRODUCT = dict(scope="продукта", names="модуля, субмодуля, функциональности",
-                         placeholder="Отбор по названию модуля или субмодуля или функциональности")
-# Индекс архивного модуля: только отбор по названию, без кнопок статусов и «Сбросить»; свой текст раздела.
-SELECTION_ARCHIVE = dict(description="Отбор (фильтрация) функциональностей модуля по названию субмодуля, функциональности.",
-                         placeholder="Отбор по названию субмодуля или функциональности", reset=False)
-SELECTION_MODULE = dict(scope="модуля", names="субмодуля, функциональности",
-                        placeholder="Отбор по названию субмодуля или функциональности")
+PLACEHOLDER_PRODUCT = "Отбор по названию модуля или субмодуля или функциональности"
+PLACEHOLDER_MODULE = "Отбор по названию субмодуля или функциональности"
+# Информация под заголовком списка архивных спецификаций (разворачиваемый блок `???+ info`).
+ARCHIVE_NOTE_TITLE = "Информация"
+ARCHIVE_NOTE = "Спецификации из папки `docs/{archive}/` или со статусом `archived`."
 
 # Блок метаданных обязан стоять в самом начале файла между строками `---`.
 FRONT_MATTER_RE = re.compile(
@@ -210,15 +192,6 @@ DIRECTORY_URLS = True
 FOLDER_TITLES = {"specifications": "Спецификации", "archive": "Архив спецификаций"}
 # Индекс раздела (вкладки верхнего меню): `docs/specifications/index.md` и `docs/archive/index.md`. Страница устроена как
 # карта фичей, но показывает только спецификации своего раздела (по первой папке пути).
-FOLDER_DESCRIPTIONS = {
-    "specifications": "Действующие спецификации функциональностей продукта по модулям и субмодулям.",
-    "archive": "Архивные спецификации: отклонённые и устаревшие функциональности продукта по модулям и субмодулям.",
-}
-SELECTION_SECTION = dict(scope="раздела", names="модуля, субмодуля, функциональности",
-                         placeholder=SELECTION_PRODUCT["placeholder"])
-SELECTION_SECTION_ARCHIVE = dict(
-    description="Отбор (фильтрация) функциональностей раздела по названию модуля, субмодуля, функциональности.",
-    placeholder=SELECTION_PRODUCT["placeholder"], reset=False)
 INDEX_NAME = "index.md"
 # Нейтральный маркер сгенерированных файлов: по нему скрипт узнаёт свои index.md и не трогает созданные вручную.
 # Он не привязан к имени скрипта, поэтому скрипт можно переименовывать без перегенерации индексов.
@@ -232,7 +205,11 @@ DEFAULT_CONFIG = REPO_ROOT / "zensical.toml"
 DEFAULT_NAV_ORDER = REPO_ROOT / "nav-order.yml"
 NAV_ORDER_KEY = "modules"
 ORDER_KEY = "order"
+# Значок статуса в левом меню: поле `icon` метаданных спецификации (значок из набора lucide, встроенного в Zensical).
+# Скрипт сам ведёт это поле по `status`; вручную его не заполняют.
+ICON_KEY = "icon"
 NAV_BEGIN = "# BEGIN GENERATED NAV — не редактируйте вручную"
+NAV_BEGIN_PREFIX = "# BEGIN GENERATED NAV"
 NAV_END = "# END GENERATED NAV"
 # Служебные страницы в начале меню: (название, файл относительно docs). Отсутствующие файлы пропускаются.
 ROOT_PAGES = [
@@ -485,90 +462,117 @@ def _escape(text: str) -> str:
 def status_counts(features: list[Feature]) -> str:
     """Счётчики фич по значкам статусов, например `:lucide-inbox:: 3, :lucide-rocket:: 6`.
 
-    Порядок — как в STATUS_ICONS; статусы без фич не выводятся.
+    Порядок — как в STATUS_ICONS; статусы без фич не выводятся. Каждый счётчик — `<span data-count-item>` с числом
+    в `<span data-count>`: при отборе их пересчитывает status-filter.js (запятые между счётчиками рисует
+    extra.css, раздел 9; без JavaScript страница показывает итоги без отбора).
     """
     parts = []
     for status, icon in STATUS_ICONS.items():
         count = sum(1 for f in features if f.shown_status == status)
         if count:
-            parts.append(f"{icon}: {count}")
-    return ", ".join(parts)
+            parts.append(f'<span data-count-item="{status}">{icon}: <span data-count>{count}</span></span>')
+    return " ".join(parts)
 
 
-def render_tree(features: list[Feature], link=lambda f: f.link) -> list[str]:
-    """Дерево «модуль -> субмодуль -> фича» со счётчиками статусов в заголовках модуля и субмодуля.
-
-    Отступ 4 пробела (требование Python-Markdown). link — как получить адрес спецификации: по умолчанию относительно
-    файла карты, для индексов разделов — относительно индекса.
-    """
+def _tree(features: list[Feature]) -> dict[str, dict[str, list[Feature]]]:
     tree: dict[str, dict[str, list[Feature]]] = defaultdict(lambda: defaultdict(list))
     for feature in features:
         tree[feature.module][feature.submodule].append(feature)
+    return tree
 
+
+def _block(kind: str, title_md: str, counts: str, body: list[str]) -> list[str]:
+    """Сворачиваемый блок `<details>` (kind — `module` или `submodule`).
+
+    Заголовок и счётчики статусов — в `<summary>`. Атрибуты `markdown="block"` / `"span"` (md_in_html) нужны, чтобы
+    Markdown внутри блока обрабатывался: список функциональностей и значки статусов (:lucide-…:). Блок закрыт по умолчанию;
+    открывать и закрывать его, а также раскрывать совпадения при отборе будет status-filter.js.
+    """
+    return [f'<details class="feature-block feature-{kind}" markdown="block">',
+            f'<summary markdown="span">{title_md}: {counts}</summary>', "", *body, "", "</details>", ""]
+
+
+def _feature_lines(features: list[Feature], link) -> list[str]:
+    return [f"- {f.icon} [{_escape(f.name)}]({link(f)})" + LINK_ATTRS_TEMPLATE.format(status=f.shown_status)
+            for f in sorted(features, key=_feature_key)]
+
+
+def render_tree(features: list[Feature], link=lambda f: f.link, with_modules: bool = True) -> list[str]:
+    """Иерархия «модуль -> субмодуль -> функциональность» в виде вложенных сворачиваемых блоков.
+
+    Заголовки модуля и субмодуля содержат счётчики статусов. with_modules=False — для страницы одного модуля:
+    блоки только по субмодулям. link — как получить адрес спецификации: по умолчанию относительно файла карты,
+    для индексов — относительно индекса.
+    """
     lines: list[str] = []
-    for module in sorted(tree, key=_module_key):
-        module_features = [f for subs in tree[module].values() for f in subs]
-        lines.append(f"- **{_escape(module)}**: {status_counts(module_features)}")
-        for submodule in sorted(tree[module], key=_sort_key):
-            lines.append(f"    - *{_escape(submodule)}*: {status_counts(tree[module][submodule])}")
-            for feature in sorted(tree[module][submodule], key=_feature_key):
-                lines.append(
-                    f"        - {feature.icon} [{_escape(feature.name)}]({link(feature)})"
-                    + LINK_ATTRS_TEMPLATE.format(status=feature.shown_status)
-                )
+    for module in sorted(_tree(features), key=_module_key):
+        subs = _tree(features)[module]
+        sub_blocks: list[str] = []
+        for submodule in sorted(subs, key=_sort_key):
+            sub_blocks += _block("submodule", f"*{_escape(submodule)}*", status_counts(subs[submodule]),
+                                 _feature_lines(subs[submodule], link))
+        if with_modules:
+            module_features = [f for items in subs.values() for f in items]
+            lines += _block("module", f"**{_escape(module)}**", status_counts(module_features), sub_blocks)
+        else:
+            lines += sub_blocks
     return lines
 
 
 def _statuses(only: list[str] | None = None, exclude: tuple[str, ...] = ()) -> list[str]:
-    """Статусы для легенды, статистики и кнопок в порядке STATUS_ICONS.
-
-    only — оставить только эти статусы, exclude — убрать указанные (в индексах модулей лишние статусы не выводятся).
-    """
+    """Статусы в порядке STATUS_ICONS: only — оставить только эти, exclude — убрать указанные."""
     return [s for s in STATUS_ICONS if (only is None or s in only) and s not in exclude]
 
 
-def legend_block(statuses: list[str] | None = None) -> list[str]:
-    """Инфо-блок «Статусы требований» (одна колонка с пояснениями), общий для карты и индексов модулей."""
-    legend = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" for s in _statuses(statuses)]
-    return ['!!! info "Статусы требований"', "", *legend, ""]
-
-
 def warning_block(page_file: str) -> list[str]:
-    """Блок «Внимание»: какой файл показан на странице и что он формируется автоматически.
+    """Свёрнутая панель «Внимание»: какой файл показан на странице и что он формируется автоматически.
 
     page_file — путь к файлу относительно корня репозитория, например `docs/feature-map.md`.
     """
     name = page_file.rsplit("/", 1)[-1]
-    return ['!!! warning "Внимание"', "",
+    return ['??? warning "Внимание"', "",
             f"    На странице отображается содержимое файла `{page_file}`. Файл `{name}` формируется "
             "автоматически скриптом `scripts/generate_docs.py` при каждом внесении изменений в ветку `main`. "
             f"Не редактируйте файл `{name}` вручную: правки будут перезаписаны.", ""]
 
 
-def statistics_block(features: list[Feature], statuses: list[str] | None = None) -> list[str]:
-    """Блок «Всего спецификаций: N» — две колонки по 3 статуса (класс `status-cols`, см. extra.css, раздел 4)."""
-    counts = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {sum(1 for f in features if f.shown_status == s)}"
-              for s in _statuses(statuses)]
-    return [f'!!! info status-cols "Всего спецификаций: {len(features)}"', "", *counts, ""]
+def tiles_block(features: list[Feature], statuses: list[str]) -> list[str]:
+    """Плитки статистики: значок статуса и число спецификаций, без надписей.
 
-
-def selection_block(texts: dict = SELECTION_PRODUCT, statuses: list[str] | None = None) -> list[str]:
-    """Текст раздела «Отбор функциональностей продукта», кнопки статусов и поле отбора по названию.
-
-    Кнопки — ссылки с классом `.md-button` (оформляет тема, см. документацию Zensical «Buttons»), поле — обычный
-    HTML-элемент `input` (Markdown пропускает его без изменений). Клики и ввод обрабатывает
-    theme-custom/javascripts/status-filter.js, вид поля задаёт extra.css, раздел 6.
+    Плитка — кнопка фильтра по статусу (атрибут data-filter; выбор нескольких, выбранные подсвечиваются). Пояснение статуса
+    показывает подсказка (атрибут title; тема выводит его стилизованной подсказкой, функция content.tooltips). Число в
+    `<span data-stat>` пересчитывает status-filter.js при отборе. Вид плиток — extra.css, раздел 4.
     """
-    buttons = [f'[{STATUS_ICONS[s]} {STATUS_TITLES[s]}](#){{ .md-button data-filter="{s}" }}' for s in _statuses(statuses)]
-    if texts.get("reset", True):
-        buttons.append('[Сбросить](#){ .md-button data-filter-reset="" }')
-    search_field = (f'<input type="search" class="feature-search" data-feature-search="" autocomplete="off" '
-                    f'placeholder="{texts["placeholder"]}" aria-label="{texts["placeholder"]}">')
-    description = texts.get("description") or SELECTION_DESCRIPTION.format(**texts)
-    # Одной строкой: так Markdown передаёт HTML-блок без изменений.
+    tiles = [f'[{STATUS_ICONS[s]} <span data-stat="{s}">{sum(1 for f in features if f.shown_status == s)}</span>](#)'
+             f'{{ .status-tile data-filter="{s}" title="{STATUS_DESCRIPTIONS[s]}" '
+             f'aria-label="{STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" }}' for s in statuses]
+    return ['<div class="status-tiles" markdown>', "", *tiles, "", "</div>", ""]
+
+
+def filter_block(placeholder: str) -> list[str]:
+    """Строка отбора по названию с кнопкой «Сбросить» (под плитками) и сообщение при пустом результате.
+
+    Поле — обычный HTML-элемент `input` (Markdown пропускает его без изменений), кнопка — ссылка с классом `.md-button`
+    (оформляет тема, см. документацию Zensical «Buttons»). Ввод и клики обрабатывает status-filter.js.
+    «Сбросить» снимает выбор плиток и очищает поле. Сообщение скрыто атрибутом `hidden`, показывает его status-filter.js.
+    """
+    field = (f'<input type="search" class="feature-search" data-feature-search="" autocomplete="off" '
+             f'placeholder="{placeholder}" aria-label="{placeholder}">')
     empty = (f'<div class="feature-empty" data-feature-empty="" hidden><p>{EMPTY_MESSAGE}</p>'
              f'<p><a href="#" class="md-button" data-filter-reset="">Сбросить</a></p></div>')
-    return [description, "", *([*buttons, ""] if buttons else []), search_field, "", empty, ""]
+    return ['<div class="feature-filter" markdown>', "", field, "",
+            '[Сбросить](#){ .md-button data-filter-reset="" }', "", "</div>", "", empty, ""]
+
+
+def archive_note(archive_dir_name: str) -> list[str]:
+    """Разворачиваемый (открытый) информационный блок под заголовком архивных спецификаций."""
+    return [f'???+ info "{ARCHIVE_NOTE_TITLE}"', "", f"    {ARCHIVE_NOTE.format(archive=archive_dir_name)}", ""]
+
+
+def statistics_section(page_file: str, features: list[Feature], statuses: list[str], placeholder: str) -> list[str]:
+    """Раздел «Статистика»: панель «Внимание» (свёрнута), плитки-фильтры, строка отбора и «Сбросить»."""
+    return ["## Статистика {#statistics}", "", *warning_block(page_file), *tiles_block(features, statuses),
+            *filter_block(placeholder)]
 
 
 def render_map(features: list[Feature], archive_dir_name: str) -> str:
@@ -576,35 +580,18 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
     archived = [f for f in features if f.archived]
 
     out: list[str] = [
-        "# Карта функциональностей {#feature-map}",
+        "# Карта функциональностей продукта {#feature-map}",
         "",
         GENERATED_COMMENT,
         "",
-        f"## Описание {{#{DESCRIPTION_ANCHOR}}}",
-        "",
-        PAGE_DESCRIPTION,
-        "",
-        *warning_block(f"docs/{DEFAULT_OUTPUT.name}"),
-        *legend_block(),
-        "## Статистика функциональностей продукта в разрезе статусов {#statistics}",
-        "",
-        *statistics_block(features),
-        "## Отбор функциональностей продукта {#feature-selection}",
-        "",
-        *selection_block(),
-        "## Актуальные функциональности {#active-features}",
+        *statistics_section(f"docs/{DEFAULT_OUTPUT.name}", features, _statuses(), PLACEHOLDER_PRODUCT),
+        "## Действующие спецификации {#active-features}",
         "",
     ]
-    out += render_tree(active) if active else ["*Нет активных фичей*"]
-    out += [
-        "",
-        "## Архивные функциональности {#archived-features}",
-        "",
-        f"> Спецификации из папки `docs/{archive_dir_name}/` или со статусом `archived`.",
-        "",
-    ]
-    out += render_tree(archived) if archived else ["*Архив пуст*"]
-    return "\n".join(out) + "\n"
+    out += render_tree(active) if active else ["*Нет действующих спецификаций*", ""]
+    out += ["## Архив спецификаций {#archived-features}", "", *archive_note(archive_dir_name)]
+    out += render_tree(archived) if archived else ["*Архив пуст*", ""]
+    return "\n".join(out).rstrip() + "\n"
 
 
 # ---------------------------------------------------------------------------
@@ -626,62 +613,40 @@ def _folder_title(folder: Path, folder_features: list[Feature], docs_dir: Path) 
     return max(set(pool), key=pool.count) if pool else folder.name
 
 
+def _page_statuses(archive: bool) -> list[str]:
+    """Статусы плиток страницы: в архиве — только «архив», в действующих спецификациях — все, кроме «архив»."""
+    return ["archived"] if archive else _statuses(exclude=("archived",))
+
+
 def render_index(folder: Path, docs_dir: Path, features: list[Feature]) -> str:
-    """Содержимое index.md папки модуля: описание, статусы, статистика и отбор (только по этому модулю) и список спецификаций."""
+    """Содержимое index.md папки модуля: статистика (плитки, отбор) и иерархия субмодулей только по этому модулю."""
     direct = [f for f in features if (docs_dir / f.path).parent == folder]
     title = _folder_title(folder, features, docs_dir)
     slug = re.sub(r"[^a-z0-9]+", "-", folder.name.lower()).strip("-") or "folder"
-    # Индекс модуля в архиве: только статус «архив» и без кнопок статусов; в действующих спецификациях статус «архив» не выводится.
-    if DEFAULT_ARCHIVE_DIR_NAME in folder.relative_to(docs_dir).parts:
-        legend_statuses, button_statuses, selection = ["archived"], [], SELECTION_ARCHIVE
-    else:
-        legend_statuses = button_statuses = _statuses(exclude=("archived",))
-        selection = SELECTION_MODULE
+    archive = DEFAULT_ARCHIVE_DIR_NAME in folder.relative_to(docs_dir).parts
+    page_file = f"docs/{(folder / INDEX_NAME).relative_to(docs_dir).as_posix()}"
 
     lines = [
         f"# {_escape(title)} {{#{slug}}}", "", GENERATED_COMMENT, "",
-        f"## Описание {{#{DESCRIPTION_ANCHOR}}}", "",
-        f"Спецификации модуля «{title}».", "",
-        *warning_block(f"docs/{(folder / INDEX_NAME).relative_to(docs_dir).as_posix()}"),
-        *legend_block(legend_statuses),
-        "## Статистика функциональностей модуля в разрезе статусов {#statistics}", "",
-        *statistics_block(direct, legend_statuses),
-        "## Отбор функциональностей модуля {#feature-selection}", "",
-        *selection_block(selection, button_statuses),
-        "## Спецификации модуля {#specs}", "",
+        *statistics_section(page_file, direct, _page_statuses(archive), PLACEHOLDER_MODULE),
+        "## Спецификации {#specs}", "",
+        *(archive_note(DEFAULT_ARCHIVE_DIR_NAME) if archive else []),
+        *render_tree(direct, lambda f: f"{Path(f.path).name}#{DESCRIPTION_ANCHOR}", with_modules=False),
     ]
-    by_sub: dict[str, list[Feature]] = defaultdict(list)
-    for f in direct:
-        by_sub[f.submodule].append(f)
-    for sub in sorted(by_sub, key=_sort_key):
-        lines.append(f"- *{_escape(sub)}*: {status_counts(by_sub[sub])}")
-        for f in sorted(by_sub[sub], key=_feature_key):
-            lines.append(f"    - {f.icon} [{_escape(f.name)}]({Path(f.path).name}#{DESCRIPTION_ANCHOR})"
-                         + LINK_ATTRS_TEMPLATE.format(status=f.shown_status))
     return "\n".join(lines).rstrip() + "\n"
 
 
 def render_section_index(tab: str, tab_features: list[Feature]) -> str:
-    """Содержимое index.md раздела (вкладки меню): как карта фичей, но только по спецификациям этого раздела."""
+    """Содержимое index.md раздела (вкладки меню): как карта, но только по спецификациям этого раздела."""
     title = FOLDER_TITLES.get(tab, tab)
     slug = re.sub(r"[^a-z0-9]+", "-", tab.lower()).strip("-") or "section"
-    if tab == DEFAULT_ARCHIVE_DIR_NAME:      # в архиве только статус «архив» и поиск по названию, без кнопок статусов
-        legend_statuses, button_statuses, selection = ["archived"], [], SELECTION_SECTION_ARCHIVE
-    else:
-        legend_statuses = button_statuses = _statuses(exclude=("archived",))
-        selection = SELECTION_SECTION
+    archive = tab == DEFAULT_ARCHIVE_DIR_NAME
     to_spec = lambda f: quote(posixpath.relpath(f.path, tab)) + f"#{DESCRIPTION_ANCHOR}"
     lines = [
         f"# {_escape(title)} {{#{slug}}}", "", GENERATED_COMMENT, "",
-        f"## Описание {{#{DESCRIPTION_ANCHOR}}}", "",
-        FOLDER_DESCRIPTIONS.get(tab, f"Спецификации раздела «{title}»."), "",
-        *warning_block(f"docs/{tab}/{INDEX_NAME}"),
-        *legend_block(legend_statuses),
-        "## Статистика функциональностей раздела в разрезе статусов {#statistics}", "",
-        *statistics_block(tab_features, legend_statuses),
-        "## Отбор функциональностей раздела {#feature-selection}", "",
-        *selection_block(selection, button_statuses),
-        "## Спецификации раздела {#specs}", "",
+        *statistics_section(f"docs/{tab}/{INDEX_NAME}", tab_features, _page_statuses(archive), PLACEHOLDER_PRODUCT),
+        "## Спецификации {#specs}", "",
+        *(archive_note(DEFAULT_ARCHIVE_DIR_NAME) if archive else []),
         *render_tree(tab_features, to_spec),
     ]
     return "\n".join(lines).rstrip() + "\n"
@@ -790,9 +755,11 @@ def sync_nav(config: Path, nav: str, check: bool, problems: Problems) -> bool:
         return False
     text = config.read_text(encoding="utf-8")
     block = f"{NAV_BEGIN}\n{nav}\n{NAV_END}"
-    pattern = re.compile(re.escape(NAV_BEGIN) + r".*?" + re.escape(NAV_END), re.DOTALL)
+    # Начальный маркер ищем по началу строки (после него допустим любой комментарий), конечный — как есть.
+    pattern = re.compile(re.escape(NAV_BEGIN_PREFIX) + r"[^\n]*\n.*?" + re.escape(NAV_END), re.DOTALL)
     if not pattern.search(text):
-        problems.warning(config, f"нет маркеров `{NAV_BEGIN}` … `{NAV_END}`: меню не обновлено")
+        # Ошибка, а не предупреждение: иначе сайт молча публикуется с устаревшим меню
+        problems.error(config, f"нет маркеров `{NAV_BEGIN}` … `{NAV_END}`: меню не обновлено")
         return False
     new = pattern.sub(lambda _: block, text, count=1)
     if new == text:
@@ -1037,6 +1004,40 @@ def place_relations_block(text: str, block: str) -> str | None:
     return head + "\n\n" + block + "\n\n" + "\n".join(lines[position:])
 
 
+def status_icon(feature: Feature) -> str:
+    """Значок статуса для поля `icon`: `:lucide-file-check:` -> `lucide/file-check` (тот же рисунок, что в карте)."""
+    return "lucide/" + STATUS_ICONS[feature.shown_status].strip(":").removeprefix("lucide-")
+
+
+def set_icon(text: str, icon: str) -> str | None:
+    """Ставит поле `icon` в метаданные: заменяет имеющееся или вставляет после `status`. None — метаданных нет."""
+    match = FRONT_MATTER_RE.match(text)
+    if not match:
+        return None
+    block, line = match.group(1), f"{ICON_KEY}: {icon}"
+    if re.search(rf"(?m)^{ICON_KEY}:.*$", block):
+        block = re.sub(rf"(?m)^{ICON_KEY}:.*$", lambda _: line, block, count=1)
+    elif re.search(r"(?m)^status:.*$", block):
+        block = re.sub(r"(?m)^(status:.*)$", lambda m: f"{m.group(1)}\n{line}", block, count=1)
+    else:
+        block = f"{block}\n{line}"
+    return text[:match.start(1)] + block + text[match.end(1):]
+
+
+def sync_icons(docs_dir: Path, features: list[Feature], check: bool) -> int:
+    """Приводит поле `icon` в спецификациях в соответствие со статусом (или только проверяет). Возвращает число файлов."""
+    changed = 0
+    for f in features:
+        path = docs_dir / f.path
+        text = path.read_text(encoding="utf-8")
+        new = set_icon(text, status_icon(f))
+        if new is not None and new != text:
+            changed += 1
+            if not check:
+                path.write_text(new, encoding="utf-8", newline="\n")
+    return changed
+
+
 def sync_relations(docs_dir: Path, features: list[Feature], check: bool, problems: Problems) -> int:
     """Обновляет раздел «Взаимосвязи» во всех спецификациях (или только проверяет). Возвращает число изменённых файлов."""
     by_slug, incoming = relation_index(features)
@@ -1088,12 +1089,16 @@ def main(argv: list[str] | None = None) -> int:
     if args.check:
         stale_idx, _ = sync_indexes(indexes, check=True, stale=stale)
         nav_stale = sync_nav(args.config, nav, True, problems)
+        if problems.errors:
+            return 1
         rel_stale = sync_relations(docs_dir, features, True, problems)
-        if current != content or stale_idx or nav_stale or rel_stale:
+        icon_stale = sync_icons(docs_dir, features, True)
+        if current != content or stale_idx or nav_stale or rel_stale or icon_stale:
             print("Карта фичей, индексы папок, меню или разделы «Взаимосвязи» устарели: запустите "
                   "scripts/generate_docs.py "
                   f"(карта: {'устарела' if current != content else 'ок'}, индексов: {stale_idx}, "
-                  f"меню: {'устарело' if nav_stale else 'ок'}, взаимосвязей в спецификациях: {rel_stale}).",
+                  f"меню: {'устарело' if nav_stale else 'ок'}, взаимосвязей в спецификациях: {rel_stale}, "
+                  f"значков статуса в метаданных: {icon_stale}).",
                   file=sys.stderr)
             return 1
         print("Карта фичей, индексы папок, меню и разделы «Взаимосвязи» актуальны.")
@@ -1106,7 +1111,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Карта фичей обновлена: {_display(args.output)} ({len(features)} спецификаций).")
     changed, total = sync_indexes(indexes, check=False, stale=stale)
     print(f"Индексы папок: изменено {changed} (всего {total}, удалено лишних {len(stale)}).")
-    print("Меню (nav) обновлено." if sync_nav(args.config, nav, False, problems) else "Меню (nav) без изменений.")
+    nav_changed = sync_nav(args.config, nav, False, problems)
+    if problems.errors:
+        return 1
+    print("Меню (nav) обновлено." if nav_changed else "Меню (nav) без изменений.")
+    print(f"Значки статуса (`{ICON_KEY}`) в метаданных спецификаций: изменено {sync_icons(docs_dir, features, False)}.")
     rel_changed = sync_relations(docs_dir, features, False, problems)
     print(f"Разделы «{RELATIONS_TITLE}» в спецификациях: изменено {rel_changed} (всего {len(features)}).")
     return 0

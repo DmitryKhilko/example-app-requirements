@@ -3,6 +3,7 @@ module: "Управление заказами"
 submodule: "Оформление заказа"
 feature_name: "Выбор адреса на интерактивной карте"
 status: "development"
+icon: lucide/file-braces
 doc_version: "0.01"
 order: 40
 owner: "Дмитрий Хилько"
@@ -54,3 +55,7 @@ flowchart LR
 
 - Адрес можно скорректировать вручную.
 - Недоступные для доставки зоны выделяются на карте.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

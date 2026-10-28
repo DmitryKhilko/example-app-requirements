@@ -3,6 +3,7 @@ module: "Управление заказами"
 submodule: "История заказов"
 feature_name: "Отмена заказа клиентом"
 status: "ready"
+icon: lucide/file-check
 doc_version: "0.01"
 order: 30
 owner: "Дмитрий Хилько"
@@ -54,3 +55,7 @@ flowchart LR
 
 - Отмена недоступна для заказов в статусах «Передан в доставку» и «Доставлен».
 - Возврат инициируется не позднее 1 часа после отмены.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

@@ -3,6 +3,7 @@ module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Фильтрация по категориям и тегам"
 status: "released"
+icon: lucide/file-text
 order: 10
 doc_version: "0.02"
 owner: "Дмитрий Хилько"
@@ -54,3 +55,7 @@ flowchart LR
 
 - Выбранные фильтры отражаются в адресе страницы.
 - Сброс фильтров возвращает полный список.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

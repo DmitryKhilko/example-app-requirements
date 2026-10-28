@@ -12,17 +12,20 @@
    [project.theme]: иначе в TOML она окажется в другой таблице, и Zensical
    её не увидит.
 
-   Парный файл: theme-custom/javascripts/tiles.js (подключается строкой
+   Парный файл: theme-custom/javascripts/status-filter.js (подключается строкой
    extra_javascript в том же разделе [project]).
 
    Разделы файла:
      1. Плитки перехода на главной странице (index.md)
      2. Цвета тёмной схемы slate
      3. Окно предпросмотра ссылок {data-preview} в тёмной схеме
-     4. Сводка на странице перечня функциональностей (две колонки)
-     5. Фильтр перечня по статусам (кнопки темы)
+     4. Плитки статусов (они же кнопки фильтра)
+     5. Строка отбора и кнопка «Сбросить»
      6. Поле отбора перечня по названию
      7. Сообщение «Нет данных» при пустом результате отбора
+     8. Значок статуса справа от названия в меню (скрыт)
+     9. Запятые между счётчиками статусов в заголовках модулей
+    10. Сворачиваемые блоки «Модуль» и «Субмодуль»
    ========================================================================== */
 
 
@@ -37,13 +40,21 @@
    показывается окно предпросмотра раздела #article-overview) и короткое
    описание. Отдельной ссылки «Открыть» в плитках нет.
 
-   Само открытие страницы по клику в любом месте плитки выполняет скрипт
-   theme-custom/javascripts/tiles.js (см. комментарии в нём). Здесь только
-   внешний вид: курсор-«рука» подсказывает читателю, что плитка кликабельна
-   целиком, а не только текст заголовка-ссылки.
+   Клик в любом месте плитки открывает страницу без скриптов: ссылка-заголовок растянута на всю
+   плитку (приём «stretched link»: прозрачный псевдоэлемент ссылки занимает плитку целиком).
+   Ctrl+клик и средняя кнопка мыши работают как у обычной ссылки; окно предпросмотра появляется
+   при наведении на любое место плитки. В плитке должна быть одна ссылка. Курсор-«рука»
+   подсказывает читателю, что плитка кликабельна целиком.
    -------------------------------------------------------------------------- */
 .grid.cards li {
-  cursor: pointer;  /* При наведении на плитку курсор превращается в «руку» */
+  position: relative;  /* Опорная точка для растянутой ссылки */
+  cursor: pointer;     /* При наведении на плитку курсор превращается в «руку» */
+}
+
+.grid.cards li a[href]::after {
+  content: "";
+  position: absolute;
+  inset: 0;            /* Ссылка накрывает всю плитку */
 }
 
 
@@ -102,41 +113,107 @@
 
 
 /* --------------------------------------------------------------------------
-   4. СВОДКА НА СТРАНИЦЕ ПЕРЕЧНЯ ФУНКЦИОНАЛЬНОСТЕЙ (feature-map.md)
+   4. ПЛИТКИ СТАТУСОВ (feature-map.md, index.md разделов и модулей)
 
-   Скрипт scripts/generate_docs.py выводит два блока "!!! info status-cols":
-   «Обозначения» и «Всего спецификаций». Класс status-cols попадает на <div class="admonition
-   info status-cols">. Список внутри блока выводится в две колонки: шесть статусов
-   распределяются по 3 в колонке (сначала заполняется левая). На узком экране
-   (меньше 40rem) колонки сворачиваются в одну.
+   Раздел «Статистика» выводит плитки: значок статуса и число спецификаций, без надписей. Плитка —
+   ссылка `.status-tile` с атрибутом data-filter и подсказкой (title, её оформляет тема: функция
+   content.tooltips). Плитки работают как кнопки фильтра: выбранная подсвечивается классом is-active
+   (ставит status-filter.js), можно выбрать несколько. Цвет задаёт переменная --c, она берётся из
+   --sf-<статус>; значения для светлой и тёмной схемы заданы ниже.
    -------------------------------------------------------------------------- */
-.md-typeset .admonition.status-cols > ul {
-  column-count: 2;
-  column-gap: 3rem;
+:root {
+  --sf-backlog: #6b7a8c;
+  --sf-analysis: #c98a00;
+  --sf-ready: #2b78c9;
+  --sf-development: #7a4fd0;
+  --sf-released: #228a5b;
+  --sf-archived: #7c7c7c;
 }
 
-.md-typeset .admonition.status-cols > ul > li {
-  break-inside: avoid;  /* Пункт не разрывается между колонками */
+[data-md-color-scheme="slate"] {
+  --sf-backlog: #9fb0c3;
+  --sf-analysis: #f0b429;
+  --sf-ready: #5aa7f0;
+  --sf-development: #a98bf0;
+  --sf-released: #4cc38a;
+  --sf-archived: #a8a8a8;
 }
 
-@media (max-width: 40rem) {
-  .md-typeset .admonition.status-cols > ul {
-    column-count: 1;
-  }
+.md-typeset .status-tiles > p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.8em 0;
+}
+
+.md-typeset a.status-tile {
+  --c: var(--sf-backlog);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 5rem;
+  padding: 0.5rem 1rem;
+  color: var(--c);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  background-color: color-mix(in srgb, var(--c) 12%, transparent);
+  border: 0.1rem solid var(--c);
+  border-radius: 0.5rem;
+  transition: background-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.md-typeset a.status-tile[data-filter="analysis"]    { --c: var(--sf-analysis); }
+.md-typeset a.status-tile[data-filter="ready"]       { --c: var(--sf-ready); }
+.md-typeset a.status-tile[data-filter="development"] { --c: var(--sf-development); }
+.md-typeset a.status-tile[data-filter="released"]    { --c: var(--sf-released); }
+.md-typeset a.status-tile[data-filter="archived"]    { --c: var(--sf-archived); }
+
+.md-typeset a.status-tile:hover {
+  background-color: color-mix(in srgb, var(--c) 24%, transparent);
+}
+
+.md-typeset a.status-tile.is-active {
+  color: #fff;
+  background-color: var(--c);
+  box-shadow: 0 0 0 0.15rem color-mix(in srgb, var(--c) 35%, transparent);
+}
+
+.md-typeset a.status-tile .twemoji {
+  --md-icon-size: 1.2em;
 }
 
 
 /* --------------------------------------------------------------------------
-   5. ФИЛЬТР ПЕРЕЧНЯ ПО СТАТУСАМ (feature-map.md)
+   5. СТРОКА ОТБОРА И КНОПКА «СБРОСИТЬ»
 
-   Кнопки фильтра — ссылки с классом .md-button (оформляет сама тема, см. документацию
-   Zensical «Buttons»); их создаёт scripts/generate_docs.py, а клики обрабатывает
-   theme-custom/javascripts/status-filter.js. Здесь только отступы между кнопками,
-   чтобы при переносе на новую строку они не слипались.
+   Под плитками стоят поле отбора по названию и кнопка «Сбросить» (ссылка с классом .md-button,
+   оформляет сама тема, см. документацию Zensical «Buttons»). Их создаёт scripts/generate_docs.py, а
+   ввод и клики обрабатывает theme-custom/javascripts/status-filter.js. Здесь они выровнены в одну строку.
    -------------------------------------------------------------------------- */
-.md-typeset a.md-button[data-filter],
-.md-typeset a.md-button[data-filter-reset] {
-  margin: 0 0.25rem 0.5rem 0;
+.md-typeset .feature-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.md-typeset .feature-filter > p {
+  margin: 0;
+}
+
+.md-typeset .feature-filter > p:first-child {
+  flex: 1 1 18rem;
+}
+
+.md-typeset .feature-filter input.feature-search {
+  margin-top: 0;
+}
+
+.md-typeset .feature-filter a.md-button,
+.md-typeset .feature-empty a.md-button {
+  margin: 0;
 }
 
 
@@ -181,4 +258,72 @@
 
 .md-typeset .feature-empty[hidden] {
   display: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   8. ЗНАЧОК СТАТУСА СПРАВА ОТ НАЗВАНИЯ В МЕНЮ (СКРЫТ)
+
+   Перед названием спецификации в левом меню значок статуса выводит сама тема: поле `icon`
+   метаданных (например, `icon: lucide/file-check`), его ведёт scripts/generate_docs.py по полю `status`.
+   Поле `status` тема тоже показывает значком («i» в кружке) справа от названия в левом меню и в
+   правом оглавлении страницы. Он дублирует значок перед названием, поэтому скрыт.
+   -------------------------------------------------------------------------- */
+.md-status {
+  display: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   9. ЗАПЯТЫЕ МЕЖДУ СЧЁТЧИКАМИ СТАТУСОВ В ЗАГОЛОВКАХ МОДУЛЕЙ
+
+   Генератор выводит каждый счётчик как <span data-count-item="статус">. Запятую после него рисует CSS,
+   а не текст: когда status-filter.js скрывает счётчик с нулём, запятая скрывается вместе с ним.
+   Последнему видимому счётчику скрипт ставит класс is-last (без скрипта «последний» — по порядку в разметке).
+   -------------------------------------------------------------------------- */
+[data-count-item]::after {
+  content: ",";
+}
+
+span[data-count-item]:last-of-type::after,
+[data-count-item].is-last::after {
+  content: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   10. СВОРАЧИВАЕМЫЕ БЛОКИ «МОДУЛЬ» И «СУБМОДУЛЬ»
+
+   Генератор выводит списки спецификаций вложенными блоками <details class="feature-block">. Тема оформляет
+   <details> как «панель» со значком типа и стрелкой; значок типа здесь убран (оставлена стрелка раскрытия),
+   у блока субмодуля рамка и фон легче, чем у блока модуля. Раскрытием управляет status-filter.js.
+   -------------------------------------------------------------------------- */
+.md-typeset details.feature-block {
+  margin: 0.5rem 0;
+  padding: 0;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-radius: 0.3rem;
+  box-shadow: none;
+}
+
+.md-typeset details.feature-block > summary {
+  padding: 0.6rem 2.4rem 0.6rem 0.9rem;
+  cursor: pointer;
+  background-color: var(--md-default-fg-color--lightest);
+}
+
+.md-typeset details.feature-block > summary::before {
+  display: none;   /* значок типа панели не нужен */
+}
+
+.md-typeset details.feature-submodule {
+  margin: 0.5rem 0.8rem;
+}
+
+.md-typeset details.feature-submodule > summary {
+  background-color: transparent;
+}
+
+.md-typeset details.feature-block > ul {
+  margin: 0.2rem 0.8rem 0.6rem;
 }

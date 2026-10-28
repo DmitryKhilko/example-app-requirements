@@ -3,6 +3,7 @@ module: "Каталог товаров"
 submodule: "Карточка товара"
 feature_name: "Галерея изображений с зумом"
 status: "released"
+icon: lucide/file-text
 order: 30
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
@@ -50,3 +51,7 @@ flowchart LR
 
 - Поддерживается не менее 10 изображений на товар.
 - Зум работает на мобильных устройствах.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}
