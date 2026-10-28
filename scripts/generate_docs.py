@@ -553,7 +553,7 @@ def warning_block(page_file: str) -> list[str]:
 
 def statistics_block(features: list[Feature], statuses: list[str] | None = None) -> list[str]:
     """Блок «Всего спецификаций: N» — две колонки по 3 статуса (класс `status-cols`, см. extra.css, раздел 4)."""
-    # Числа в <span data-stat>: при отборе их пересчитывает status-filter.js (по тексту отбора, без учёта выбранных статусов)
+    # Числа в <span data-stat>: при отборе их пересчитывает status-filter.js (результат отбора по статусам и по названию)
     counts = [f'    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: <span data-stat="{s}">{sum(1 for f in features if f.shown_status == s)}</span>'
               for s in _statuses(statuses)]
     return [f'!!! info status-cols "Всего спецификаций: {len(features)}"', "", *counts, ""]
