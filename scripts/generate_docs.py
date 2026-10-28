@@ -528,20 +528,23 @@ def _statuses(only: list[str] | None = None, exclude: tuple[str, ...] = ()) -> l
 
 
 def tiles_block(features: list[Feature], statuses: list[str]) -> list[str]:
-    """Плитки статистики: первой идёт плитка «Всего» (общий итог, не кнопка), далее — значок, название статуса и число.
+    """Плитки статистики: сверху на всю ширину плитка «Всего» (общий итог, не кнопка), ниже плитки статусов:
+    значок и число, под ними название статуса.
 
     Плитка — кнопка фильтра по статусу (атрибут data-filter; выбор нескольких, выбранные подсвечиваются). Пояснение статуса
     показывает подсказка (атрибут title; тема выводит его стилизованной подсказкой, функция content.tooltips). Число в
     `<span data-stat>` пересчитывает status-filter.js при отборе. Вид плиток — extra.css, раздел 4.
     """
-    tiles = [f'[{STATUS_ICONS[s]} <span class="status-name">{STATUS_TITLES[s]}</span> '
-             f'<span data-stat="{s}">{sum(1 for f in features if f.shown_status == s)}</span>](#)'
+    tiles = [f'[<span class="status-top">{STATUS_ICONS[s]} '
+             f'<span data-stat="{s}">{sum(1 for f in features if f.shown_status == s)}</span></span>'
+             f'<span class="status-name">{STATUS_TITLES[s]}</span>](#)'
              f'{{ .status-tile data-filter="{s}" title="{STATUS_DESCRIPTIONS[s]}" '
              f'aria-label="{STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" }}' for s in statuses]
     # Общий итог — обычный элемент (не ссылка), поэтому фильтром не является; число пересчитывает status-filter.js.
     total = (f'<span class="status-total">:lucide-files: <span class="status-name">Всего</span> '
              f'<span data-stat-total>{len(features)}</span></span>')
-    return ['<div class="status-tiles" markdown>', "", total, *tiles, "", "</div>", ""]
+    # --n — число плиток статусов: по нему extra.css делит ширину строки поровну (раздел 4)
+    return [f'<div class="status-tiles" style="--n: {len(statuses)}" markdown>', "", total, *tiles, "", "</div>", ""]
 
 
 def filter_block(placeholder: str) -> list[str]:
