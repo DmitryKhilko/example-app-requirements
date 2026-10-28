@@ -54,4 +54,4 @@ flowchart LR
 
 ## Ссылка на задачу {#task}
 
-[Задача 01](https://github.bmf/khilko/app_requirements/issues/1)
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}
