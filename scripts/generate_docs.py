@@ -233,6 +233,7 @@ DEFAULT_NAV_ORDER = REPO_ROOT / "nav-order.yml"
 NAV_ORDER_KEY = "modules"
 ORDER_KEY = "order"
 NAV_BEGIN = "# BEGIN GENERATED NAV — не редактируйте вручную"
+NAV_BEGIN_PREFIX = "# BEGIN GENERATED NAV"
 NAV_END = "# END GENERATED NAV"
 # Служебные страницы в начале меню: (название, файл относительно docs). Отсутствующие файлы пропускаются.
 ROOT_PAGES = [
@@ -790,9 +791,11 @@ def sync_nav(config: Path, nav: str, check: bool, problems: Problems) -> bool:
         return False
     text = config.read_text(encoding="utf-8")
     block = f"{NAV_BEGIN}\n{nav}\n{NAV_END}"
-    pattern = re.compile(re.escape(NAV_BEGIN) + r".*?" + re.escape(NAV_END), re.DOTALL)
+    # Начальный маркер ищем по началу строки (после него допустим любой комментарий), конечный — как есть.
+    pattern = re.compile(re.escape(NAV_BEGIN_PREFIX) + r"[^\n]*\n.*?" + re.escape(NAV_END), re.DOTALL)
     if not pattern.search(text):
-        problems.warning(config, f"нет маркеров `{NAV_BEGIN}` … `{NAV_END}`: меню не обновлено")
+        # Ошибка, а не предупреждение: иначе сайт молча публикуется с устаревшим меню
+        problems.error(config, f"нет маркеров `{NAV_BEGIN}` … `{NAV_END}`: меню не обновлено")
         return False
     new = pattern.sub(lambda _: block, text, count=1)
     if new == text:
@@ -1088,6 +1091,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.check:
         stale_idx, _ = sync_indexes(indexes, check=True, stale=stale)
         nav_stale = sync_nav(args.config, nav, True, problems)
+        if problems.errors:
+            return 1
         rel_stale = sync_relations(docs_dir, features, True, problems)
         if current != content or stale_idx or nav_stale or rel_stale:
             print("Карта фичей, индексы папок, меню или разделы «Взаимосвязи» устарели: запустите "
@@ -1106,7 +1111,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Карта фичей обновлена: {_display(args.output)} ({len(features)} спецификаций).")
     changed, total = sync_indexes(indexes, check=False, stale=stale)
     print(f"Индексы папок: изменено {changed} (всего {total}, удалено лишних {len(stale)}).")
-    print("Меню (nav) обновлено." if sync_nav(args.config, nav, False, problems) else "Меню (nav) без изменений.")
+    nav_changed = sync_nav(args.config, nav, False, problems)
+    if problems.errors:
+        return 1
+    print("Меню (nav) обновлено." if nav_changed else "Меню (nav) без изменений.")
     rel_changed = sync_relations(docs_dir, features, False, problems)
     print(f"Разделы «{RELATIONS_TITLE}» в спецификациях: изменено {rel_changed} (всего {len(features)}).")
     return 0

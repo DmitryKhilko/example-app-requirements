@@ -1,7 +1,7 @@
 # example-app-requirements
 Пример организации требований с использованием подхода "Documentation as Code"
 
-Адрес сайта: https://dmitrykhilko.github.io/example-app-requirements/
+Адрес сайта задан параметром `site_url` в `zensical.toml`.
 
 ## Как устроена карта фичей
 
@@ -13,11 +13,12 @@
 Слияние в main ──► feature-map: python scripts/generate_docs.py ──► коммит docs/feature-map.md (если изменился)
                                                                         │
                                                                         ▼
-                                                  deploy: zensical build ──► GitHub Pages
+                                                  deploy: zensical build ──► Pages
 ```
 
-Workflow: `.github/workflows/deploy.yml`. Карта обновляется только при слиянии в `main`; в рабочих ветках
-`docs/feature-map.md` не трогают, поэтому конфликтов слияния в нём не возникает.
+Workflow: `.github/workflows/deploy.yml` (GitHub) или `.gitea/workflows/pages.yaml` (Gitea). Карта обновляется
+только при слиянии в `main`; в рабочих ветках `docs/feature-map.md` не трогают, поэтому конфликтов слияния в нём не
+возникает.
 
 ### Метаданные спецификации
 
@@ -194,7 +195,16 @@ python scripts/generate_docs.py --check  # проверить, что всё а�
 
 ### Настройки репозитория
 
+**GitHub**
+
 * Settings → Pages → Source: **GitHub Actions**.
 * Settings → Actions → General → Workflow permissions: **Read and write permissions** (нужно для коммита карты).
 * Если ветка `main` защищена правилом «только через Pull Request», разрешите обход правила для GitHub Actions
   либо замените `GITHUB_TOKEN` в шаге коммита на токен с правом записи.
+
+**Gitea**
+
+* Нужен зарегистрированный `act_runner` с меткой, указанной в `runs-on` файла `.gitea/workflows/pages.yaml`.
+* Если ветка `main` защищена, разрешите пользователю, от имени которого workflow коммитит карту, прямую запись в `main`.
+
+В обоих случаях `site_url`, `repo_url` и `repo_name` в разделе `[project]` файла `zensical.toml` укажите для своего сервера.
