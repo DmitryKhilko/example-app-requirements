@@ -23,6 +23,7 @@
      5. Фильтр перечня по статусам (кнопки темы)
      6. Поле отбора перечня по названию
      7. Сообщение «Нет данных» при пустом результате отбора
+     8. Значки статусов в левом меню
    ========================================================================== */
 
 
@@ -181,4 +182,92 @@
 
 .md-typeset .feature-empty[hidden] {
   display: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   8. ЗНАЧКИ СТАТУСОВ В ЛЕВОМ МЕНЮ
+
+   Поле `status` в метаданных спецификации тема показывает в левом меню значком справа от названия
+   (по умолчанию — «i» в кружке). Здесь значок заменён на тот же, что и в карте функциональностей
+   (STATUS_ICONS в scripts/generate_docs.py: файл, файл с пером, с галочкой, со скобками, с текстом,
+   в архиве) и перенесён перед названием. Значки заданы маской, поэтому берут цвет текста темы и
+   работают в светлой и тёмной схемах. Новый статус: добавьте его в [project.extra.status]
+   в zensical.toml и сюда (по образцу ниже).
+   -------------------------------------------------------------------------- */
+.md-nav__link .md-status--backlog,
+.md-nav__link .md-status--analysis,
+.md-nav__link .md-status--ready,
+.md-nav__link .md-status--development,
+.md-nav__link .md-status--released,
+.md-nav__link .md-status--archived {
+  order: -1;                 /* значок идёт перед названием: ссылка меню — flex-контейнер */
+  flex-shrink: 0;
+  margin-top: 0.05em;
+}
+
+.md-nav__link .md-status--backlog::after,
+.nav-status-icon[data-status="backlog"] {        /* lucide: file */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7.5L14.5%202z%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7.5L14.5%202z%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3C/svg%3E");
+}
+
+.md-nav__link .md-status--analysis::after,
+.nav-status-icon[data-status="analysis"] {        /* lucide: file-pen-line */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h3%22/%3E%3Cpath%20d=%22M20%208.5V7.5L14.5%202%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3Cpath%20d=%22M13%2021l.5-2.5%206-6a1.4%201.4%200%200%201%202%202l-6%206z%22/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h3%22/%3E%3Cpath%20d=%22M20%208.5V7.5L14.5%202%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3Cpath%20d=%22M13%2021l.5-2.5%206-6a1.4%201.4%200%200%201%202%202l-6%206z%22/%3E%3C/svg%3E");
+}
+
+.md-nav__link .md-status--ready::after,
+.nav-status-icon[data-status="ready"] {        /* lucide: file-check */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7.5L14.5%202z%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3Cpath%20d=%22m9%2015%202%202%204-4%22/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7.5L14.5%202z%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3Cpath%20d=%22m9%2015%202%202%204-4%22/%3E%3C/svg%3E");
+}
+
+.md-nav__link .md-status--development::after,
+.nav-status-icon[data-status="development"] {        /* lucide: file-braces */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7.5L14.5%202z%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3Cpath%20d=%22M10%2012a1%201%200%200%200-1%201v1a1%201%200%200%201-1%201%201%201%200%200%201%201%201v1a1%201%200%200%200%201%201%22/%3E%3Cpath%20d=%22M14%2018a1%201%200%200%200%201-1v-1a1%201%200%200%201%201-1%201%201%200%200%201-1-1v-1a1%201%200%200%200-1-1%22/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7.5L14.5%202z%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3Cpath%20d=%22M10%2012a1%201%200%200%200-1%201v1a1%201%200%200%201-1%201%201%201%200%200%201%201%201v1a1%201%200%200%200%201%201%22/%3E%3Cpath%20d=%22M14%2018a1%201%200%200%200%201-1v-1a1%201%200%200%201%201-1%201%201%200%200%201-1-1v-1a1%201%200%200%200-1-1%22/%3E%3C/svg%3E");
+}
+
+.md-nav__link .md-status--released::after,
+.nav-status-icon[data-status="released"] {        /* lucide: file-text */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7.5L14.5%202z%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3Cline%20x1=%2216%22%20x2=%228%22%20y1=%2213%22%20y2=%2213%22/%3E%3Cline%20x1=%2216%22%20x2=%228%22%20y1=%2217%22%20y2=%2217%22/%3E%3Cline%20x1=%2210%22%20x2=%228%22%20y1=%229%22%20y2=%229%22/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7.5L14.5%202z%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3Cline%20x1=%2216%22%20x2=%228%22%20y1=%2213%22%20y2=%2213%22/%3E%3Cline%20x1=%2216%22%20x2=%228%22%20y1=%2217%22%20y2=%2217%22/%3E%3Cline%20x1=%2210%22%20x2=%228%22%20y1=%229%22%20y2=%229%22/%3E%3C/svg%3E");
+}
+
+.md-nav__link .md-status--archived::after,
+.nav-status-icon[data-status="archived"] {        /* lucide: file-archive */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7.5L14.5%202z%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3Ccircle%20cx=%2210%22%20cy=%2220%22%20r=%222%22/%3E%3Cpath%20d=%22M10%207V6%22/%3E%3Cpath%20d=%22M10%2012v-1%22/%3E%3Cpath%20d=%22M10%2018v-2%22/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22black%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M14.5%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7.5L14.5%202z%22/%3E%3Cpolyline%20points=%2214%202%2014%208%2020%208%22/%3E%3Ccircle%20cx=%2210%22%20cy=%2220%22%20r=%222%22/%3E%3Cpath%20d=%22M10%207V6%22/%3E%3Cpath%20d=%22M10%2012v-1%22/%3E%3Cpath%20d=%22M10%2018v-2%22/%3E%3C/svg%3E");
+}
+
+
+/* --------------------------------------------------------------------------
+   9. ЗНАЧКИ СТАТУСОВ В ЛЕВОМ МЕНЮ: РАЗМЕТКА, НЕ ЗАВИСЯЩАЯ ОТ ВЕРСИИ ТЕМЫ
+
+   Скрипт theme-custom/javascripts/nav-status.js по файлу docs/nav-status.json (его формирует
+   scripts/generate_docs.py) ставит перед названием спецификации в левом меню элемент
+   <span class="nav-status-icon" data-status="…"> и убирает штатный значок темы («i» в кружке).
+   Рисунок значка по статусу задан в разделе 8 (маска), цвет берётся из текста темы.
+   -------------------------------------------------------------------------- */
+.nav-status-icon {
+  display: inline-block;
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+  margin-right: 0.45em;
+  vertical-align: -0.2em;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+/* Штатный значок темы справа от названия (если тема рисует его псевдоэлементом) */
+.md-nav__link[data-status]::after {
+  display: none !important;
 }
