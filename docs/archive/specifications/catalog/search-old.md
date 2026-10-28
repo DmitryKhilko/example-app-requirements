@@ -50,3 +50,7 @@ flowchart LR
 ## Критерии приёмки {#acceptance-criteria}
 
 - Заменено фичей ["Полнотекстовый поиск по названию"](../../../specifications/catalog/search-text.md#article-overview){data-preview}.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1)

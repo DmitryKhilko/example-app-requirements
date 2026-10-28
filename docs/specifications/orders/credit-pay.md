@@ -60,3 +60,7 @@ flowchart LR
 ## Критерии приёмки {#acceptance-criteria}
 
 - Доступно для заказов от 10 000 ₽.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1)

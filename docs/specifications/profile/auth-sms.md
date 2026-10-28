@@ -59,3 +59,7 @@ flowchart LR
 
 - Код действует 5 минут.
 - После 3 неверных попыток ввод блокируется на 15 минут.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1)

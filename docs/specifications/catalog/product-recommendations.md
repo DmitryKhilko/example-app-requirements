@@ -60,3 +60,7 @@ flowchart LR
 ## Критерии приёмки {#acceptance-criteria}
 
 - Блок не показывается, если подходящих товаров меньше 3.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1)

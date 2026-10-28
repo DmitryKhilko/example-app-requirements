@@ -30,3 +30,7 @@ owner: "Дмитрий Хилько"
 ## Критерии приёмки {#acceptance-criteria}
 
 - Фича выведена из эксплуатации.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1)

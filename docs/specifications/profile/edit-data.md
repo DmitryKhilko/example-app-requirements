@@ -57,3 +57,7 @@ flowchart LR
 ## Критерии приёмки {#acceptance-criteria}
 
 - Смена e-mail требует подтверждения по ссылке из письма.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1)

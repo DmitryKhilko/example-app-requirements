@@ -59,3 +59,7 @@ flowchart LR
 
 - Срок действия QR-кода — 10 минут.
 - Статус оплаты обновляется без перезагрузки страницы.
+
+## Ссылка на задачу {#task}
+
+[Задача 01](https://github.bmf/khilko/app_requirements/issues/1)
