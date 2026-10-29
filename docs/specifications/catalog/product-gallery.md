@@ -1,4 +1,5 @@
 ---
+id: "SHOP-CAT-CARD-001"
 module: "Каталог товаров"
 submodule: "Карточка товара"
 feature_name: "Галерея изображений с зумом"

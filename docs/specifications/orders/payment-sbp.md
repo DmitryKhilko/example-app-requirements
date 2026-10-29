@@ -1,4 +1,5 @@
 ---
+id: "SHOP-ORD-CHCK-003"
 module: "Управление заказами"
 submodule: "Оформление заказа"
 feature_name: "Оплата через СБП / QR-код"

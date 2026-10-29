@@ -1,4 +1,5 @@
 ---
+id: "SHOP-ACC-AUTH-001"
 module: "Личный кабинет"
 submodule: "Авторизация"
 feature_name: "Двухфакторная аутентификация (2FA)"

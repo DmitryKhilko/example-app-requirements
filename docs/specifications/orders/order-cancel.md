@@ -1,4 +1,5 @@
 ---
+id: "SHOP-ORD-HIST-002"
 module: "Управление заказами"
 submodule: "История заказов"
 feature_name: "Отмена заказа клиентом"

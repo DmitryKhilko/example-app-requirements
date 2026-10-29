@@ -1,4 +1,5 @@
 ---
+id: "SHOP-ACC-AUTH-002"
 module: "Личный кабинет"
 submodule: "Авторизация"
 feature_name: "Вход по номеру телефона и SMS"

@@ -1,4 +1,5 @@
 ---
+id: "SHOP-ORD-CHCK-002"
 module: "Управление заказами"
 submodule: "Оформление заказа"
 feature_name: "Покупка в рассрочку"

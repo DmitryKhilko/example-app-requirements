@@ -1,4 +1,5 @@
 ---
+id: "SHOP-CAT-SF-005"
 module: "Каталог товаров"
 submodule: "Поиск и фильтрация"
 feature_name: "Новая фича"
