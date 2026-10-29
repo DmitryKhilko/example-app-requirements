@@ -41,6 +41,7 @@
 ------
     python scripts/generate_docs.py           # пересобрать карту, индексы, меню и разделы «Взаимосвязи»
     python scripts/generate_docs.py --check   # только проверить, что всё актуально
+    python scripts/generate_docs.py --validate  # только проверить спецификации (метаданные, связи, структуру), ничего не писать
 
 Код возврата 1 — ошибка в метаданных (нет `module` или `feature_name`, битый YAML, ошибки в `relations`)
 либо, в режиме --check, что-то из сформированного устарело.
@@ -1056,6 +1057,39 @@ def sync_relations(docs_dir: Path, features: list[Feature], check: bool, problem
     return changed
 
 
+def check_structure(docs_dir: Path, features: list[Feature], archive_dir_name: str, problems: Problems) -> None:
+    """Дополнительные проверки режима --validate (только предупреждения, ничего не пишет).
+
+    * в спецификации есть раздел «Описание» с якорем `{#article-overview}` (на него ведут ссылки карты и окна предпросмотра);
+    * в папках разделов (specifications, archive) нет .md-файлов без метаданных спецификации: такой файл
+      молча не попал бы в карту. Сформированные index.md пропускаются.
+    """
+    for f in features:
+        path = docs_dir / f.path
+        in_fence, found = False, False
+        for line in path.read_text(encoding="utf-8").split("\n"):
+            if line.lstrip().startswith(("```", "~~~")):
+                in_fence = not in_fence
+            elif not in_fence and _DESCRIPTION_RE.match(line):
+                found = True
+                break
+        if not found:
+            problems.warning(path, f"нет раздела «Описание» с якорем `{{#{DESCRIPTION_ANCHOR}}}`")
+
+    known = {docs_dir / f.path for f in features}
+    for section in sorted({archive_dir_name, *FOLDER_TITLES}):
+        folder = docs_dir / section
+        if not folder.is_dir():
+            continue
+        for path in sorted(folder.rglob("*.md")):
+            if path in known:
+                continue
+            if path.name == INDEX_NAME and INDEX_MARKER in path.read_text(encoding="utf-8"):
+                continue
+            problems.warning(path, "файл в папке спецификаций без метаданных спецификации "
+                                   "(`module`, `feature_name`): в карту он не попадёт")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Сборка карты фичей из спецификаций")
     parser.add_argument("--docs", type=Path, default=DEFAULT_DOCS_DIR, help="папка со спецификациями")
@@ -1064,7 +1098,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG, help="zensical.toml с блоком меню (nav)")
     parser.add_argument("--nav-order", type=Path, default=DEFAULT_NAV_ORDER, help="nav-order.yml с порядком модулей в меню")
     parser.add_argument("--check", action="store_true", help="не писать файл, а проверить его актуальность")
+    parser.add_argument("--validate", action="store_true",
+                        help="только проверить спецификации (метаданные, связи, структура); ничего не писать")
     args = parser.parse_args(argv)
+    if args.validate and args.check:
+        parser.error("--validate и --check взаимоисключающие")
 
     docs_dir = args.docs.resolve()
     if not docs_dir.is_dir():
@@ -1075,6 +1113,14 @@ def main(argv: list[str] | None = None) -> int:
     features = collect_features(docs_dir, args.output, args.archive_dir, problems)
     MODULE_ORDER[:] = load_module_order(args.nav_order, problems)
     check_order(features, MODULE_ORDER, docs_dir, args.nav_order, problems)
+    if args.validate:
+        check_structure(docs_dir, features, args.archive_dir, problems)
+        if problems.errors:
+            print(f"Проверка не пройдена: ошибок — {len(problems.errors)}, предупреждений — {len(problems.warnings)}.",
+                  file=sys.stderr)
+            return 1
+        print(f"Проверка пройдена: спецификаций — {len(features)}, предупреждений — {len(problems.warnings)}.")
+        return 0
     if problems.errors:
         print(f"Карта не обновлена: ошибок в метаданных — {len(problems.errors)}.", file=sys.stderr)
         return 1

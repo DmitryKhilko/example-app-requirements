@@ -1,0 +1,15 @@
+#!/bin/sh
+# Локальная проверка спецификаций перед коммитом (срабатывает и из терминала, и из VS Code).
+# Включение (один раз в клоне): git config core.hooksPath .githooks
+# Обход (на этапе разработки): git commit --no-verify
+
+# Устанавливаем переменные окружения для принудительного UTF-8 в Python и выводе
+export PYTHONIOENCODING=utf-8
+export LANG=ru_RU.UTF-8
+export LC_ALL=ru_RU.UTF-8
+
+PY=python; command -v python >/dev/null 2>&1 || PY=python3
+"$PY" scripts/generate_docs.py --validate || {
+  echo "Коммит отменён: исправьте ошибки в спецификациях (см. выше)."
+  exit 1
+}
