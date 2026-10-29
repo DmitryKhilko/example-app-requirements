@@ -9,11 +9,15 @@ hide:
 
 ## Статистика {#statistics}
 
+??? info "Статусы спецификаций"
+
+    - :lucide-file-archive: архив: отклонённое или устаревшее требование
+
 <div class="status-total" markdown="span">:lucide-files: <span class="status-name">Всего спецификаций</span> <span data-stat-total>3</span></div>
 
 <div class="status-tiles" data-n="1" markdown>
 
-[<span class="status-top">:lucide-file-archive: <span data-stat="archived">3</span></span><span class="status-name">архив</span>](#){ .status-tile data-filter="archived" title="отклонённое или устаревшее требование" aria-label="архив: отклонённое или устаревшее требование" }
+[<span class="status-top">:lucide-file-archive: <span data-stat="archived">3</span></span><span class="status-name">архив</span>](#){ .status-tile data-filter="archived" aria-label="архив" }
 
 </div>
 

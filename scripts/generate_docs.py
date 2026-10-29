@@ -14,7 +14,7 @@
   т. п.) в карту не попадают.
 * Архивная спецификация — файл внутри docs/archive/ ИЛИ файл со статусом
   `archived`. В карте такие фичи выводятся в отдельном разделе со значком коробки.
-* Страница карты состоит из разделов: «Статистика» (плитки со статусами и числами —
+* Страница карты состоит из разделов: «Статистика» (свёрнутый инфо-блок «Статусы спецификаций», плитки со статусами и числами —
   они же кнопки фильтра, строка отбора по названию и кнопка «Сбросить»), «Действующие спецификации» и «Архив
   спецификаций». Списки спецификаций — вложенные сворачиваемые блоки «Модуль» → «Субмодуль». У всех заголовков страницы
   заданы явные якоря, как в спецификациях: `{#feature-map}`, `{#statistics}`, `{#active-features}`, `{#archived-features}`.
@@ -528,15 +528,14 @@ def tiles_block(features: list[Feature], statuses: list[str]) -> list[str]:
     """Плитки статистики: сверху на всю ширину плитка «Всего спецификаций» (общий итог, не кнопка), ниже сетка плиток
     статусов одной высоты и ширины: значок и число, под ними название статуса.
 
-    Плитка — кнопка фильтра по статусу (атрибут data-filter; выбор нескольких, выбранные подсвечиваются). Пояснение статуса
-    показывает подсказка (атрибут title; тема выводит его стилизованной подсказкой, функция content.tooltips). Число в
-    `<span data-stat>` пересчитывает status-filter.js при отборе. Вид плиток — extra.css, раздел 4.
+    Плитка — кнопка фильтра по статусу (атрибут data-filter; выбор нескольких, выбранные подсвечиваются). Подсказок
+    (tooltip) у плиток нет: статусы поясняет инфо-блок «Статусы спецификаций». Число в `<span data-stat>` пересчитывает
+    status-filter.js при отборе. Вид плиток — extra.css, раздел 4.
     """
     tiles = [f'[<span class="status-top">{STATUS_ICONS[s]} '
              f'<span data-stat="{s}">{sum(1 for f in features if f.shown_status == s)}</span></span>'
              f'<span class="status-name">{STATUS_TITLES[s]}</span>](#)'
-             f'{{ .status-tile data-filter="{s}" title="{STATUS_DESCRIPTIONS[s]}" '
-             f'aria-label="{STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" }}' for s in statuses]
+             f'{{ .status-tile data-filter="{s}" aria-label="{STATUS_TITLES[s]}" }}' for s in statuses]
     # Общий итог — обычный элемент (не ссылка), поэтому фильтром не является; число пересчитывает status-filter.js.
     total = (f'<div class="status-total" markdown="span">:lucide-files: <span class="status-name">Всего спецификаций</span> '
              f'<span data-stat-total>{len(features)}</span></div>')
@@ -559,9 +558,20 @@ def filter_block(placeholder: str) -> list[str]:
             '[Сбросить](#){ .md-button data-filter-reset="" }', "", "</div>", "", empty, ""]
 
 
+def statuses_info(statuses: list[str]) -> list[str]:
+    """Свёрнутый инфо-блок «Статусы спецификаций»: каждый статус в строке «значок название: пояснение».
+
+    Выводятся статусы, плитки которых есть на странице (на странице архива — только «архив»). Блок `??? info` свёрнут
+    по умолчанию (расширение pymdownx.details). Тексты — STATUS_TITLES и STATUS_DESCRIPTIONS.
+    """
+    rows = [f"    - {STATUS_ICONS[s]} {STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" for s in statuses]
+    return ['??? info "Статусы спецификаций"', "", *rows, ""]
+
+
 def statistics_section(features: list[Feature], statuses: list[str], placeholder: str) -> list[str]:
-    """Раздел «Статистика»: плитки-фильтры, строка отбора и «Сбросить»."""
-    return ["## Статистика {#statistics}", "", *tiles_block(features, statuses), *filter_block(placeholder)]
+    """Раздел «Статистика»: инфо-блок «Статусы спецификаций», плитки-фильтры, строка отбора и «Сбросить»."""
+    return ["## Статистика {#statistics}", "", *statuses_info(statuses), *tiles_block(features, statuses),
+            *filter_block(placeholder)]
 
 
 def render_map(features: list[Feature], archive_dir_name: str) -> str:

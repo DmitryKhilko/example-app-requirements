@@ -9,15 +9,23 @@ hide:
 
 ## Статистика {#statistics}
 
+??? info "Статусы спецификаций"
+
+    - :lucide-file: бэклог: зафиксированное сырое требование или идея
+    - :lucide-file-pen-line: анализ: детализация и согласование требования
+    - :lucide-file-check: готово к разработке: утверждённое требование, готовое к реализации
+    - :lucide-file-braces: разработка: требование в работе у команды разработки и тестирования
+    - :lucide-file-text: реализовано: код, связанный с требованием, успешно развёрнут на проде
+
 <div class="status-total" markdown="span">:lucide-files: <span class="status-name">Всего спецификаций</span> <span data-stat-total>15</span></div>
 
 <div class="status-tiles" data-n="5" markdown>
 
-[<span class="status-top">:lucide-file: <span data-stat="backlog">3</span></span><span class="status-name">бэклог</span>](#){ .status-tile data-filter="backlog" title="зафиксированное сырое требование или идея" aria-label="бэклог: зафиксированное сырое требование или идея" }
-[<span class="status-top">:lucide-file-pen-line: <span data-stat="analysis">1</span></span><span class="status-name">анализ</span>](#){ .status-tile data-filter="analysis" title="детализация и согласование требования" aria-label="анализ: детализация и согласование требования" }
-[<span class="status-top">:lucide-file-check: <span data-stat="ready">2</span></span><span class="status-name">готово к разработке</span>](#){ .status-tile data-filter="ready" title="утверждённое требование, готовое к реализации" aria-label="готово к разработке: утверждённое требование, готовое к реализации" }
-[<span class="status-top">:lucide-file-braces: <span data-stat="development">3</span></span><span class="status-name">разработка</span>](#){ .status-tile data-filter="development" title="требование в работе у команды разработки и тестирования" aria-label="разработка: требование в работе у команды разработки и тестирования" }
-[<span class="status-top">:lucide-file-text: <span data-stat="released">6</span></span><span class="status-name">реализовано</span>](#){ .status-tile data-filter="released" title="код, связанный с требованием, успешно развёрнут на проде" aria-label="реализовано: код, связанный с требованием, успешно развёрнут на проде" }
+[<span class="status-top">:lucide-file: <span data-stat="backlog">3</span></span><span class="status-name">бэклог</span>](#){ .status-tile data-filter="backlog" aria-label="бэклог" }
+[<span class="status-top">:lucide-file-pen-line: <span data-stat="analysis">1</span></span><span class="status-name">анализ</span>](#){ .status-tile data-filter="analysis" aria-label="анализ" }
+[<span class="status-top">:lucide-file-check: <span data-stat="ready">2</span></span><span class="status-name">готово к разработке</span>](#){ .status-tile data-filter="ready" aria-label="готово к разработке" }
+[<span class="status-top">:lucide-file-braces: <span data-stat="development">3</span></span><span class="status-name">разработка</span>](#){ .status-tile data-filter="development" aria-label="разработка" }
+[<span class="status-top">:lucide-file-text: <span data-stat="released">6</span></span><span class="status-name">реализовано</span>](#){ .status-tile data-filter="released" aria-label="реализовано" }
 
 </div>
 
