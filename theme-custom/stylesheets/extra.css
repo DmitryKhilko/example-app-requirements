@@ -140,24 +140,45 @@
   --sf-archived: #a8a8a8;
 }
 
-.md-typeset .status-tiles > p {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin: 0.8em 0;
+/* Сетка плиток статусов: все плитки одной ширины и высоты (высоту задаёт самая высокая, например «готово к разработке»
+   в две строки), ряд заполняет всю ширину страницы. Число колонок зависит от числа плиток (data-n) и ширины блока
+   (контейнерные запросы): на широкой странице все плитки в одну строку, на узкой — 3 колонки (2 ряда), на совсем узкой — 2 */
+.md-typeset .status-tiles {
+  container-type: inline-size;
 }
 
-/* Плитки статусов одной ширины: если помещаются, делят строку поровну (--n — их число); если не помещаются,
-   переносятся на следующую строку, сохраняя минимальную ширину (не растягиваются) */
-.md-typeset .status-tiles > p > a.status-tile {
-  flex: 0 0 auto;
-  width: max(8.5rem, calc((100% - (var(--n, 6) - 1) * 0.6rem) / var(--n, 6)));
+.md-typeset .status-tiles > p {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 6), minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 0.6rem;
+  margin: 0.6rem 0 0.8rem;
+}
+
+.md-typeset .status-tiles[data-n="1"] { --n: 1; }
+.md-typeset .status-tiles[data-n="2"] { --n: 2; }
+.md-typeset .status-tiles[data-n="3"] { --n: 3; }
+.md-typeset .status-tiles[data-n="4"] { --n: 4; }
+.md-typeset .status-tiles[data-n="5"] { --n: 5; }
+.md-typeset .status-tiles[data-n="6"] { --n: 6; }
+
+@container (max-width: 40rem) {
+  .md-typeset .status-tiles[data-n="6"] > p { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@container (max-width: 33rem) {
+  .md-typeset .status-tiles[data-n="5"] > p { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@container (max-width: 22rem) {
+  .md-typeset .status-tiles > p { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .md-typeset a.status-tile {
   --c: var(--sf-backlog);
   display: flex;
   flex-direction: column;   /* сверху значок и число, под ними название статуса */
+  width: auto;
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
@@ -198,13 +219,13 @@
   text-decoration: none !important;
 }
 
-/* Плитка «Всего» — общий итог: на всю ширину над плитками статусов, в цвете темы, не кнопка */
-.md-typeset .status-tiles > p > .status-total {
+/* Плитка «Всего спецификаций» — общий итог: на всю ширину над плитками статусов, в цвете темы, не кнопка */
+.md-typeset .status-total {
   display: flex;
-  flex: 0 0 100%;   /* на всю ширину страницы, сверху всех плиток */
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  margin: 0.6rem 0;
   padding: 0.6rem 0.9rem;
   color: var(--md-primary-fg-color);
   font-size: 0.95rem;
@@ -249,7 +270,7 @@
 .md-typeset .feature-filter {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: stretch;   /* кнопка «Сбросить» той же высоты, что и поле */
   gap: 0.6rem;
 }
 
@@ -261,13 +282,20 @@
   flex: 1 1 18rem;
 }
 
+.md-typeset .feature-filter > p:last-child {
+  display: flex;
+}
+
 .md-typeset .feature-filter input.feature-search {
   margin-top: 0;
 }
 
-.md-typeset .feature-filter a.md-button,
-.md-typeset .feature-empty a.md-button {
+/* Кнопка «Сбросить»: цвет темы, форма как у поля ввода (прямоугольник со скруглёнными углами) */
+.md-typeset .feature-filter a.md-button[data-filter-reset] {
+  display: inline-flex;
+  align-items: center;
   margin: 0;
+  border-radius: 0.2rem;
 }
 
 
@@ -350,11 +378,12 @@ span[data-count-item]:last-of-type::after,
 
    Генератор выводит списки спецификаций вложенными блоками <details class="feature-block">. Тема оформляет
    <details> как «панель» со значком типа и стрелкой; значок типа здесь убран (оставлена стрелка раскрытия),
-   у блока субмодуля рамка и фон легче, чем у блока модуля. Раскрытием управляет status-filter.js.
+   размер шрифта как у основного текста, цветной полосы за названием нет. Раскрытием управляет status-filter.js.
    -------------------------------------------------------------------------- */
 .md-typeset details.feature-block {
   margin: 0.5rem 0;
   padding: 0;
+  font-size: inherit;   /* тема уменьшает шрифт <details>; здесь — как у основного текста страницы */
   border: 0.05rem solid var(--md-default-fg-color--lighter);
   border-radius: 0.3rem;
   box-shadow: none;
@@ -362,20 +391,27 @@ span[data-count-item]:last-of-type::after,
 
 .md-typeset details.feature-block > summary {
   padding: 0.6rem 2.4rem 0.6rem 0.9rem;
+  font-size: inherit;
   cursor: pointer;
-  background-color: var(--md-default-fg-color--lightest);
+  background: none !important;   /* без цветной полосы за названием */
 }
 
 .md-typeset details.feature-block > summary::before {
   display: none;   /* значок типа панели не нужен */
 }
 
-.md-typeset details.feature-submodule {
-  margin: 0.5rem 0.8rem;
+/* Название модуля или субмодуля — на первой строке, статистика статусов — на второй */
+.md-typeset details.feature-block .feature-title,
+.md-typeset details.feature-block .feature-counts {
+  display: block;
 }
 
-.md-typeset details.feature-submodule > summary {
-  background-color: transparent;
+.md-typeset details.feature-block .feature-counts {
+  margin-top: 0.15rem;
+}
+
+.md-typeset details.feature-submodule {
+  margin: 0.5rem 0.8rem;
 }
 
 .md-typeset details.feature-block > ul {

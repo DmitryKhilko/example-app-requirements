@@ -29,7 +29,7 @@
    Текст попадает в адрес страницы (?q=...).
 
    Итоги пересчитываются при каждом изменении отбора и всегда показывают то, что подходит под оба условия
-   (выбранные статусы и текст). Плитки (числа в `<span data-stat>`): число по каждому статусу; плитка «Всего» (`<span data-stat-total>`) — общий итог.
+   (выбранные статусы и текст). Плитки (числа в `<span data-stat>`): число по каждому статусу; плитка «Всего спецификаций» (`<span data-stat-total>`) — общий итог.
    Счётчики в заголовках блоков модулей и субмодулей (`<span data-count-item>`) — то, что осталось
    в списке под заголовком; статусы с нулём там скрываются.
 
@@ -104,10 +104,10 @@
 
     function statusOk(a) { return !any || active[a.getAttribute("data-status")]; }
 
-    /* Название узла иерархии: у блока модуля или субмодуля — первый strong или em в summary, у функциональности —
+    /* Название узла иерархии: у блока модуля или субмодуля — элемент .feature-title в summary, у функциональности —
        её ссылка; счётчики статусов в заголовках блоков в поиск не попадают */
     function label(node) {
-      var el = node.matches("details") ? node.querySelector(":scope > summary > strong, :scope > summary > em")
+      var el = node.matches("details") ? node.querySelector(":scope > summary .feature-title")
                                        : node.querySelector(":scope > a");
       return el ? el.textContent.toLowerCase() : "";
     }
@@ -181,7 +181,7 @@
     /* Счётчики в заголовках блоков модулей и субмодулей: что осталось в списке под заголовком */
     Array.prototype.forEach.call(root.querySelectorAll("details.feature-block"), function (block) {
       var summary = block.querySelector(":scope > summary");
-      var items = summary ? Array.prototype.filter.call(summary.children, function (el) { return el.hasAttribute("data-count-item"); }) : [];
+      var items = summary ? Array.prototype.slice.call(summary.querySelectorAll("[data-count-item]")) : [];
       if (!items.length) return;
       var counts = {};
       Array.prototype.forEach.call(block.querySelectorAll("a[data-status]"), function (a) {

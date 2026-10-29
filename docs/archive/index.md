@@ -9,9 +9,10 @@ hide:
 
 ## Статистика {#statistics}
 
-<div class="status-tiles" style="--n: 1" markdown>
+<div class="status-total" markdown="span">:lucide-files: <span class="status-name">Всего спецификаций</span> <span data-stat-total>3</span></div>
 
-<span class="status-total">:lucide-files: <span class="status-name">Всего</span> <span data-stat-total>3</span></span>
+<div class="status-tiles" data-n="1" markdown>
+
 [<span class="status-top">:lucide-file-archive: <span data-stat="archived">3</span></span><span class="status-name">архив</span>](#){ .status-tile data-filter="archived" title="отклонённое или устаревшее требование" aria-label="архив: отклонённое или устаревшее требование" }
 
 </div>
@@ -24,19 +25,15 @@ hide:
 
 </div>
 
-<div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p><p><a href="#" class="md-button" data-filter-reset="">Сбросить</a></p></div>
+<div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p></div>
 
 ## Спецификации {#specs}
 
-???+ info "Информация"
-
-    Спецификации из папки `docs/archive/` или со статусом `archived`.
-
 <details class="feature-block feature-module" markdown="block">
-<summary markdown="span">**Каталог товаров**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+<summary markdown="span"><span class="feature-title">**Каталог товаров**</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span">*Поиск и фильтрация*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+<summary markdown="span"><span class="feature-title">*Поиск и фильтрация*</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-archive: [Старый текстовый поиск (устарел)](specifications/catalog/search-old.md#article-overview){data-preview data-status="archived"}
 
@@ -46,10 +43,10 @@ hide:
 </details>
 
 <details class="feature-block feature-module" markdown="block">
-<summary markdown="span">**Управление заказами**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+<summary markdown="span"><span class="feature-title">**Управление заказами**</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span">*История заказов*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+<summary markdown="span"><span class="feature-title">*История заказов*</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-archive: [Выписка заказов в виде бумажного чека](specifications/orders/print-receipt.md#article-overview){data-preview data-status="archived"}
 
@@ -59,10 +56,10 @@ hide:
 </details>
 
 <details class="feature-block feature-module" markdown="block">
-<summary markdown="span">**Личный кабинет**: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+<summary markdown="span"><span class="feature-title">**Личный кабинет**</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span">*Профиль пользователя*: <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></summary>
+<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-archive: [Дисконтные карты старого образца](specifications/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
 

@@ -128,10 +128,6 @@ LINK_ATTRS_TEMPLATE = '{{data-preview data-status="{status}"}}'
 EMPTY_MESSAGE = "Нет данных, соответствующих условиям отбора"
 PLACEHOLDER_PRODUCT = "Отбор по названию модуля или субмодуля или функциональности"
 PLACEHOLDER_MODULE = "Отбор по названию субмодуля или функциональности"
-# Информация под заголовком списка архивных спецификаций (разворачиваемый блок `???+ info`).
-ARCHIVE_NOTE_TITLE = "Информация"
-ARCHIVE_NOTE = "Спецификации из папки `docs/{archive}/` или со статусом `archived`."
-
 # Блок метаданных обязан стоять в самом начале файла между строками `---`.
 FRONT_MATTER_RE = re.compile(
     r"\A﻿?---[ \t]*\r?\n(.*?)\r?\n---[ \t]*(?:\r?\n|\Z)", re.DOTALL
@@ -487,12 +483,13 @@ def _tree(features: list[Feature]) -> dict[str, dict[str, list[Feature]]]:
 def _block(kind: str, title_md: str, counts: str, body: list[str]) -> list[str]:
     """Сворачиваемый блок `<details>` (kind — `module` или `submodule`).
 
-    Заголовок и счётчики статусов — в `<summary>`. Атрибуты `markdown="block"` / `"span"` (md_in_html) нужны, чтобы
+    Заголовок и счётчики статусов — в `<summary>`: название на первой строке, статистика (значки и числа) на второй. Атрибуты `markdown="block"` / `"span"` (md_in_html) нужны, чтобы
     Markdown внутри блока обрабатывался: список функциональностей и значки статусов (:lucide-…:). Блок закрыт по умолчанию;
     открывать и закрывать его, а также раскрывать совпадения при отборе будет status-filter.js.
     """
     return [f'<details class="feature-block feature-{kind}" markdown="block">',
-            f'<summary markdown="span">{title_md}: {counts}</summary>', "", *body, "", "</details>", ""]
+            f'<summary markdown="span"><span class="feature-title">{title_md}</span>'
+            f'<span class="feature-counts">{counts}</span></summary>', "", *body, "", "</details>", ""]
 
 
 def _feature_lines(features: list[Feature], link) -> list[str]:
@@ -528,8 +525,8 @@ def _statuses(only: list[str] | None = None, exclude: tuple[str, ...] = ()) -> l
 
 
 def tiles_block(features: list[Feature], statuses: list[str]) -> list[str]:
-    """Плитки статистики: сверху на всю ширину плитка «Всего» (общий итог, не кнопка), ниже плитки статусов:
-    значок и число, под ними название статуса.
+    """Плитки статистики: сверху на всю ширину плитка «Всего спецификаций» (общий итог, не кнопка), ниже сетка плиток
+    статусов одной высоты и ширины: значок и число, под ними название статуса.
 
     Плитка — кнопка фильтра по статусу (атрибут data-filter; выбор нескольких, выбранные подсвечиваются). Пояснение статуса
     показывает подсказка (атрибут title; тема выводит его стилизованной подсказкой, функция content.tooltips). Число в
@@ -541,10 +538,10 @@ def tiles_block(features: list[Feature], statuses: list[str]) -> list[str]:
              f'{{ .status-tile data-filter="{s}" title="{STATUS_DESCRIPTIONS[s]}" '
              f'aria-label="{STATUS_TITLES[s]}: {STATUS_DESCRIPTIONS[s]}" }}' for s in statuses]
     # Общий итог — обычный элемент (не ссылка), поэтому фильтром не является; число пересчитывает status-filter.js.
-    total = (f'<span class="status-total">:lucide-files: <span class="status-name">Всего</span> '
-             f'<span data-stat-total>{len(features)}</span></span>')
-    # --n — число плиток статусов: по нему extra.css делит ширину строки поровну (раздел 4)
-    return [f'<div class="status-tiles" style="--n: {len(statuses)}" markdown>', "", total, *tiles, "", "</div>", ""]
+    total = (f'<div class="status-total" markdown="span">:lucide-files: <span class="status-name">Всего спецификаций</span> '
+             f'<span data-stat-total>{len(features)}</span></div>')
+    # data-n — число плиток статусов: по нему extra.css выбирает число колонок сетки (раздел 4)
+    return [total, "", f'<div class="status-tiles" data-n="{len(statuses)}" markdown>', "", *tiles, "", "</div>", ""]
 
 
 def filter_block(placeholder: str) -> list[str]:
@@ -552,19 +549,14 @@ def filter_block(placeholder: str) -> list[str]:
 
     Поле — обычный HTML-элемент `input` (Markdown пропускает его без изменений), кнопка — ссылка с классом `.md-button`
     (оформляет тема, см. документацию Zensical «Buttons»). Ввод и клики обрабатывает status-filter.js.
-    «Сбросить» снимает выбор плиток и очищает поле. Сообщение скрыто атрибутом `hidden`, показывает его status-filter.js.
+    «Сбросить» снимает выбор плиток и очищает поле. Сообщение «Нет данных…» скрыто атрибутом `hidden`, показывает его
+    status-filter.js; своей кнопки у него нет: достаточно «Сбросить» рядом с полем.
     """
     field = (f'<input type="search" class="feature-search" data-feature-search="" autocomplete="off" '
              f'placeholder="{placeholder}" aria-label="{placeholder}">')
-    empty = (f'<div class="feature-empty" data-feature-empty="" hidden><p>{EMPTY_MESSAGE}</p>'
-             f'<p><a href="#" class="md-button" data-filter-reset="">Сбросить</a></p></div>')
+    empty = f'<div class="feature-empty" data-feature-empty="" hidden><p>{EMPTY_MESSAGE}</p></div>'
     return ['<div class="feature-filter" markdown>', "", field, "",
             '[Сбросить](#){ .md-button data-filter-reset="" }', "", "</div>", "", empty, ""]
-
-
-def archive_note(archive_dir_name: str) -> list[str]:
-    """Разворачиваемый (открытый) информационный блок под заголовком архивных спецификаций."""
-    return [f'???+ info "{ARCHIVE_NOTE_TITLE}"', "", f"    {ARCHIVE_NOTE.format(archive=archive_dir_name)}", ""]
 
 
 def statistics_section(features: list[Feature], statuses: list[str], placeholder: str) -> list[str]:
@@ -587,7 +579,7 @@ def render_map(features: list[Feature], archive_dir_name: str) -> str:
         "",
     ]
     out += render_tree(active) if active else ["*Нет действующих спецификаций*", ""]
-    out += ["## Архив спецификаций {#archived-features}", "", *archive_note(archive_dir_name)]
+    out += ["## Архив спецификаций {#archived-features}", ""]
     out += render_tree(archived) if archived else ["*Архив пуст*", ""]
     return "\n".join(out).rstrip() + "\n"
 
@@ -628,7 +620,6 @@ def render_index(folder: Path, docs_dir: Path, features: list[Feature]) -> str:
         f"# {_escape(title)} {{#{slug}}}", "", GENERATED_COMMENT, "",
         *statistics_section(direct, _page_statuses(archive), PLACEHOLDER_MODULE),
         "## Спецификации {#specs}", "",
-        *(archive_note(DEFAULT_ARCHIVE_DIR_NAME) if archive else []),
         *render_tree(direct, lambda f: f"{Path(f.path).name}#{DESCRIPTION_ANCHOR}", with_modules=False),
     ]
     return "\n".join(lines).rstrip() + "\n"
@@ -645,7 +636,6 @@ def render_section_index(tab: str, tab_features: list[Feature]) -> str:
         f"# {_escape(title)} {{#{slug}}}", "", GENERATED_COMMENT, "",
         *statistics_section(tab_features, _page_statuses(archive), PLACEHOLDER_PRODUCT),
         "## Спецификации {#specs}", "",
-        *(archive_note(DEFAULT_ARCHIVE_DIR_NAME) if archive else []),
         *render_tree(tab_features, to_spec),
     ]
     return "\n".join(lines).rstrip() + "\n"
