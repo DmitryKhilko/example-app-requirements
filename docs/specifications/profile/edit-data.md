@@ -58,6 +58,10 @@ flowchart LR
 
 - Смена e-mail требует подтверждения по ссылке из письма.
 
+## Критерии релиза {#release-criteria}
+
+- **Наступление даты:** Не ранее 1 декабря 2026 года.
+
 ## Ссылка на задачу {#task}
 
 [Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}
