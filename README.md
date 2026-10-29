@@ -234,7 +234,14 @@ class="feature-block">`. Клики, ввод и раскрытие блоков
 pip install -r scripts/requirements.txt
 python scripts/generate_docs.py          # пересобрать карту, индексы, меню и разделы «Взаимосвязи»
 python scripts/generate_docs.py --check  # проверить, что всё актуально (код возврата 1, если нет)
+python scripts/generate_docs.py --validate  # только проверить спецификации (метаданные, связи, структура), ничего не писать
 ```
+
+Скрипт состоит из тонкой точки входа `scripts/generate_docs.py` и пакета `scripts/docgen/`. Работа идёт в четыре этапа:
+чтение (`reader.py`) → проверка (`validate/`) → генерация (`generate/`) → запись или сверка (`apply.py`). Ошибки в метаданных
+находит этап проверки до того, как что-либо записано на диск. Подробнее о модулях — в `scripts/docgen/__init__.py`.
+
+Локальная проверка перед коммитом и push: `git config core.hooksPath .githooks` (хуки запускают `--validate`).
 
 ### Настройки репозитория
 
