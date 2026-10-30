@@ -8,6 +8,8 @@ icon: lucide/file-text
 doc_version: "0.01"
 order: 30
 owner: "Дмитрий Хилько"
+task_id: "1"
+relise_id: "1.3.0"
 template: "spec.html"
 relations:
   depends_on: []
@@ -64,7 +66,3 @@ flowchart LR
 ## Критерии релиза {#release-criteria}
 
 - **Наступление даты:** Не ранее 1 декабря 2026 года.
-
-## Ссылка на задачу {#task}
-
-[Задача 01](https://github.bmf/khilko/app_requirements/issues/1){:target="_blank"}

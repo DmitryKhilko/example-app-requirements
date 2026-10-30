@@ -108,6 +108,11 @@ features = [
 text = "Nunito"
 code = "Fira Code"
 
+[project.extra.tracker]
+# Адрес задач в трекере: ссылка в «паспорте» спецификации строится как task_url + номер из поля task_id
+# (например, "https://github.bmf/khilko/app_requirements/issues/" + "1"). Адрес должен оканчиваться на «/».
+task_url = "https://github.bmf/khilko/app_requirements/issues/"
+
 [project.extra.status]
 # Статусы фич (поле status в спецификациях, карта фичей), жизненный цикл SDLC
 backlog = "Бэклог"
