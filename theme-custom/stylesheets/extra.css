@@ -459,13 +459,14 @@ span[data-count-item]:last-of-type::after,
    12. ПАСПОРТ СПЕЦИФИКАЦИИ
 
    Блок <dl class="spec-passport"> выводит шаблон theme-custom/spec.html над заголовком спецификации: код, статус, модуль,
-   субмодуль, ответственный, версия документа. Каждое поле — элемент .spec-passport__item с подписью <dt> и значением <dd>.
+   субмодуль, ответственный, версия документа. Поля идут столбцом, одно под другим, в виде «КЛЮЧ: значение».
+   Каждое поле — элемент .spec-passport__item с ключом <dt> (двоеточие добавляет стиль) и значением <dd>.
    Цвета берутся из переменных темы, поэтому блок работает в светлой и тёмной схемах.
    -------------------------------------------------------------------------- */
 .md-typeset dl.spec-passport {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1.6rem;
+  flex-direction: column;
+  gap: 0.25rem;
   margin: 0 0 1.2rem;
   padding: 0.5rem 0.8rem;
   border-left: 0.15rem solid var(--md-primary-fg-color);
@@ -476,7 +477,9 @@ span[data-count-item]:last-of-type::after,
 
 .md-typeset .spec-passport__item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.4rem;
   min-width: 0;
 }
 
@@ -487,6 +490,11 @@ span[data-count-item]:last-of-type::after,
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+}
+
+/* Двоеточие после ключа */
+.md-typeset .spec-passport__item dt::after {
+  content: ":";
 }
 
 .md-typeset .spec-passport__item dd {
