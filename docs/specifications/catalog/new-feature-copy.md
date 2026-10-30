@@ -8,6 +8,7 @@ icon: lucide/file-check
 order: 70
 doc_version: "0.02"
 owner: "Дмитрий Хилько"
+template: "spec.html"
 relations:
   depends_on: []
   related:

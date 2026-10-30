@@ -27,6 +27,7 @@
      9. Запятые между счётчиками статусов в заголовках модулей
     10. Сворачиваемые блоки «Модуль» и «Субмодуль»
     11. Ширина страниц со скрытым правым меню
+    12. Паспорт спецификации (шаблон theme-custom/spec.html)
    ========================================================================== */
 
 
@@ -451,4 +452,49 @@ span[data-count-item]:last-of-type::after,
     display: block !important;
     visibility: hidden;
   }
+}
+
+
+/* --------------------------------------------------------------------------
+   12. ПАСПОРТ СПЕЦИФИКАЦИИ
+
+   Блок <dl class="spec-passport"> выводит шаблон theme-custom/spec.html над заголовком спецификации: код, статус, модуль,
+   субмодуль, ответственный, версия документа. Каждое поле — элемент .spec-passport__item с подписью <dt> и значением <dd>.
+   Цвета берутся из переменных темы, поэтому блок работает в светлой и тёмной схемах.
+   -------------------------------------------------------------------------- */
+.md-typeset dl.spec-passport {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.6rem;
+  margin: 0 0 1.2rem;
+  padding: 0.5rem 0.8rem;
+  border-left: 0.15rem solid var(--md-primary-fg-color);
+  border-radius: 0.1rem;
+  background-color: var(--md-code-bg-color);
+  font-size: 0.64rem;
+}
+
+.md-typeset .spec-passport__item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.md-typeset .spec-passport__item dt {
+  margin: 0;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.85em;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.md-typeset .spec-passport__item dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Архивная спецификация: статус приглушён */
+.md-typeset dl.spec-passport[data-status="archived"] .spec-passport__status {
+  color: var(--md-default-fg-color--light);
 }

@@ -8,6 +8,7 @@ icon: lucide/file-braces
 doc_version: "0.01"
 order: 10
 owner: "Дмитрий Хилько"
+template: "spec.html"
 relations:
   depends_on: []
   extends:

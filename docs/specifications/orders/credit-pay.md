@@ -8,6 +8,7 @@ icon: lucide/file
 doc_version: "0.01"
 order: 10
 owner: "Дмитрий Хилько"
+template: "spec.html"
 relations:
   depends_on:
     - feature: edit-data
