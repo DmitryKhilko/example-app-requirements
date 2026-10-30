@@ -387,27 +387,28 @@ span[data-count-item]:last-of-type::after,
   border: 0.05rem solid var(--md-default-fg-color--lighter);
   border-radius: 0.3rem;
   box-shadow: none;
-  /* ДОБАВЛЕНО: сбрасываем минимальную высоту самого блока, если она задана темой */
-  min-height: unset !important; 
+  min-height: 0 !important; /* Полный сброс минимальной высоты */
 }
 
 .md-typeset details.feature-block > summary {
-  /* Уменьшили отступы до 0.3rem сверху и снизу для еще большей компактности */
+  /* Задаем минимальные вертикальные отступы */
   padding: 0.3rem 2.4rem 0.3rem 0.9rem !important;
   font-size: inherit;
   cursor: pointer;
   background: none !important;
   position: relative;
-  /* ДОБАВЛЕНО: принудительно убираем ограничение по минимальной высоте из темы */
-  min-height: unset !important; 
+  
+  /* Сбрасываем высоту и жесткий line-height темы */
+  min-height: 0 !important;
   height: auto !important;
+  line-height: 1.2 !important; 
 }
 
 .md-typeset details.feature-block > summary::before {
-  display: none;   /* значок типа панели не нужен */
+  display: none;
 }
 
-/* ДОБАВЛЕНО: центрирование стрелки (обычно это псевдоэлемент ::after в MkDocs Material) по вертикали */
+/* Центрирование стрелки раскрытия по вертикали */
 .md-typeset details.feature-block > summary::after {
   top: 0 !important;
   bottom: 0 !important;
@@ -415,14 +416,18 @@ span[data-count-item]:last-of-type::after,
   margin-bottom: auto !important;
 }
 
-/* Название модуля или субмодуля — на первой строке, статистика статусов — на второй */
+/* Название модуля/субмодуля и статистика */
 .md-typeset details.feature-block .feature-title,
 .md-typeset details.feature-block .feature-counts {
   display: block;
+  margin: 0 !important;       /* Убираем все скрытые отступы темы */
+  padding: 0 !important;      /* Убираем внутренние отступы у строк текста */
+  line-height: 1.25 !important; /* Делаем текст компактным по высоте */
 }
 
+/* Возвращаем строго контролируемый микро-отступ между двумя строками */
 .md-typeset details.feature-block .feature-counts {
-  margin-top: 0.15rem;
+  margin-top: 0.15rem !important;
 }
 
 .md-typeset details.feature-submodule {
@@ -432,6 +437,7 @@ span[data-count-item]:last-of-type::after,
 .md-typeset details.feature-block > ul {
   margin: 0.2rem 0.8rem 0.6rem;
 }
+
 
 
 /* --------------------------------------------------------------------------
