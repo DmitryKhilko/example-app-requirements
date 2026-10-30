@@ -9,6 +9,7 @@ order: 70
 doc_version: "0.02"
 owner: "Дмитрий Хилько"
 relations:
+  depends_on: []
   related:
     - feature: new-feature
       note: "Копия-шаблон фичи"

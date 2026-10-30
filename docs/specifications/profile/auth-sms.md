@@ -8,6 +8,8 @@ icon: lucide/file-text
 doc_version: "0.01"
 order: 20
 owner: "Дмитрий Хилько"
+relations:
+  depends_on: []
 ---
 
 # Вход по номеру телефона и SMS {#auth-sms}

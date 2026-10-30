@@ -9,6 +9,7 @@ doc_version: "0.01"
 order: 40
 owner: "Дмитрий Хилько"
 relations:
+  depends_on: []
   related:
     - feature: auth-sms
       note: "Альтернативный способ входа"

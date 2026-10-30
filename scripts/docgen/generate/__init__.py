@@ -17,7 +17,7 @@ def build_plan(ctx: BuildContext, specs: list[Spec], features: list[Feature]) ->
     """Строит план записи по проверенным данным."""
     docs_dir = ctx.docs_dir
     indexes = build_indexes(ctx, features)
-    nav = render_nav(docs_dir, features, indexes, ctx.module_order)
+    nav = render_nav(docs_dir, features, indexes, ctx.module_order, generated=frozenset({ctx.output}))
 
     # Значки и разделы «Взаимосвязи» меняют одни и те же файлы: связи считаются по тексту уже со значком.
     texts = {s.rel: s.text for s in specs}

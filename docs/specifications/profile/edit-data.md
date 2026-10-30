@@ -9,6 +9,7 @@ doc_version: "0.01"
 order: 30
 owner: "Дмитрий Хилько"
 relations:
+  depends_on: []
   related:
     - feature: auth-sms
       note: "Смена номера телефона влияет на вход по SMS"

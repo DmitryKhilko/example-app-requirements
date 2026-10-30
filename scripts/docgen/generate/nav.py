@@ -13,13 +13,16 @@ from ..textutils import toml_str
 
 
 def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Path, str],
-               module_order: list[str]) -> str:
+               module_order: list[str], generated: frozenset[Path] = frozenset()) -> str:
     """Блок `nav = [...]` для zensical.toml: служебные страницы, затем вкладки по корневым папкам.
 
     Вкладка — первая папка пути (specifications, archive), раздел меню — модуль (папка со спецификациями),
     промежуточные папки пропускаются. Названия берутся из FOLDER_TITLES и поля `module`.
+    generated — файлы, которых ещё нет на диске, но которые будут созданы этой же сборкой (карта фичей): служебная
+    страница с таким файлом попадает в меню уже при первом запуске, а не при втором.
     """
-    items = [f"    {{ {toml_str(title)} = {toml_str(page)} }}," for title, page in ROOT_PAGES if (docs_dir / page).exists()]
+    items = [f"    {{ {toml_str(title)} = {toml_str(page)} }},"
+             for title, page in ROOT_PAGES if (docs_dir / page).exists() or docs_dir / page in generated]
 
     folders = sorted({(docs_dir / f.path).parent for f in features})
     # модули в меню — в порядке nav-order.yml (а не по именам папок); тот же порядок в «Спецификациях» и в архиве

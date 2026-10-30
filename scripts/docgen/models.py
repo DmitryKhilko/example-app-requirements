@@ -71,6 +71,7 @@ class BuildContext:
     archive_dir_name: str
     config: Path                  # zensical.toml
     nav_order: Path               # nav-order.yml
+    template: Path                # шаблон спецификации: источник правил проверки
     module_order: list[str] = field(default_factory=list)   # заполняется при проверке (из nav-order.yml)
 
 

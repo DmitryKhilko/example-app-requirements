@@ -8,6 +8,8 @@ icon: lucide/file-text
 order: 20
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  depends_on: []
 ---
 
 # Оплата через СБП / QR-код {#payment-sbp}

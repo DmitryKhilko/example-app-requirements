@@ -8,6 +8,8 @@ icon: lucide/file-archive
 order: 10
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  depends_on: []
 ---
 
 # Дисконтные карты старого образца {#legacy-cards}

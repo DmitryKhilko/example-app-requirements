@@ -8,7 +8,7 @@ from pathlib import Path
 
 from .apply import apply_plan
 from .config import (DEFAULT_ARCHIVE_DIR_NAME, DEFAULT_CONFIG, DEFAULT_DOCS_DIR, DEFAULT_NAV_ORDER, DEFAULT_OUTPUT,
-                     ICON_KEY, RELATIONS_TITLE)
+                     DEFAULT_TEMPLATE, ICON_KEY, RELATIONS_TITLE)
 from .generate import build_plan
 from .models import BuildContext
 from .problems import Problems, display_path
@@ -22,6 +22,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--archive-dir", default=DEFAULT_ARCHIVE_DIR_NAME, help="имя папки архива")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG, help="zensical.toml с блоком меню (nav)")
     parser.add_argument("--nav-order", type=Path, default=DEFAULT_NAV_ORDER, help="nav-order.yml с порядком модулей в меню")
+    parser.add_argument("--template", type=Path, default=DEFAULT_TEMPLATE,
+                        help="шаблон спецификации: из него берутся правила проверки метаданных и заголовков")
     parser.add_argument("--check", action="store_true", help="не писать файл, а проверить его актуальность")
     parser.add_argument("--validate", action="store_true",
                         help="только проверить спецификации (метаданные, связи, структура); ничего не писать")
@@ -34,7 +36,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Папка не найдена: {docs_dir}", file=sys.stderr)
         return 1
 
-    ctx = BuildContext(docs_dir, args.output.resolve(), args.archive_dir, args.config, args.nav_order)
+    ctx = BuildContext(docs_dir, args.output.resolve(), args.archive_dir, args.config, args.nav_order, args.template)
     problems = Problems()
 
     # Этап 1-2. Чтение и проверка

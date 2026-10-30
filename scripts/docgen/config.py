@@ -167,3 +167,12 @@ DESCRIPTION_RE = re.compile(r"^##\s+.*\{#" + re.escape(DESCRIPTION_ANCHOR) + r"\
 # Блок меню в zensical.toml между маркерами NAV_BEGIN и NAV_END. Начальный маркер ищем по началу строки
 # (после него допустим любой комментарий), конечный — как есть.
 NAV_RE = re.compile(re.escape(NAV_BEGIN_PREFIX) + r"[^\n]*\n.*?" + re.escape(NAV_END), re.DOTALL)
+
+# Шаблон спецификации: из него берутся правила проверки (обязательные поля метаданных и заголовки).
+DEFAULT_TEMPLATE = REPO_ROOT / "templates" / "feature-spec-template.md"
+# Код спецификации (поле `id`): латиница и цифры, группы через дефис (например, SHOP-CAT-SF-005); уникален среди всех
+# спецификаций, включая архив.
+ID_KEY = "id"
+ID_RE = re.compile(r"^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$")
+# Поля, значения которых в шаблоне — подсказки («Название модуля», «Фамилия Имя»): оставить их без замены нельзя.
+TEMPLATE_PLACEHOLDER_FIELDS = ("module", "submodule", "feature_name", "owner")

@@ -8,6 +8,8 @@ icon: lucide/file-pen-line
 order: 60
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  depends_on: []
 ---
 
 # Новая фича {#new-feature}

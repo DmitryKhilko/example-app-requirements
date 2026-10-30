@@ -8,6 +8,8 @@ icon: lucide/file-text
 order: 10
 doc_version: "0.02"
 owner: "Дмитрий Хилько"
+relations:
+  depends_on: []
 ---
 
 # Фильтрация по категориям и тегам {#filter-categories}

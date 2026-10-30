@@ -6,26 +6,25 @@ import os
 from pathlib import Path
 from urllib.parse import quote
 
-from ..config import (DEFAULT_STATUS, DEFAULT_SUBMODULE, DESCRIPTION_ANCHOR, ORDER_KEY, RELATION_TYPES,
-                      RELATIONS_KEY, STATUS_ALIASES, STATUS_ICONS)
+from ..config import (DEFAULT_STATUS, DEFAULT_SUBMODULE, DESCRIPTION_ANCHOR, ID_KEY, ID_RE, ORDER_KEY,
+                      RELATION_TYPES, RELATIONS_KEY, STATUS_ALIASES, STATUS_ICONS, TEMPLATE_PLACEHOLDER_FIELDS)
 from ..models import BuildContext, Feature, Relation, Spec
 from ..problems import Problems
+from ..template import ALWAYS_REQUIRED, TemplateRules
 from ..textutils import clean
 
 
-def normalize_status(raw: object, path: Path, problems: Problems) -> str:
+def normalize_status(raw: object, path: Path, problems: Problems, required: bool = False) -> str:
+    """Статус по жизненному циклу. Пустой — предупреждение (если поле не обязательное; обязательное проверяет
+    check_template_meta), неизвестное значение — ошибка. В обоих случаях дальше работа идёт со статусом по умолчанию."""
     key = clean(raw).lower()
     if not key:
-        problems.warning(path, f"не указан `status`, принято значение `{DEFAULT_STATUS}`")
+        if not required:
+            problems.warning(path, f"не указан `status`, принято значение `{DEFAULT_STATUS}`")
         return DEFAULT_STATUS
     key = STATUS_ALIASES.get(key, key)
     if key not in STATUS_ICONS:
-        allowed = ", ".join(STATUS_ICONS)
-        problems.warning(
-            path,
-            f"неизвестный `status: {raw}` (допустимо: {allowed}), "
-            f"принято значение `{DEFAULT_STATUS}`",
-        )
+        problems.error(path, f"неизвестный `status: {raw}` (допустимо: {', '.join(STATUS_ICONS)})")
         return DEFAULT_STATUS
     return key
 
@@ -77,7 +76,7 @@ def parse_order(raw: object, path: Path, problems: Problems) -> int | None:
     return raw
 
 
-def build_features(specs: list[Spec], ctx: BuildContext, problems: Problems) -> list[Feature]:
+def build_features(specs: list[Spec], ctx: BuildContext, problems: Problems, rules: TemplateRules) -> list[Feature]:
     """Проверяет метаданные каждой спецификации и собирает из них фичи.
 
     Спецификацией считается файл с одним из полей SPEC_KEYS; остальные статьи (глоссарий, главная и т. п.)
@@ -85,6 +84,7 @@ def build_features(specs: list[Spec], ctx: BuildContext, problems: Problems) -> 
     такая спецификация в список не попадает.
     """
     features: list[Feature] = []
+    status_required = any(rule.path == ("status",) and rule.required for rule in rules.meta)
     for spec in specs:
         if not spec.is_spec:
             continue  # не спецификация фичи (глоссарий, главная и т. п.)
@@ -102,7 +102,7 @@ def build_features(specs: list[Spec], ctx: BuildContext, problems: Problems) -> 
 
         rel_to_docs = Path(spec.rel)
         in_archive_dir = ctx.archive_dir_name in rel_to_docs.parts[:-1]
-        status = normalize_status(meta.get("status"), path, problems)
+        status = normalize_status(meta.get("status"), path, problems, status_required)
         archived = in_archive_dir or status == "archived"
 
         order = parse_order(meta.get(ORDER_KEY), path, problems)
@@ -111,3 +111,79 @@ def build_features(specs: list[Spec], ctx: BuildContext, problems: Problems) -> 
         features.append(Feature(module, submodule, name, link, status, archived,
                                 spec.rel, path.stem, parse_relations(meta, path, problems), order))
     return features
+
+
+def _is_empty(value: object) -> bool:
+    """Поле не задано или пусто (пустая строка)."""
+    return value is None or (isinstance(value, str) and not clean(value))
+
+
+def _lookup(meta: dict, path: tuple[str, ...]) -> tuple[bool, object]:
+    """Значение поля по пути (`("relations", "depends_on")`): (есть ли поле, значение)."""
+    value: object = meta
+    for key in path:
+        if not isinstance(value, dict) or key not in value:
+            return False, None
+        value = value[key]
+    return True, value
+
+
+def check_template_meta(specs: list[Spec], rules: TemplateRules, problems: Problems) -> None:
+    """Метаданные по шаблону:
+
+    * обязательные поля заполнены. Обязательность берётся из комментариев шаблона; у списков и наборов
+      (`relations`, `relations.depends_on`) «обязательное» значит, что поле есть, пустой список `[]` допустим;
+    * значения-подсказки из шаблона («Название модуля», «Фамилия Имя») заменены;
+    * `id` — латиница и цифры, группы через дефис; уникален среди всех спецификаций (включая архив);
+    * неизвестные шаблону поля — предупреждение (чаще всего опечатка).
+
+    `module` и `feature_name` проверяет build_features, поэтому здесь они пропускаются.
+    """
+    ids: dict[str, Spec] = {}
+    for spec in specs:
+        if not spec.is_spec:
+            continue
+        path, meta = spec.path, spec.meta
+
+        missing_top: set[str] = set()
+        for rule in rules.meta:
+            if not rule.required or (len(rule.path) == 1 and rule.path[0] in ALWAYS_REQUIRED):
+                continue
+            if len(rule.path) > 1:
+                parent_found, parent = _lookup(meta, rule.path[:1])
+                if rule.path[0] in missing_top or (parent_found and parent is not None and not isinstance(parent, dict)):
+                    continue   # о родителе уже сообщено (нет поля или неверный формат)
+            found, value = _lookup(meta, rule.path)
+            if found if rule.container else (found and not _is_empty(value)):
+                continue
+            if len(rule.path) == 1:
+                missing_top.add(rule.path[0])
+            if rule.container:
+                hint = " (если значений нет, укажите пустой список `[]`)" if isinstance(rule.placeholder, list) else ""
+                problems.error(path, f"нет обязательного поля `{rule.name}`{hint}")
+            else:
+                problems.error(path, f"не заполнено обязательное поле `{rule.name}`")
+
+        for rule in rules.meta:
+            if (len(rule.path) == 1 and rule.path[0] in TEMPLATE_PLACEHOLDER_FIELDS
+                    and isinstance(rule.placeholder, str) and clean(rule.placeholder)):
+                found, value = _lookup(meta, rule.path)
+                if found and clean(value) == clean(rule.placeholder):
+                    report = problems.error if rule.required else problems.warning
+                    report(path, f"поле `{rule.name}` не заполнено: значение «{clean(value)}» взято из шаблона")
+
+        code = clean(meta.get(ID_KEY))
+        if code:
+            if not ID_RE.match(code):
+                problems.error(path, f"недопустимый `{ID_KEY}: {code}`: латиница и цифры, группы через дефис "
+                                     f"(например, SHOP-CAT-SF-005)")
+            elif code in ids:
+                problems.error(path, f"`{ID_KEY}: {code}` уже используется в спецификации {ids[code].rel}")
+            else:
+                ids[code] = spec
+
+        if rules.known_fields:
+            unknown = [str(key) for key in meta if str(key) not in rules.known_fields]
+            if unknown:
+                problems.warning(path, f"неизвестные поля метаданных: {', '.join(unknown)} "
+                                       f"(в шаблоне: {', '.join(rules.known_fields)})")

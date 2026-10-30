@@ -9,6 +9,7 @@ doc_version: "0.01"
 order: 10
 owner: "Дмитрий Хилько"
 relations:
+  depends_on: []
   extends:
     - feature: auth-sms
       note: "Добавляет второй шаг к входу по номеру телефона"

@@ -8,6 +8,8 @@ icon: lucide/file-text
 order: 30
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
+relations:
+  depends_on: []
 ---
 
 # Галерея изображений с зумом {#product-gallery}

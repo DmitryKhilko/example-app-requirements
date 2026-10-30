@@ -8,6 +8,8 @@ icon: lucide/file-archive
 doc_version: "0.01"
 order: 10
 owner: "Дмитрий Хилько"
+relations:
+  depends_on: []
 ---
 
 # Старый текстовый поиск (устарел) {#search-old}

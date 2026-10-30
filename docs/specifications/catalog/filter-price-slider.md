@@ -9,6 +9,7 @@ order: 20
 doc_version: "0.01"
 owner: "Дмитрий Хилько"
 relations:
+  depends_on: []
   extends:
     - feature: filter-categories
       note: "Добавляет ещё один фильтр в ту же панель фильтров"
