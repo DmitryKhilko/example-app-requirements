@@ -390,14 +390,24 @@ span[data-count-item]:last-of-type::after,
 }
 
 .md-typeset details.feature-block > summary {
-  padding: 0.6rem 2.4rem 0.6rem 0.9rem;
+  /* ИЗМЕНЕНО: уменьшили верхний и нижний отступы с 0.6rem до 0.35rem для компактности плитки */
+  padding: 0.35rem 2.4rem 0.35rem 0.9rem;
   font-size: inherit;
   cursor: pointer;
   background: none !important;   /* без цветной полосы за названием */
+  position: relative;            /* гарантирует корректное позиционирование псевдоэлементов */
 }
 
 .md-typeset details.feature-block > summary::before {
   display: none;   /* значок типа панели не нужен */
+}
+
+/* ДОБАВЛЕНО: центрирование стрелки (обычно это псевдоэлемент ::after в MkDocs Material) по вертикали */
+.md-typeset details.feature-block > summary::after {
+  top: 0 !important;
+  bottom: 0 !important;
+  margin-top: auto !important;
+  margin-bottom: auto !important;
 }
 
 /* Название модуля или субмодуля — на первой строке, статистика статусов — на второй */
