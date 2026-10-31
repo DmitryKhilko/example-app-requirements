@@ -59,8 +59,8 @@ def render_tree(features: list[Feature], module_order: list[str], link=lambda f:
     """Иерархия «модуль -> субмодуль -> функциональность» в виде вложенных сворачиваемых блоков.
 
     Заголовки модуля и субмодуля содержат счётчики статусов. with_modules=False — для страницы одного модуля:
-    блоки только по субмодулям. module_order — порядок модулей из nav-order.yml. link — как получить адрес спецификации: по умолчанию относительно файла карты,
-    для индексов — относительно индекса.
+    блоки только по субмодулям. module_order — порядок модулей из nav-order.yml. link — как получить адрес спецификации
+    относительно страницы (см. pages.link_from); по умолчанию — относительно папки docs.
     """
     lines: list[str] = []
     for module in sorted(_tree(features), key=lambda m: module_key(m, module_order)):
@@ -121,7 +121,14 @@ def statuses_info(statuses: list[str]) -> list[str]:
     return ['??? info "Статусы спецификаций"', "", *rows, ""]
 
 
+def controls_block(features: list[Feature], statuses: list[str], placeholder: str) -> list[str]:
+    """Верх страницы-перечня без заголовка: инфо-блок «Статусы спецификаций», плитки-фильтры, строка отбора и «Сбросить».
+
+    Так устроены страницы «Обзор» и индексы подразделов («Действующие», «Архив»): сразу под заголовком первого уровня.
+    """
+    return [*statuses_info(statuses), *tiles_block(features, statuses), *filter_block(placeholder)]
+
+
 def statistics_section(features: list[Feature], statuses: list[str], placeholder: str) -> list[str]:
-    """Раздел «Статистика»: инфо-блок «Статусы спецификаций», плитки-фильтры, строка отбора и «Сбросить»."""
-    return ["## Статистика {#statistics}", "", *statuses_info(statuses), *tiles_block(features, statuses),
-            *filter_block(placeholder)]
+    """Раздел «Статистика» (индексы модулей): заголовок второго уровня и тот же блок управления."""
+    return ["## Статистика {#statistics}", "", *controls_block(features, statuses, placeholder)]

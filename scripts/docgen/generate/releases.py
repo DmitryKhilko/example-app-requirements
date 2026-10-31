@@ -1,13 +1,18 @@
 """Страница «Релизы» (docs/releases.md): сворачиваемый блок на каждый релиз со списком вошедших спецификаций.
 
-Заголовок блока: «Релиз 1.2.1 (15.09.2026)»; дата — поле `relise_date`, без даты скобки не выводятся."""
+Заголовок блока: «Релиз 1.2.1 (15.09.2026)»; дата — поле `relise_date`, без даты скобки не выводятся.
+
+Страница лежит в корне docs, ссылки на спецификации строятся от корня (`registry/active/...`)."""
 
 from __future__ import annotations
 
 import re
 from collections import defaultdict
 
-from ..config import GENERATED_COMMENT, NO_RELEASES_TEXT, PAGE_FRONT_MATTER, RELEASES_ANCHOR, RELEASES_TITLE
+from urllib.parse import quote
+
+from ..config import (DESCRIPTION_ANCHOR, GENERATED_COMMENT, NO_RELEASES_TEXT, PAGE_FRONT_MATTER, RELEASES_ANCHOR,
+                      RELEASES_TITLE)
 from ..models import Feature
 from ..ordering import feature_key, module_key
 from ..textutils import escape_md
@@ -38,7 +43,9 @@ def _spec_item(f: Feature) -> list[str]:
     """Элемент списка: значок статуса и ссылка на спецификацию (название), под ней описание из раздела «Описание»."""
     # Без `data-preview`: окно предпросмотра на странице «Релизы» не нужно. Код спецификации (data-id) попадает в текстовый файл.
     attrs = f'{{data-status="{f.shown_status}"' + (f' data-id="{f.spec_id}"' if f.spec_id else "") + "}"
-    lines = [f"- {f.icon} [{escape_md(f.name)}]({f.link})" + attrs, ""]
+    # страница releases.md лежит в корне docs, поэтому адрес спецификации — её путь от docs
+    link = quote(f.path) + f"#{DESCRIPTION_ANCHOR}"
+    lines = [f"- {f.icon} [{escape_md(f.name)}]({link})" + attrs, ""]
     if f.description:
         lines += _indent(f.description) + [""]
     return lines

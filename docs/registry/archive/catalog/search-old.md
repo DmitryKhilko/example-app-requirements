@@ -40,12 +40,12 @@ flowchart LR
     class n0 current
     class n0 archived
 
-    click n1 "../../../../specifications/catalog/search-text/"
+    click n1 "../../../active/catalog/search-text/"
 ```
 
 | Связь | Функциональность | Статус | Комментарий |
 |---|---|---|---|
-| Заменена функциональностью | [Полнотекстовый поиск по названию](../../../specifications/catalog/search-text.md#article-overview){data-preview} | реализовано | Поиск по точному совпадению названия выведен из эксплуатации |
+| Заменена функциональностью | [Полнотекстовый поиск по названию](../../active/catalog/search-text.md#article-overview){data-preview} | реализовано | Поиск по точному совпадению названия выведен из эксплуатации |
 
 <!-- relations:end -->
 
@@ -56,7 +56,7 @@ flowchart LR
 
 ## Критерии приёмки {#acceptance-criteria}
 
-- Заменено фичей ["Полнотекстовый поиск по названию"](../../../specifications/catalog/search-text.md#article-overview){data-preview}.
+- Заменено фичей ["Полнотекстовый поиск по названию"](../../active/catalog/search-text.md#article-overview){data-preview}.
 
 ## Критерии релиза {#release-criteria}
 

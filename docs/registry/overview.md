@@ -3,11 +3,9 @@ hide:
   - toc
 ---
 
-# Карта функциональностей продукта {#feature-map}
+# Обзор спецификаций продукта {#overview}
 
 <!-- generated: файл формируется автоматически, не редактируйте его вручную -->
-
-## Статистика {#statistics}
 
 ??? info "Статусы спецификаций"
 
@@ -49,19 +47,19 @@ hide:
 <details class="feature-block feature-submodule" markdown="block">
 <summary markdown="span"><span class="feature-title">*Карточка товара*</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
-- :lucide-file-text: [Галерея изображений с зумом](specifications/catalog/product-gallery.md#article-overview){data-preview data-status="released"}
-- :lucide-file: [Блок похожих товаров (рекомендации)](specifications/catalog/product-recommendations.md#article-overview){data-preview data-status="backlog"}
+- :lucide-file-text: [Галерея изображений с зумом](active/catalog/product-gallery.md#article-overview){data-preview data-status="released"}
+- :lucide-file: [Блок похожих товаров (рекомендации)](active/catalog/product-recommendations.md#article-overview){data-preview data-status="backlog"}
 
 </details>
 
 <details class="feature-block feature-submodule" markdown="block">
 <summary markdown="span"><span class="feature-title">*Поиск и фильтрация*</span><span class="feature-counts"><span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
 
-- :lucide-file-text: [Фильтрация по категориям и тегам](specifications/catalog/filter-categories.md#article-overview){data-preview data-status="released"}
-- :lucide-file-braces: [Фильтр по диапазону цен с ползунком](specifications/catalog/filter-price-slider.md#article-overview){data-preview data-status="development"}
-- :lucide-file-text: [Полнотекстовый поиск по названию](specifications/catalog/search-text.md#article-overview){data-preview data-status="released"}
-- :lucide-file-pen-line: [Новая фича](specifications/catalog/new-feature.md#article-overview){data-preview data-status="analysis"}
-- :lucide-file-check: [Ещё одна новая фича](specifications/catalog/new-feature-copy.md#article-overview){data-preview data-status="ready"}
+- :lucide-file-text: [Фильтрация по категориям и тегам](active/catalog/filter-categories.md#article-overview){data-preview data-status="released"}
+- :lucide-file-braces: [Фильтр по диапазону цен с ползунком](active/catalog/filter-price-slider.md#article-overview){data-preview data-status="development"}
+- :lucide-file-text: [Полнотекстовый поиск по названию](active/catalog/search-text.md#article-overview){data-preview data-status="released"}
+- :lucide-file-pen-line: [Новая фича](active/catalog/new-feature.md#article-overview){data-preview data-status="analysis"}
+- :lucide-file-check: [Ещё одна новая фича](active/catalog/new-feature-copy.md#article-overview){data-preview data-status="ready"}
 
 </details>
 
@@ -74,16 +72,16 @@ hide:
 <details class="feature-block feature-submodule" markdown="block">
 <summary markdown="span"><span class="feature-title">*История заказов*</span><span class="feature-counts"><span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span></span></summary>
 
-- :lucide-file-check: [Отмена заказа клиентом](specifications/orders/order-cancel.md#article-overview){data-preview data-status="ready"}
+- :lucide-file-check: [Отмена заказа клиентом](active/orders/order-cancel.md#article-overview){data-preview data-status="ready"}
 
 </details>
 
 <details class="feature-block feature-submodule" markdown="block">
 <summary markdown="span"><span class="feature-title">*Оформление заказа*</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
-- :lucide-file: [Покупка в рассрочку](specifications/orders/credit-pay.md#article-overview){data-preview data-status="backlog"}
-- :lucide-file-text: [Оплата через СБП / QR-код](specifications/orders/payment-sbp.md#article-overview){data-preview data-status="released"}
-- :lucide-file-braces: [Выбор адреса на интерактивной карте](specifications/orders/checkout-map.md#article-overview){data-preview data-status="development"}
+- :lucide-file: [Покупка в рассрочку](active/orders/credit-pay.md#article-overview){data-preview data-status="backlog"}
+- :lucide-file-text: [Оплата через СБП / QR-код](active/orders/payment-sbp.md#article-overview){data-preview data-status="released"}
+- :lucide-file-braces: [Выбор адреса на интерактивной карте](active/orders/checkout-map.md#article-overview){data-preview data-status="development"}
 
 </details>
 
@@ -96,23 +94,23 @@ hide:
 <details class="feature-block feature-submodule" markdown="block">
 <summary markdown="span"><span class="feature-title">*Авторизация*</span><span class="feature-counts"><span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
-- :lucide-file-braces: [Двухфакторная аутентификация (2FA)](specifications/profile/auth-2fa.md#article-overview){data-preview data-status="development"}
-- :lucide-file-text: [Вход по номеру телефона и SMS](specifications/profile/auth-sms.md#article-overview){data-preview data-status="released"}
+- :lucide-file-braces: [Двухфакторная аутентификация (2FA)](active/profile/auth-2fa.md#article-overview){data-preview data-status="development"}
+- :lucide-file-text: [Вход по номеру телефона и SMS](active/profile/auth-sms.md#article-overview){data-preview data-status="released"}
 
 </details>
 
 <details class="feature-block feature-submodule" markdown="block">
 <summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
-- :lucide-file-text: [Редактирование персональных данных](specifications/profile/edit-data.md#article-overview){data-preview data-status="released"}
-- :lucide-file: [Привязка профилей социальных сетей](specifications/profile/oauth.md#article-overview){data-preview data-status="backlog"}
+- :lucide-file-text: [Редактирование персональных данных](active/profile/edit-data.md#article-overview){data-preview data-status="released"}
+- :lucide-file: [Привязка профилей социальных сетей](active/profile/oauth.md#article-overview){data-preview data-status="backlog"}
 
 </details>
 
 
 </details>
 
-## Архив спецификаций {#archived-features}
+## Архивные спецификации {#archived-features}
 
 <details class="feature-block feature-module" markdown="block">
 <summary markdown="span"><span class="feature-title">**Каталог товаров**</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
@@ -120,7 +118,7 @@ hide:
 <details class="feature-block feature-submodule" markdown="block">
 <summary markdown="span"><span class="feature-title">*Поиск и фильтрация*</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
-- :lucide-file-archive: [Старый текстовый поиск (устарел)](archive/specifications/catalog/search-old.md#article-overview){data-preview data-status="archived"}
+- :lucide-file-archive: [Старый текстовый поиск (устарел)](archive/catalog/search-old.md#article-overview){data-preview data-status="archived"}
 
 </details>
 
@@ -133,7 +131,7 @@ hide:
 <details class="feature-block feature-submodule" markdown="block">
 <summary markdown="span"><span class="feature-title">*История заказов*</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
-- :lucide-file-archive: [Выписка заказов в виде бумажного чека](archive/specifications/orders/print-receipt.md#article-overview){data-preview data-status="archived"}
+- :lucide-file-archive: [Выписка заказов в виде бумажного чека](archive/orders/print-receipt.md#article-overview){data-preview data-status="archived"}
 
 </details>
 
@@ -146,7 +144,7 @@ hide:
 <details class="feature-block feature-submodule" markdown="block">
 <summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
-- :lucide-file-archive: [Дисконтные карты старого образца](archive/specifications/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
+- :lucide-file-archive: [Дисконтные карты старого образца](archive/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
 
 </details>
 

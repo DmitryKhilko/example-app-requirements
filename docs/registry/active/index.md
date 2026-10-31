@@ -3,11 +3,9 @@ hide:
   - toc
 ---
 
-# Спецификации {#specifications}
+# Действующие спецификации {#active}
 
 <!-- generated: файл формируется автоматически, не редактируйте его вручную -->
-
-## Статистика {#statistics}
 
 ??? info "Статусы спецификаций"
 
@@ -38,8 +36,6 @@ hide:
 </div>
 
 <div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p></div>
-
-## Спецификации {#specs}
 
 <details class="feature-block feature-module" markdown="block">
 <summary markdown="span"><span class="feature-title">**Каталог товаров**</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>3</span></span></span></summary>

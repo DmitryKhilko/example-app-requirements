@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
@@ -127,7 +126,7 @@ def build_features(specs: list[Spec], ctx: BuildContext, problems: Problems, rul
                 problems.warning(path, f"указана `{RELEASE_DATE_KEY}`, но не указан `{RELEASE_KEY}`: дата нигде не выводится "
                                        f"на странице «Релизы»")
 
-        link = quote(os.path.relpath(path, ctx.output.parent).replace(os.sep, "/")) + f"#{DESCRIPTION_ANCHOR}"
+        link = quote(spec.rel) + f"#{DESCRIPTION_ANCHOR}"
         features.append(Feature(module, submodule, name, link, status, archived,
                                 spec.rel, path.stem, parse_relations(meta, path, problems), order,
                                 clean(meta.get(ID_KEY)), release, description_of(spec.text), release_date))

@@ -21,7 +21,7 @@ class Feature:
     module: str
     submodule: str
     name: str
-    link: str          # ссылка на раздел «Описание» относительно файла карты (с якорем)
+    link: str          # ссылка на раздел «Описание» относительно папки docs (с якорем); страницы пересчитывают её от своей папки
     status: str        # ключ из STATUS_ICONS
     archived: bool
     path: str = ""    # путь файла относительно папки docs (posix)
@@ -71,7 +71,7 @@ class Spec:
 class BuildContext:
     """Параметры запуска, общие для всех этапов (вместо глобальных переменных)."""
     docs_dir: Path
-    output: Path                  # файл карты фичей (resolved)
+    output: Path                  # страница «Обзор» (registry/overview.md, resolved)
     archive_dir_name: str
     config: Path                  # zensical.toml
     nav_order: Path               # nav-order.yml
@@ -82,7 +82,7 @@ class BuildContext:
 @dataclass
 class Plan:
     """Результат генерации: что должно оказаться на диске. Сама генерация ничего не пишет."""
-    map_path: Path
+    map_path: Path                            # страница «Обзор»
     map_content: str
     indexes: dict[Path, str]
     stale_indexes: list[Path]

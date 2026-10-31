@@ -16,9 +16,9 @@ from .validate import validate_all
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Сборка карты фичей из спецификаций")
+    parser = argparse.ArgumentParser(description="Сборка обзора спецификаций, индексов, меню и страницы «Релизы» из спецификаций")
     parser.add_argument("--docs", type=Path, default=DEFAULT_DOCS_DIR, help="папка со спецификациями")
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="файл карты фичей")
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="страница «Обзор» (по умолчанию docs/registry/overview.md)")
     parser.add_argument("--archive-dir", default=DEFAULT_ARCHIVE_DIR_NAME, help="имя папки архива")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG, help="zensical.toml с блоком меню (nav)")
     parser.add_argument("--nav-order", type=Path, default=DEFAULT_NAV_ORDER, help="nav-order.yml с порядком модулей в меню")
@@ -46,7 +46,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Проверка не пройдена: ошибок — {len(problems.errors)}, предупреждений — {len(problems.warnings)}.",
                   file=sys.stderr)
         else:
-            print(f"Карта не обновлена: ошибок — {len(problems.errors)}.", file=sys.stderr)
+            print(f"Обзор и остальные страницы не обновлены: ошибок — {len(problems.errors)}.", file=sys.stderr)
         return 1
     if args.validate:
         print(f"Проверка пройдена: спецификаций — {len(features)}, предупреждений — {len(problems.warnings)}.")
@@ -58,22 +58,22 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.check:
         if result.outdated:
-            print("Карта фичей, страница «Релизы», индексы папок, меню или разделы «Взаимосвязи» устарели: запустите "
+            print("Страница «Обзор», страница «Релизы», индексы папок, меню или разделы «Взаимосвязи» устарели: запустите "
                   "scripts/generate_docs.py "
-                  f"(карта: {'устарела' if result.map_changed else 'ок'}, "
+                  f"(обзор: {'устарел' if result.map_changed else 'ок'}, "
                   f"релизы: {'устарели' if result.releases_changed else 'ок'}, индексов: {result.indexes_changed}, "
                   f"меню: {'устарело' if result.nav_changed else 'ок'}, "
                   f"взаимосвязей в спецификациях: {result.relations_changed}, "
                   f"значков статуса в метаданных: {result.icons_changed}).",
                   file=sys.stderr)
             return 1
-        print("Карта фичей, страница «Релизы», индексы папок, меню и разделы «Взаимосвязи» актуальны.")
+        print("Страница «Обзор», страница «Релизы», индексы папок, меню и разделы «Взаимосвязи» актуальны.")
         return 0
 
     if not result.map_changed:
-        print(f"Карта фичей без изменений ({len(features)} спецификаций).")
+        print(f"Страница «Обзор» без изменений ({len(features)} спецификаций).")
     else:
-        print(f"Карта фичей обновлена: {display_path(args.output)} ({len(features)} спецификаций).")
+        print(f"Страница «Обзор» обновлена: {display_path(args.output)} ({len(features)} спецификаций).")
     print("Страница «Релизы» обновлена." if result.releases_changed else "Страница «Релизы» без изменений.")
     print(f"Индексы папок: изменено {result.indexes_changed} (всего {result.indexes_total}, "
           f"удалено лишних {result.stale_removed}).")

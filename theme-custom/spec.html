@@ -21,8 +21,8 @@
     {% set status_titles = config.extra.status if config and config.extra else none %}
     {% set task_url = config.extra.tracker.task_url if config and config.extra and config.extra.tracker else none %}
     {% set status_code = meta.status %}
-    {#- Спецификация из папки archive/ показывается как архивная, даже если в метаданных осталось прежнее значение. -#}
-    {% if page.url and page.url[:8] == "archive/" %}
+    {#- Спецификация из папки registry/archive/ показывается как архивная, даже если в метаданных осталось прежнее значение. -#}
+    {% if page.url and page.url[:17] == "registry/archive/" %}
       {% set status_code = "archived" %}
     {% endif %}
     {% if status_titles and status_code and status_code in status_titles %}

@@ -18,11 +18,11 @@ hide:
 
 </div>
 
-- :lucide-file-text: [Вход по номеру телефона и SMS](specifications/profile/auth-sms.md#article-overview){data-status="released" data-id="SHOP-ACC-AUTH-002"}
+- :lucide-file-text: [Вход по номеру телефона и SMS](registry/active/profile/auth-sms.md#article-overview){data-status="released" data-id="SHOP-ACC-AUTH-002"}
 
     Вход без пароля по одноразовому коду из SMS.
 
-- :lucide-file-text: [Редактирование персональных данных](specifications/profile/edit-data.md#article-overview){data-status="released" data-id="SHOP-ACC-USER-002"}
+- :lucide-file-text: [Редактирование персональных данных](registry/active/profile/edit-data.md#article-overview){data-status="released" data-id="SHOP-ACC-USER-002"}
 
     Изменение имени, e-mail и контактных данных пользователя.
 
@@ -37,19 +37,19 @@ hide:
 
 </div>
 
-- :lucide-file-text: [Фильтрация по категориям и тегам](specifications/catalog/filter-categories.md#article-overview){data-status="released" data-id="SHOP-CAT-SF-002"}
+- :lucide-file-text: [Фильтрация по категориям и тегам](registry/active/catalog/filter-categories.md#article-overview){data-status="released" data-id="SHOP-CAT-SF-002"}
 
     Сужение списка товаров выбором категорий и тегов.
 
-- :lucide-file-text: [Галерея изображений с зумом](specifications/catalog/product-gallery.md#article-overview){data-status="released" data-id="SHOP-CAT-CARD-001"}
+- :lucide-file-text: [Галерея изображений с зумом](registry/active/catalog/product-gallery.md#article-overview){data-status="released" data-id="SHOP-CAT-CARD-001"}
 
     Просмотр изображений товара с увеличением.
 
-- :lucide-file-text: [Полнотекстовый поиск по названию](specifications/catalog/search-text.md#article-overview){data-status="released" data-id="SHOP-CAT-SF-004"}
+- :lucide-file-text: [Полнотекстовый поиск по названию](registry/active/catalog/search-text.md#article-overview){data-status="released" data-id="SHOP-CAT-SF-004"}
 
     Пользователь находит товары, вводя часть названия в строку поиска.
 
-- :lucide-file-text: [Оплата через СБП / QR-код](specifications/orders/payment-sbp.md#article-overview){data-status="released" data-id="SHOP-ORD-CHCK-003"}
+- :lucide-file-text: [Оплата через СБП / QR-код](registry/active/orders/payment-sbp.md#article-overview){data-status="released" data-id="SHOP-ORD-CHCK-003"}
 
     Оплата заказа через Систему быстрых платежей.
 

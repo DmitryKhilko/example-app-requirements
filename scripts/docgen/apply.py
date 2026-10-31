@@ -11,7 +11,7 @@ from .models import Plan
 @dataclass
 class ApplyResult:
     """Что изменилось (при check=True — что устарело)."""
-    map_changed: bool
+    map_changed: bool         # страница «Обзор»
     releases_changed: bool
     indexes_changed: int      # изменённые и удалённые лишние индексы
     indexes_total: int
@@ -27,6 +27,7 @@ class ApplyResult:
 
 
 def _write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)   # папка подраздела реестра может ещё не существовать
     path.write_text(content, encoding="utf-8", newline="\n")
 
 

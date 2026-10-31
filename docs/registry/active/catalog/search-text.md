@@ -45,13 +45,13 @@ flowchart LR
     class n0 current
     class n1 archived
 
-    click n1 "../../../archive/specifications/catalog/search-old/"
+    click n1 "../../../archive/catalog/search-old/"
     click n2 "../filter-price-slider/"
 ```
 
 | Связь | Функциональность | Статус | Комментарий |
 |---|---|---|---|
-| Заменяет | [Старый текстовый поиск (устарел)](../../archive/specifications/catalog/search-old.md#article-overview){data-preview} | архив | Поиск по точному совпадению названия выведен из эксплуатации |
+| Заменяет | [Старый текстовый поиск (устарел)](../../archive/catalog/search-old.md#article-overview){data-preview} | архив | Поиск по точному совпадению названия выведен из эксплуатации |
 | Связана с | [Фильтр по диапазону цен с ползунком](filter-price-slider.md#article-overview){data-preview} | разработка | Границы диапазона цен вычисляются по текущей выдаче, в том числе поисковой |
 
 <!-- relations:end -->

@@ -5,7 +5,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from ..config import FOLDER_TITLES, INDEX_NAME
+from ..config import INDEX_NAME
+from ..layout import section_of
 from ..markdown import parse_headings
 from ..models import BuildContext, Spec
 from ..problems import Problems
@@ -83,16 +84,15 @@ def check_headings(spec: Spec, rules: TemplateRules, problems: Problems) -> None
 
 
 def check_structure(specs: list[Spec], rules: TemplateRules, ctx: BuildContext, problems: Problems) -> None:
-    """Проверяет структуру всех спецификаций (включая архив) и ищет в папках разделов файлы без метаданных."""
+    """Проверяет структуру всех спецификаций (включая архив) и ищет в папках реестра файлы без метаданных."""
     for spec in specs:
         if spec.is_spec:
             check_headings(spec, rules, problems)
 
-    sections = {ctx.archive_dir_name, *FOLDER_TITLES}
+    # в `docs/registry/active/` и `docs/registry/archive/` лежат только спецификации (и сформированные index.md)
     for spec in specs:
-        parts = Path(spec.rel).parts
-        if spec.is_spec or spec.broken or len(parts) < 2 or parts[0] not in sections:
+        if spec.is_spec or spec.broken or section_of(spec.rel) is None:
             continue
         if spec.path.name == INDEX_NAME:
             continue  # сформированные index.md — не спецификации; созданные вручную отмечает validate/project.py
-        problems.error(spec.path, "нет метаданных спецификации (`module`, `feature_name`): файл не попадёт в карту")
+        problems.error(spec.path, "нет метаданных спецификации (`module`, `feature_name`): файл не попадёт в обзор и меню")

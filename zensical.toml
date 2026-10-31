@@ -19,55 +19,61 @@ extra_javascript = ["javascripts/status-filter.js", "javascripts/releases.js"]
 #*.yml
 #"""
 
-# Меню сайта формируется скриптом scripts/generate_docs.py (названия папок по-русски).
+# Меню сайта формируется скриптом scripts/generate_docs.py: вкладки «Проект», «Реестр требований» и «Релизы»,
+# левое меню вкладки — её страницы (названия папок по-русски).
 # BEGIN GENERATED NAV — не редактируйте вручную
 nav = [
-    { "О продукте" = "index.md" },
-    { "Глоссарий" = "glossary.md" },
+    { "Проект" = [
+        { "О продукте" = "project/about.md" },
+        { "Глоссарий" = "project/glossary.md" },
+        { "Roadmap" = "project/roadmap.md" },
+    ] },
+    { "Реестр требований" = [
+        { "Обзор" = "registry/overview.md" },
+        { "Действующие" = [
+            "registry/active/index.md",
+            { "Каталог товаров" = [
+                "registry/active/catalog/index.md",
+                "registry/active/catalog/filter-categories.md",
+                "registry/active/catalog/filter-price-slider.md",
+                "registry/active/catalog/product-gallery.md",
+                "registry/active/catalog/product-recommendations.md",
+                "registry/active/catalog/search-text.md",
+                "registry/active/catalog/new-feature.md",
+                "registry/active/catalog/new-feature-copy.md",
+            ] },
+            { "Управление заказами" = [
+                "registry/active/orders/index.md",
+                "registry/active/orders/credit-pay.md",
+                "registry/active/orders/payment-sbp.md",
+                "registry/active/orders/order-cancel.md",
+                "registry/active/orders/checkout-map.md",
+            ] },
+            { "Личный кабинет" = [
+                "registry/active/profile/index.md",
+                "registry/active/profile/auth-2fa.md",
+                "registry/active/profile/auth-sms.md",
+                "registry/active/profile/edit-data.md",
+                "registry/active/profile/oauth.md",
+            ] },
+        ] },
+        { "Архив" = [
+            "registry/archive/index.md",
+            { "Каталог товаров" = [
+                "registry/archive/catalog/index.md",
+                "registry/archive/catalog/search-old.md",
+            ] },
+            { "Управление заказами" = [
+                "registry/archive/orders/index.md",
+                "registry/archive/orders/print-receipt.md",
+            ] },
+            { "Личный кабинет" = [
+                "registry/archive/profile/index.md",
+                "registry/archive/profile/legacy-cards.md",
+            ] },
+        ] },
+    ] },
     { "Релизы" = "releases.md" },
-    { "Карта функциональностей" = "feature-map.md" },
-    { "Спецификации" = [
-        "specifications/index.md",
-        { "Каталог товаров" = [
-            "specifications/catalog/index.md",
-            "specifications/catalog/filter-categories.md",
-            "specifications/catalog/filter-price-slider.md",
-            "specifications/catalog/product-gallery.md",
-            "specifications/catalog/product-recommendations.md",
-            "specifications/catalog/search-text.md",
-            "specifications/catalog/new-feature.md",
-            "specifications/catalog/new-feature-copy.md",
-        ] },
-        { "Управление заказами" = [
-            "specifications/orders/index.md",
-            "specifications/orders/credit-pay.md",
-            "specifications/orders/payment-sbp.md",
-            "specifications/orders/order-cancel.md",
-            "specifications/orders/checkout-map.md",
-        ] },
-        { "Личный кабинет" = [
-            "specifications/profile/index.md",
-            "specifications/profile/auth-2fa.md",
-            "specifications/profile/auth-sms.md",
-            "specifications/profile/edit-data.md",
-            "specifications/profile/oauth.md",
-        ] },
-    ] },
-    { "Архив спецификаций" = [
-        "archive/index.md",
-        { "Каталог товаров" = [
-            "archive/specifications/catalog/index.md",
-            "archive/specifications/catalog/search-old.md",
-        ] },
-        { "Управление заказами" = [
-            "archive/specifications/orders/index.md",
-            "archive/specifications/orders/print-receipt.md",
-        ] },
-        { "Личный кабинет" = [
-            "archive/specifications/profile/index.md",
-            "archive/specifications/profile/legacy-cards.md",
-        ] },
-    ] },
 ]
 # END GENERATED NAV
 
@@ -115,7 +121,7 @@ code = "Fira Code"
 task_url = "https://github.bmf/khilko/app_requirements/issues/"
 
 [project.extra.status]
-# Статусы фич (поле status в спецификациях, карта фичей), жизненный цикл SDLC
+# Статусы фич (поле status в спецификациях, страницы реестра), жизненный цикл SDLC
 backlog = "Бэклог"
 analysis = "Анализ"
 ready = "Готово к разработке"
@@ -166,10 +172,13 @@ custom_checkbox = true
 # Настройки предварительного просмотра страниц
 [[project.markdown_extensions.zensical.extensions.preview.configurations]]
 targets.include = ["**/*.md"]
-# Страницы index.md (главная и индексы модулей) сами ссылок для предпросмотра не получают:
-# у ссылок на спецификации там явно задан data-preview, а кнопки фильтра предпросмотра не нужны.
-# Страница «Релизы» (releases.md) тоже исключена: ссылки на спецификации в её блоках открываются без окна предпросмотра.
-sources.exclude = ["index.md", "**/index.md", "releases.md"]
+# Страницы-перечни сами ссылок для предпросмотра не получают: у ссылок на спецификации там явно задан data-preview,
+# а кнопки фильтра предпросмотра не нужны. Исключены:
+#   * index.md — стартовая страница, индексы подразделов «Действующие» и «Архив» и индексы модулей;
+#   * registry/overview.md — страница «Обзор» реестра;
+#   * project/about.md — «О продукте» (плитки перехода);
+#   * releases.md — «Релизы»: ссылки на спецификации в её блоках открываются без окна предпросмотра.
+sources.exclude = ["index.md", "**/index.md", "registry/overview.md", "project/about.md", "releases.md"]
 
 # Отображение иконок эмодзи
 [project.markdown_extensions.pymdownx.emoji]

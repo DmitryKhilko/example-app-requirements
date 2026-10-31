@@ -13,7 +13,7 @@ from ..problems import Problems
 from ..reader import read_specs
 from ..template import load_template
 from .meta import build_features, check_release_dates, check_template_meta
-from .project import check_manual_indexes, check_nav_markers, check_order
+from .project import check_locations, check_manual_indexes, check_nav_markers, check_order
 from .relations import check_relations
 from .structure import check_structure
 
@@ -29,6 +29,7 @@ def validate_all(ctx: BuildContext, problems: Problems) -> tuple[list[Spec], lis
     ctx.module_order[:] = load_module_order(ctx.nav_order, problems)
     check_order(features, ctx.module_order, ctx.docs_dir, ctx.nav_order, problems)
     check_nav_markers(ctx.config, problems)
+    check_locations(features, ctx.docs_dir, problems)
     check_manual_indexes(ctx.docs_dir, features, problems)
     check_structure(specs, rules, ctx, problems)
     return specs, features
