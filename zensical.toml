@@ -25,6 +25,7 @@ nav = [
     { "О продукте" = "index.md" },
     { "Глоссарий" = "glossary.md" },
     { "Карта функциональностей" = "feature-map.md" },
+    { "Релизы" = "releases.md" },
     { "Спецификации" = [
         "specifications/index.md",
         { "Каталог товаров" = [
@@ -67,7 +68,6 @@ nav = [
             "archive/specifications/profile/legacy-cards.md",
         ] },
     ] },
-    { "Релизы" = "releases.md" },
 ]
 # END GENERATED NAV
 
