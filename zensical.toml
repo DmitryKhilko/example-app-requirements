@@ -24,6 +24,7 @@ extra_javascript = ["javascripts/status-filter.js", "javascripts/releases.js"]
 nav = [
     { "О продукте" = "index.md" },
     { "Глоссарий" = "glossary.md" },
+    { "Релизы" = "releases.md" },
     { "Карта функциональностей" = "feature-map.md" },
     { "Спецификации" = [
         "specifications/index.md",
@@ -67,7 +68,6 @@ nav = [
             "archive/specifications/profile/legacy-cards.md",
         ] },
     ] },
-    { "Релизы" = "releases.md" },
 ]
 # END GENERATED NAV
 
