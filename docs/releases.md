@@ -11,21 +11,6 @@ hide:
 
 Релизы идут от новых к старым. Откройте релиз, чтобы увидеть вошедшие в него спецификации; список релиза можно скачать в текстовый файл.
 
-<details class="feature-block feature-module release-block" data-release="1.3.1" markdown="block">
-<summary markdown="span"><span class="feature-title">**Релиз 1.3.1**</span><span class="feature-counts">1 спецификация</span></summary>
-
-<div class="release-actions" markdown>
-
-[:lucide-download: Скачать в текстовый файл](#){ .md-button data-release-download="1.3.1" }
-
-</div>
-
-- :lucide-file-braces: [Двухфакторная аутентификация (2FA)](specifications/profile/auth-2fa.md#article-overview){data-preview data-status="development" data-id="SHOP-ACC-AUTH-001"}
-
-    Дополнительное подтверждение входа одноразовым кодом из приложения-аутентификатора.
-
-</details>
-
 <details class="feature-block feature-module release-block" data-release="1.3.0" markdown="block">
 <summary markdown="span"><span class="feature-title">**Релиз 1.3.0**</span><span class="feature-counts">2 спецификации</span></summary>
 
