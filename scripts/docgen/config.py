@@ -156,7 +156,8 @@ NAV_BEGIN_PREFIX = "# BEGIN GENERATED NAV"
 NAV_END = "# END GENERATED NAV"
 # Служебные страницы в начале меню: (название, файл относительно docs). Отсутствующие файлы пропускаются.
 ROOT_PAGES = [
-    ("О программном продукте", "index.md"),
+    # Название в меню короче, чем заголовок самой страницы (`# О программном продукте` в docs/index.md)
+    ("О продукте", "index.md"),
     ("Глоссарий", "glossary.md"),
     ("Карта функциональностей", "feature-map.md"),
     ("Релизы", "releases.md"),
@@ -170,8 +171,13 @@ ROOT_PAGES = [
 # от новых релизов к старым. Кнопку «Скачать» в блоке обслуживает theme-custom/javascripts/releases.js.
 RELEASE_KEY = "relise_id"
 RELEASE_RE = re.compile(r"^\d+(?:\.\d+)*$")
+# Поле `relise_date` — дата релиза в формате ДД.ММ.ГГГГ (строкой в кавычках). У спецификаций одного релиза она одинакова;
+# выводится в заголовке блока релиза на странице «Релизы» и в «паспорте» спецификации.
+RELEASE_DATE_KEY = "relise_date"
+RELEASE_DATE_FORMAT = "%d.%m.%Y"
 RELEASES_PAGE = "releases.md"
 RELEASES_ANCHOR = "releases"
+RELEASES_TITLE = "Релизы программного продукта"
 NO_RELEASES_TEXT = "Релизов пока нет: ни у одной спецификации не указан `relise_id`."
 
 # Регулярные выражения, собранные из констант выше.

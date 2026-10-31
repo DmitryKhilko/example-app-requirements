@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import os
+from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
 
-from ..config import (DEFAULT_STATUS, DEFAULT_SUBMODULE, DESCRIPTION_ANCHOR, ID_KEY, ID_RE, ORDER_KEY, RELATION_TYPES,
+from ..config import (RELEASE_DATE_FORMAT, RELEASE_DATE_KEY, DEFAULT_STATUS, DEFAULT_SUBMODULE, DESCRIPTION_ANCHOR, ID_KEY, ID_RE, ORDER_KEY, RELATION_TYPES,
                       RELATIONS_KEY, RELEASE_KEY, RELEASE_RE, STATUS_ALIASES, STATUS_ICONS, TEMPLATE_PLACEHOLDER_FIELDS)
 from ..markdown import description_of
 from ..models import BuildContext, Feature, Relation, Spec
@@ -112,11 +113,24 @@ def build_features(specs: list[Spec], ctx: BuildContext, problems: Problems, rul
             problems.error(path, f"недопустимый `{RELEASE_KEY}: {release}`: номер релиза — числа через точку "
                                  f"(например, 1.2.1; в кавычках)")
             release = ""
+        release_date = clean(meta.get(RELEASE_DATE_KEY))
+        if release_date:
+            try:
+                datetime.strptime(release_date, RELEASE_DATE_FORMAT)
+                if len(release_date) != 10:
+                    raise ValueError
+            except ValueError:
+                problems.error(path, f"недопустимая `{RELEASE_DATE_KEY}: {release_date}`: дата в формате ДД.ММ.ГГГГ "
+                                     f"строкой в кавычках (например, \"15.09.2026\")")
+                release_date = ""
+            if release_date and not release:
+                problems.warning(path, f"указана `{RELEASE_DATE_KEY}`, но не указан `{RELEASE_KEY}`: дата нигде не выводится "
+                                       f"на странице «Релизы»")
 
         link = quote(os.path.relpath(path, ctx.output.parent).replace(os.sep, "/")) + f"#{DESCRIPTION_ANCHOR}"
         features.append(Feature(module, submodule, name, link, status, archived,
                                 spec.rel, path.stem, parse_relations(meta, path, problems), order,
-                                clean(meta.get(ID_KEY)), release, description_of(spec.text)))
+                                clean(meta.get(ID_KEY)), release, description_of(spec.text), release_date))
     return features
 
 
@@ -194,3 +208,16 @@ def check_template_meta(specs: list[Spec], rules: TemplateRules, problems: Probl
             if unknown:
                 problems.warning(path, f"неизвестные поля метаданных: {', '.join(unknown)} "
                                        f"(в шаблоне: {', '.join(rules.known_fields)})")
+
+
+def check_release_dates(features: list[Feature], problems: Problems, docs_dir: Path) -> None:
+    """Предупреждение: у спецификаций одного релиза разные даты (на странице «Релизы» берётся самая частая)."""
+    dates: dict[str, dict[str, list[Feature]]] = {}
+    for f in features:
+        if f.release and f.release_date:
+            dates.setdefault(f.release, {}).setdefault(f.release_date, []).append(f)
+    for release, by_date in sorted(dates.items()):
+        if len(by_date) > 1:
+            listing = "; ".join(f"{d}: {', '.join(x.slug for x in items)}" for d, items in sorted(by_date.items()))
+            problems.warning(docs_dir / next(iter(by_date.values()))[0].path,
+                             f"у спецификаций релиза {release} разные `{RELEASE_DATE_KEY}` ({listing})")

@@ -22,7 +22,7 @@ extra_javascript = ["javascripts/status-filter.js", "javascripts/releases.js"]
 # Меню сайта формируется скриптом scripts/generate_docs.py (названия папок по-русски).
 # BEGIN GENERATED NAV — не редактируйте вручную
 nav = [
-    { "О программном продукте" = "index.md" },
+    { "О продукте" = "index.md" },
     { "Глоссарий" = "glossary.md" },
     { "Карта функциональностей" = "feature-map.md" },
     { "Релизы" = "releases.md" },

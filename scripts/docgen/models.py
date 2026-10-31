@@ -31,6 +31,7 @@ class Feature:
     spec_id: str = ""          # код спецификации (поле `id`)
     release: str = ""          # номер релиза (поле `relise_id`); пусто — спецификация не вошла ни в один релиз
     description: str = ""      # текст раздела «Описание» (для страницы «Релизы»)
+    release_date: str = ""     # дата релиза ДД.ММ.ГГГГ (поле `relise_date`)
 
     @property
     def shown_status(self) -> str:

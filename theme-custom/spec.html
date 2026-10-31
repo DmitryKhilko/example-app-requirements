@@ -4,7 +4,7 @@
   Подключение: в метаданных спецификации указано `template: "spec.html"` (поле есть в templates/feature-spec-template.md).
   Файл лежит в папке theme-custom (`custom_dir` в zensical.toml); имя не должно совпадать с файлами темы (main.html, base.html).
 
-  Выводятся: id, status, module, submodule, owner, doc_version, task_id и relise_id (последние два — всегда, даже пустые)
+  Выводятся: id, status, module, submodule, owner, doc_version, task_id, relise_id и relise_date (последние три — всегда, даже пустые)
   и (если задан) sprints.
   Не выводятся: relations (связи показывает раздел «Взаимосвязи», который формирует скрипт), feature_name (это заголовок
   страницы), order и icon (служебные поля меню).
@@ -50,10 +50,11 @@
       {% if meta.doc_version %}
         <div class="spec-passport__item"><dt>Версия документа</dt><dd>{{ meta.doc_version }}</dd></div>
       {% endif %}
-      {#- Ключи task_id и relise_id выводятся всегда, даже если значение пусто. Текст ссылки на задачу — её номер из task_id,
+      {#- Ключи task_id, relise_id и relise_date выводятся всегда, даже если значение пусто. Текст ссылки на задачу — её номер из task_id,
           адрес строится из [project.extra.tracker] task_url в zensical.toml; если адрес не задан, выводится только номер. -#}
       <div class="spec-passport__item"><dt>Задача</dt><dd>{% if meta.task_id and task_url %}<a href="{{ task_url }}{{ meta.task_id }}" target="_blank" rel="noopener">{{ meta.task_id }}</a>{% else %}{{ meta.task_id }}{% endif %}</dd></div>
       <div class="spec-passport__item"><dt>Релиз</dt><dd>{{ meta.relise_id }}</dd></div>
+      <div class="spec-passport__item"><dt>Дата релиза</dt><dd>{{ meta.relise_date }}</dd></div>
       {% if meta.sprints %}
         <div class="spec-passport__item"><dt>Спринты</dt><dd>{{ meta.sprints | join(", ") }}</dd></div>
       {% endif %}

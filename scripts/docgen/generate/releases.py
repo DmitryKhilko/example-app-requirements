@@ -1,11 +1,13 @@
-"""Страница «Релизы» (docs/releases.md): сворачиваемый блок на каждый релиз со списком вошедших спецификаций."""
+"""Страница «Релизы» (docs/releases.md): сворачиваемый блок на каждый релиз со списком вошедших спецификаций.
+
+Заголовок блока: «Релиз 1.2.1 (15.09.2026)»; дата — поле `relise_date`, без даты скобки не выводятся."""
 
 from __future__ import annotations
 
 import re
 from collections import defaultdict
 
-from ..config import GENERATED_COMMENT, LINK_ATTRS_TEMPLATE, NO_RELEASES_TEXT, PAGE_FRONT_MATTER, RELEASES_ANCHOR
+from ..config import GENERATED_COMMENT, NO_RELEASES_TEXT, PAGE_FRONT_MATTER, RELEASES_ANCHOR, RELEASES_TITLE
 from ..models import Feature
 from ..ordering import feature_key, module_key
 from ..textutils import escape_md
@@ -34,13 +36,18 @@ def _indent(text: str) -> list[str]:
 
 def _spec_item(f: Feature) -> list[str]:
     """Элемент списка: значок статуса и ссылка на спецификацию (название), под ней описание из раздела «Описание»."""
-    attrs = LINK_ATTRS_TEMPLATE.format(status=f.shown_status)
-    if f.spec_id:
-        attrs = attrs[:-1] + f' data-id="{f.spec_id}"}}'      # код спецификации попадает в текстовый файл
+    # Без `data-preview`: окно предпросмотра на странице «Релизы» не нужно. Код спецификации (data-id) попадает в текстовый файл.
+    attrs = f'{{data-status="{f.shown_status}"' + (f' data-id="{f.spec_id}"' if f.spec_id else "") + "}"
     lines = [f"- {f.icon} [{escape_md(f.name)}]({f.link})" + attrs, ""]
     if f.description:
         lines += _indent(f.description) + [""]
     return lines
+
+
+def _release_date(items: list[Feature]) -> str:
+    """Дата релиза (ДД.ММ.ГГГГ): самая частая среди спецификаций релиза; пусто — дата нигде не указана."""
+    dates = [f.release_date for f in items if f.release_date]
+    return max(sorted(set(dates)), key=dates.count) if dates else ""
 
 
 def _block(release: str, items: list[Feature], module_order: list[str]) -> list[str]:
@@ -54,8 +61,11 @@ def _block(release: str, items: list[Feature], module_order: list[str]) -> list[
             "", "</div>", ""]
     for f in sorted(items, key=lambda f: (module_key(f.module, module_order), feature_key(f))):
         body += _spec_item(f)
-    return [f'<details class="feature-block feature-module release-block" data-release="{release}" markdown="block">',
-            f'<summary markdown="span"><span class="feature-title">**Релиз {release}**</span>'
+    date = _release_date(items)
+    title = f"Релиз {release}" + (f" ({date})" if date else "")
+    date_attr = f' data-release-date="{date}"' if date else ""
+    return [f'<details class="feature-block feature-module release-block" data-release="{release}"{date_attr} markdown="block">',
+            f'<summary markdown="span"><span class="feature-title">**{title}**</span>'
             f'<span class="feature-counts">{_plural_specs(len(items))}</span></summary>', "", *body, "</details>", ""]
 
 
@@ -70,11 +80,9 @@ def render_releases(features: list[Feature], module_order: list[str]) -> str:
 
     out: list[str] = [
         *PAGE_FRONT_MATTER,
-        f"# Релизы продукта {{#{RELEASES_ANCHOR}}}",
+        f"# {RELEASES_TITLE} {{#{RELEASES_ANCHOR}}}",
         "",
         GENERATED_COMMENT,
-        "",
-        "## Список релизов {#release-list}",
         "",
     ]
     if by_release:

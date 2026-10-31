@@ -10,6 +10,7 @@ order: 30
 owner: "Дмитрий Хилько"
 task_id: "1"
 relise_id: "1.3.0"
+relise_date: "20.10.2026"
 template: "spec.html"
 relations:
   depends_on: []

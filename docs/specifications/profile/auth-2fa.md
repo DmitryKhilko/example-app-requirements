@@ -9,7 +9,8 @@ doc_version: "0.01"
 order: 10
 owner: "Дмитрий Хилько"
 task_id: "1"
-relise_id: 
+relise_id: ""
+relise_date: ""
 template: "spec.html"
 relations:
   depends_on: []

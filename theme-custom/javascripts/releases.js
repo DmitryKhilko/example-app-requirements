@@ -2,7 +2,7 @@
    releases.js — скачивание списка спецификаций релиза в текстовый файл
 
    Страница docs/releases.md формируется скриптом scripts/generate_docs.py. В ней на каждый релиз стоит сворачиваемый блок
-   details.release-block (атрибут data-release="<номер релиза>"); в панели блока — кнопка «Скачать в текстовый файл»
+   details.release-block (атрибуты data-release="<номер релиза>" и data-release-date="<дата ДД.ММ.ГГГГ>"); в панели блока — кнопка «Скачать в текстовый файл»
    (ссылка с атрибутом data-release-download) и список спецификаций: у каждой есть ссылка с названием (a[data-status],
    код спецификации — в атрибуте data-id) и под ней описание.
 
@@ -11,7 +11,7 @@
    Файл формируется в браузере, сервер не нужен.
 
    Формат файла:
-       Релиз 1.2.1
+       Релиз 1.2.1 (15.09.2026)
        Спецификаций: 4
 
        1. Название спецификации [КОД]
@@ -40,8 +40,9 @@
 
   function buildText(block) {
     var release = block.getAttribute("data-release") || "";
+    var date = block.getAttribute("data-release-date") || "";
     var items = block.querySelectorAll("li");
-    var lines = ["Релиз " + release, "Спецификаций: " + items.length, ""];
+    var lines = ["Релиз " + release + (date ? " (" + date + ")" : ""), "Спецификаций: " + items.length, ""];
     Array.prototype.forEach.call(items, function (item, index) {
       var link = item.querySelector("a[data-status]");
       var id = link ? link.getAttribute("data-id") : "";
