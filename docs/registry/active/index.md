@@ -38,6 +38,28 @@ hide:
 <div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p></div>
 
 <details class="feature-block feature-module" markdown="block">
+<summary markdown="span"><span class="feature-title">**Личный кабинет**</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
+
+<details class="feature-block feature-submodule" markdown="block">
+<summary markdown="span"><span class="feature-title">*Авторизация*</span><span class="feature-counts"><span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+
+- :lucide-file-braces: [Двухфакторная аутентификация (2FA)](profile/auth-2fa.md#article-overview){data-preview data-status="development"}
+- :lucide-file-text: [Вход по номеру телефона и SMS](profile/auth-sms.md#article-overview){data-preview data-status="released"}
+
+</details>
+
+<details class="feature-block feature-submodule" markdown="block">
+<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+
+- :lucide-file-text: [Редактирование персональных данных](profile/edit-data.md#article-overview){data-preview data-status="released"}
+- :lucide-file: [Привязка профилей социальных сетей](profile/oauth.md#article-overview){data-preview data-status="backlog"}
+
+</details>
+
+
+</details>
+
+<details class="feature-block feature-module" markdown="block">
 <summary markdown="span"><span class="feature-title">**Каталог товаров**</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>3</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
@@ -78,28 +100,6 @@ hide:
 - :lucide-file: [Покупка в рассрочку](orders/credit-pay.md#article-overview){data-preview data-status="backlog"}
 - :lucide-file-text: [Оплата через СБП / QR-код](orders/payment-sbp.md#article-overview){data-preview data-status="released"}
 - :lucide-file-braces: [Выбор адреса на интерактивной карте](orders/checkout-map.md#article-overview){data-preview data-status="development"}
-
-</details>
-
-
-</details>
-
-<details class="feature-block feature-module" markdown="block">
-<summary markdown="span"><span class="feature-title">**Личный кабинет**</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
-
-<details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Авторизация*</span><span class="feature-counts"><span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
-
-- :lucide-file-braces: [Двухфакторная аутентификация (2FA)](profile/auth-2fa.md#article-overview){data-preview data-status="development"}
-- :lucide-file-text: [Вход по номеру телефона и SMS](profile/auth-sms.md#article-overview){data-preview data-status="released"}
-
-</details>
-
-<details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
-
-- :lucide-file-text: [Редактирование персональных данных](profile/edit-data.md#article-overview){data-preview data-status="released"}
-- :lucide-file: [Привязка профилей социальных сетей](profile/oauth.md#article-overview){data-preview data-status="backlog"}
 
 </details>
 

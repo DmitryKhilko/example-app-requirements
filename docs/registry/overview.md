@@ -42,6 +42,28 @@ hide:
 ## Действующие спецификации {#active-features}
 
 <details class="feature-block feature-module" markdown="block">
+<summary markdown="span"><span class="feature-title">**Личный кабинет**</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
+
+<details class="feature-block feature-submodule" markdown="block">
+<summary markdown="span"><span class="feature-title">*Авторизация*</span><span class="feature-counts"><span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+
+- :lucide-file-braces: [Двухфакторная аутентификация (2FA)](active/profile/auth-2fa.md#article-overview){data-preview data-status="development"}
+- :lucide-file-text: [Вход по номеру телефона и SMS](active/profile/auth-sms.md#article-overview){data-preview data-status="released"}
+
+</details>
+
+<details class="feature-block feature-submodule" markdown="block">
+<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+
+- :lucide-file-text: [Редактирование персональных данных](active/profile/edit-data.md#article-overview){data-preview data-status="released"}
+- :lucide-file: [Привязка профилей социальных сетей](active/profile/oauth.md#article-overview){data-preview data-status="backlog"}
+
+</details>
+
+
+</details>
+
+<details class="feature-block feature-module" markdown="block">
 <summary markdown="span"><span class="feature-title">**Каталог товаров**</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>3</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
@@ -88,29 +110,20 @@ hide:
 
 </details>
 
-<details class="feature-block feature-module" markdown="block">
-<summary markdown="span"><span class="feature-title">**Личный кабинет**</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
-
-<details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Авторизация*</span><span class="feature-counts"><span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
-
-- :lucide-file-braces: [Двухфакторная аутентификация (2FA)](active/profile/auth-2fa.md#article-overview){data-preview data-status="development"}
-- :lucide-file-text: [Вход по номеру телефона и SMS](active/profile/auth-sms.md#article-overview){data-preview data-status="released"}
-
-</details>
-
-<details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
-
-- :lucide-file-text: [Редактирование персональных данных](active/profile/edit-data.md#article-overview){data-preview data-status="released"}
-- :lucide-file: [Привязка профилей социальных сетей](active/profile/oauth.md#article-overview){data-preview data-status="backlog"}
-
-</details>
-
-
-</details>
-
 ## Архивные спецификации {#archived-features}
+
+<details class="feature-block feature-module" markdown="block">
+<summary markdown="span"><span class="feature-title">**Личный кабинет**</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
+
+<details class="feature-block feature-submodule" markdown="block">
+<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
+
+- :lucide-file-archive: [Дисконтные карты старого образца](archive/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
+
+</details>
+
+
+</details>
 
 <details class="feature-block feature-module" markdown="block">
 <summary markdown="span"><span class="feature-title">**Каталог товаров**</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
@@ -132,19 +145,6 @@ hide:
 <summary markdown="span"><span class="feature-title">*История заказов*</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-archive: [Выписка заказов в виде бумажного чека](archive/orders/print-receipt.md#article-overview){data-preview data-status="archived"}
-
-</details>
-
-
-</details>
-
-<details class="feature-block feature-module" markdown="block">
-<summary markdown="span"><span class="feature-title">**Личный кабинет**</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
-
-<details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
-
-- :lucide-file-archive: [Дисконтные карты старого образца](archive/profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
 
 </details>
 
