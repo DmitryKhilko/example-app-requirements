@@ -58,21 +58,23 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.check:
         if result.outdated:
-            print("Карта фичей, индексы папок, меню или разделы «Взаимосвязи» устарели: запустите "
+            print("Карта фичей, страница «Релизы», индексы папок, меню или разделы «Взаимосвязи» устарели: запустите "
                   "scripts/generate_docs.py "
-                  f"(карта: {'устарела' if result.map_changed else 'ок'}, индексов: {result.indexes_changed}, "
+                  f"(карта: {'устарела' if result.map_changed else 'ок'}, "
+                  f"релизы: {'устарели' if result.releases_changed else 'ок'}, индексов: {result.indexes_changed}, "
                   f"меню: {'устарело' if result.nav_changed else 'ок'}, "
                   f"взаимосвязей в спецификациях: {result.relations_changed}, "
                   f"значков статуса в метаданных: {result.icons_changed}).",
                   file=sys.stderr)
             return 1
-        print("Карта фичей, индексы папок, меню и разделы «Взаимосвязи» актуальны.")
+        print("Карта фичей, страница «Релизы», индексы папок, меню и разделы «Взаимосвязи» актуальны.")
         return 0
 
     if not result.map_changed:
         print(f"Карта фичей без изменений ({len(features)} спецификаций).")
     else:
         print(f"Карта фичей обновлена: {display_path(args.output)} ({len(features)} спецификаций).")
+    print("Страница «Релизы» обновлена." if result.releases_changed else "Страница «Релизы» без изменений.")
     print(f"Индексы папок: изменено {result.indexes_changed} (всего {result.indexes_total}, "
           f"удалено лишних {result.stale_removed}).")
     print("Меню (nav) обновлено." if result.nav_changed else "Меню (nav) без изменений.")

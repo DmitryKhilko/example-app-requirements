@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from .config import FRONT_MATTER_RE
+from .config import DESCRIPTION_RE, FRONT_MATTER_RE, RELATIONS_BEGIN_PREFIX
 
 _HEADING_RE = re.compile(r"^ {0,3}(#{1,6})[ \t]+(.+?)[ \t]*$")
 # Явный якорь в конце строки заголовка: `Текст {#latin-id}` (после идентификатора допустимы другие атрибуты attr_list)
@@ -51,3 +51,27 @@ def parse_headings(text: str) -> list[Heading]:
         else:
             headings.append(Heading(len(found.group(1)), raw, None, number))
     return headings
+
+
+def description_of(text: str) -> str:
+    """Текст раздела «Описание» (от заголовка с якорем `article-overview` до следующего заголовка или раздела «Взаимосвязи»).
+
+    Блок метаданных, блоки кода и HTML-комментарии не учитываются при поиске заголовков; сам текст раздела возвращается
+    как есть (Markdown), без лишних пустых строк по краям. Нет раздела — пустая строка.
+    """
+    match = FRONT_MATTER_RE.match(text)
+    body = text[match.end():] if match else text
+    lines: list[str] = []
+    found = in_fence = False
+    for line in body.split("\n"):
+        stripped = line.strip()
+        if not found:
+            if DESCRIPTION_RE.match(line):
+                found = True
+            continue
+        if stripped.startswith(("```", "~~~")):
+            in_fence = not in_fence
+        elif not in_fence and (_HEADING_RE.match(line) or stripped.startswith(RELATIONS_BEGIN_PREFIX)):
+            break
+        lines.append(line.rstrip())
+    return "\n".join(lines).strip("\n")

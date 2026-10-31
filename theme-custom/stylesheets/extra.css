@@ -28,6 +28,7 @@
     10. Сворачиваемые блоки «Модуль» и «Субмодуль»
     11. Ширина страниц со скрытым правым меню
     12. Паспорт спецификации (шаблон theme-custom/spec.html)
+    13. Страница «Релизы» (docs/releases.md)
    ========================================================================== */
 
 
@@ -504,5 +505,30 @@ span[data-count-item]:last-of-type::after,
 
 /* Архивная спецификация: статус приглушён */
 .md-typeset dl.spec-passport[data-status="archived"] .spec-passport__status {
+  color: var(--md-default-fg-color--light);
+}
+
+
+/* --------------------------------------------------------------------------
+   13. СТРАНИЦА «РЕЛИЗЫ»
+
+   Блоки релизов — те же <details class="feature-block">, что и модули на карте функциональностей (раздел 10), с добавочным
+   классом .release-block. В панели: строка с кнопкой «Скачать в текстовый файл» (.release-actions) и список спецификаций:
+   название-ссылка и под ней описание, приглушённым цветом. Скачивание — theme-custom/javascripts/releases.js.
+   -------------------------------------------------------------------------- */
+.md-typeset .release-actions {
+  margin: 0.6rem 0.9rem 0.2rem;
+}
+
+.md-typeset .release-actions .md-button {
+  margin: 0;
+  font-size: 0.64rem;
+}
+
+.md-typeset details.release-block > ul > li > p {
+  margin: 0.15rem 0;
+}
+
+.md-typeset details.release-block > ul > li > p + p {
   color: var(--md-default-fg-color--light);
 }

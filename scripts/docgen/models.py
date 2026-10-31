@@ -28,6 +28,9 @@ class Feature:
     slug: str = ""    # имя файла без расширения: по нему фичи ссылаются друг на друга
     relations: tuple[Relation, ...] = ()
     order: int | None = None   # необязательное поле `order`: порядок в меню и картах (меньше — выше)
+    spec_id: str = ""          # код спецификации (поле `id`)
+    release: str = ""          # номер релиза (поле `relise_id`); пусто — спецификация не вошла ни в один релиз
+    description: str = ""      # текст раздела «Описание» (для страницы «Релизы»)
 
     @property
     def shown_status(self) -> str:
@@ -86,4 +89,6 @@ class Plan:
     nav_content: str | None = None
     icons: dict[Path, str] = field(default_factory=dict)       # спецификации с обновлённым `icon` (новый текст)
     relations: dict[Path, str] = field(default_factory=dict)   # спецификации с обновлённым разделом «Взаимосвязи»
+    releases_path: Path | None = None         # docs/releases.md
+    releases_content: str = ""
     features_total: int = 0

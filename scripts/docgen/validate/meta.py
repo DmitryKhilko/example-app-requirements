@@ -6,8 +6,9 @@ import os
 from pathlib import Path
 from urllib.parse import quote
 
-from ..config import (DEFAULT_STATUS, DEFAULT_SUBMODULE, DESCRIPTION_ANCHOR, ID_KEY, ID_RE, ORDER_KEY,
-                      RELATION_TYPES, RELATIONS_KEY, STATUS_ALIASES, STATUS_ICONS, TEMPLATE_PLACEHOLDER_FIELDS)
+from ..config import (DEFAULT_STATUS, DEFAULT_SUBMODULE, DESCRIPTION_ANCHOR, ID_KEY, ID_RE, ORDER_KEY, RELATION_TYPES,
+                      RELATIONS_KEY, RELEASE_KEY, RELEASE_RE, STATUS_ALIASES, STATUS_ICONS, TEMPLATE_PLACEHOLDER_FIELDS)
+from ..markdown import description_of
 from ..models import BuildContext, Feature, Relation, Spec
 from ..problems import Problems
 from ..template import ALWAYS_REQUIRED, TemplateRules
@@ -106,10 +107,16 @@ def build_features(specs: list[Spec], ctx: BuildContext, problems: Problems, rul
         archived = in_archive_dir or status == "archived"
 
         order = parse_order(meta.get(ORDER_KEY), path, problems)
+        release = clean(meta.get(RELEASE_KEY))
+        if release and not RELEASE_RE.match(release):
+            problems.error(path, f"недопустимый `{RELEASE_KEY}: {release}`: номер релиза — числа через точку "
+                                 f"(например, 1.2.1; в кавычках)")
+            release = ""
 
         link = quote(os.path.relpath(path, ctx.output.parent).replace(os.sep, "/")) + f"#{DESCRIPTION_ANCHOR}"
         features.append(Feature(module, submodule, name, link, status, archived,
-                                spec.rel, path.stem, parse_relations(meta, path, problems), order))
+                                spec.rel, path.stem, parse_relations(meta, path, problems), order,
+                                clean(meta.get(ID_KEY)), release, description_of(spec.text)))
     return features
 
 

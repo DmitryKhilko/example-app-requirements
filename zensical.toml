@@ -10,7 +10,7 @@ repo_url = "https://github.com/DmitryKhilko/example-app-requirements"
 repo_name = "GitHub"
 edit_uri = "edit/main/docs/"
 extra_css = ["stylesheets/extra.css"]
-extra_javascript = ["javascripts/status-filter.js"]
+extra_javascript = ["javascripts/status-filter.js", "javascripts/releases.js"]
 
 # Не публиковать служебные файлы (скрипты, схемы, таксономию)
 # exclude_docs = """
@@ -23,8 +23,9 @@ extra_javascript = ["javascripts/status-filter.js"]
 # BEGIN GENERATED NAV — не редактируйте вручную
 nav = [
     { "О программном продукте" = "index.md" },
-    { "Карта функциональностей" = "feature-map.md" },
     { "Глоссарий" = "glossary.md" },
+    { "Карта функциональностей" = "feature-map.md" },
+    { "Релизы" = "releases.md" },
     { "Спецификации" = [
         "specifications/index.md",
         { "Каталог товаров" = [
