@@ -324,7 +324,7 @@ class="feature-block">`. Клики, ввод и раскрытие блоков
 ### Локальный запуск
 
 ```bash
-pip install -r scripts/requirements.txt
+uv pip install --system -r scripts/requirements.txt
 python scripts/generate_docs.py             # пересобрать карту, индексы, меню и разделы «Взаимосвязи»
 python scripts/generate_docs.py --check     # проверить, что всё актуально (код возврата 1, если нет)
 python scripts/generate_docs.py --validate  # только проверить спецификации (метаданные, связи, структуру), ничего не писать
@@ -349,11 +349,11 @@ python scripts/generate_docs.py --template другой-шаблон.md   # вз
 **Включение (один раз в каждом клоне репозитория):**
 
 ```bash
-pip install -r scripts/requirements.txt     # PyYAML для того же Python, который запускается командой `python`
+uv pip install --system -r scripts/requirements.txt     # PyYAML для того же Python, который запускается командой `python`
 git config core.hooksPath .githooks         # Git берёт хуки из папки проекта
 ```
 
-Проверить: `git config core.hooksPath` должен вывести `.githooks`. Нужны Git, Python 3.10+ и PyYAML. В Linux и macOS файлам
+Проверить: `git config core.hooksPath` должен вывести `.githooks`. Нужны Git, Python 3.10+, [uv](https://docs.astral.sh/uv/) и PyYAML. В Linux и macOS файлам
 хуков нужны права на исполнение (`chmod +x .githooks/*`); Git for Windows запускает хуки сам.
 
 **Как это выглядит.** Испортите поле метаданных (например, сотрите `module`) и сделайте коммит: он будет отклонён, а в выводе
@@ -375,7 +375,7 @@ git config core.hooksPath .githooks         # Git берёт хуки из па�
 * `python: command not found` или открывается Microsoft Store: установите Python с python.org, отметив «Add python.exe to PATH»
   (хук сам выберет `python` или `python3`);
 * `ModuleNotFoundError: No module named 'yaml'`: установите PyYAML в тот Python, который запускает хук
-  (`python -m pip install pyyaml`);
+  (`uv pip install --system pyyaml`);
 * вместо кириллицы в выводе «кракозябры»: хуки уже выставляют UTF-8 (`PYTHONIOENCODING`, `LANG`, `LC_ALL`); при необходимости
   включите UTF-8 и в самом терминале.
 
