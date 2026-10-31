@@ -25,7 +25,6 @@ nav = [
     { "О продукте" = "index.md" },
     { "Глоссарий" = "glossary.md" },
     { "Карта функциональностей" = "feature-map.md" },
-    { "Релизы" = "releases.md" },
     { "Спецификации" = [
         "specifications/index.md",
         { "Каталог товаров" = [
@@ -68,6 +67,7 @@ nav = [
             "archive/specifications/profile/legacy-cards.md",
         ] },
     ] },
+    { "Релизы" = "releases.md" },
 ]
 # END GENERATED NAV
 
@@ -168,7 +168,8 @@ custom_checkbox = true
 targets.include = ["**/*.md"]
 # Страницы index.md (главная и индексы модулей) сами ссылок для предпросмотра не получают:
 # у ссылок на спецификации там явно задан data-preview, а кнопки фильтра предпросмотра не нужны.
-sources.exclude = ["index.md", "**/index.md"]
+# Страница «Релизы» (releases.md) тоже исключена: ссылки на спецификации в её блоках открываются без окна предпросмотра.
+sources.exclude = ["index.md", "**/index.md", "releases.md"]
 
 # Отображение иконок эмодзи
 [project.markdown_extensions.pymdownx.emoji]

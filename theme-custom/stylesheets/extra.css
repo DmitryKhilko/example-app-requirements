@@ -440,6 +440,15 @@ span[data-count-item]:last-of-type::after,
   margin: 0.2rem 0.8rem 0.6rem;
 }
 
+/* Заголовки блоков (модуль, субмодуль, релиз) и строка со счётчиком (значки статусов, «N спецификаций») — обычным
+   начертанием: тема делает текст в summary полужирным, а генератор выделяет название модуля и релиза (**…**). */
+.md-typeset details.feature-block > summary,
+.md-typeset details.feature-block > summary .feature-title,
+.md-typeset details.feature-block > summary .feature-counts,
+.md-typeset details.feature-block > summary strong {
+  font-weight: 400 !important;
+}
+
 
 /* --------------------------------------------------------------------------
    11. ШИРИНА СТРАНИЦ С СКРЫТЫМ ПРАВЫМ МЕНЮ
