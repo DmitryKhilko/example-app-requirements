@@ -30,48 +30,8 @@ nav = [
     ] },
     { "Реестр требований" = [
         { "Обзор" = "registry/overview.md" },
-        { "Действующие" = [
-            "registry/active/index.md",
-            { "Личный кабинет" = [
-                "registry/active/profile/index.md",
-                "registry/active/profile/auth-2fa.md",
-                "registry/active/profile/auth-sms.md",
-                "registry/active/profile/edit-data.md",
-                "registry/active/profile/oauth.md",
-            ] },
-            { "Каталог товаров" = [
-                "registry/active/catalog/index.md",
-                "registry/active/catalog/filter-categories.md",
-                "registry/active/catalog/filter-price-slider.md",
-                "registry/active/catalog/product-gallery.md",
-                "registry/active/catalog/product-recommendations.md",
-                "registry/active/catalog/search-text.md",
-                "registry/active/catalog/new-feature.md",
-                "registry/active/catalog/new-feature-copy.md",
-            ] },
-            { "Управление заказами" = [
-                "registry/active/orders/index.md",
-                "registry/active/orders/credit-pay.md",
-                "registry/active/orders/payment-sbp.md",
-                "registry/active/orders/order-cancel.md",
-                "registry/active/orders/checkout-map.md",
-            ] },
-        ] },
-        { "Архив" = [
-            "registry/archive/index.md",
-            { "Личный кабинет" = [
-                "registry/archive/profile/index.md",
-                "registry/archive/profile/legacy-cards.md",
-            ] },
-            { "Каталог товаров" = [
-                "registry/archive/catalog/index.md",
-                "registry/archive/catalog/search-old.md",
-            ] },
-            { "Управление заказами" = [
-                "registry/archive/orders/index.md",
-                "registry/archive/orders/print-receipt.md",
-            ] },
-        ] },
+        { "Действующие" = "registry/active/index.md" },
+        { "Архив" = "registry/archive/index.md" },
     ] },
     { "Релизы" = "releases.md" },
 ]
