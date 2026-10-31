@@ -87,14 +87,11 @@ def plan_nav(config: Path, nav: str) -> str | None:
 
     None — файла нет (или в нём нет маркеров: об этом сообщает проверка, validate/project.py).
     """
-    # if not config.exists():
-    #     return None
-    # text = config.read_text(encoding="utf-8")
-    # block = f"{NAV_BEGIN}\n{nav}\n{NAV_END}"
-    # if not NAV_RE.search(text):
-    #     return None
-    # return NAV_RE.sub(lambda _: block, text, count=1)
-
-    # Временно отключаю замену в zensical.toml `nav`.
-    # Необходимо вручную править `nav`
-    pass
+    if not config.exists():
+        return None
+    text = config.read_text(encoding="utf-8")
+    block = f"{NAV_BEGIN}\n{nav}\n{NAV_END}"
+    if not NAV_RE.search(text):
+        return None
+    return NAV_RE.sub(lambda _: block, text, count=1)
+   
