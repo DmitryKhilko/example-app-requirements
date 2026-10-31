@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import defaultdict
 from pathlib import Path
 
-from ..config import FOLDER_TITLES, INDEX_NAME, NAV_BEGIN, NAV_END, NAV_RE, ROOT_PAGES
+from ..config import FOLDER_TITLES, INDEX_NAME, NAV_BEGIN, NAV_END, NAV_RE, ROOT_PAGES, TRAILING_PAGES
 from ..layout import folder_title
 from ..models import Feature
 from ..ordering import feature_key, module_key
@@ -14,7 +14,7 @@ from ..textutils import toml_str
 
 def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Path, str],
                module_order: list[str], generated: frozenset[Path] = frozenset()) -> str:
-    """Блок `nav = [...]` для zensical.toml: служебные страницы, затем вкладки по корневым папкам.
+    """Блок `nav = [...]` для zensical.toml: служебные страницы, вкладки по корневым папкам, затем завершающие страницы («Релизы»).
 
     Вкладка — первая папка пути (specifications, archive), раздел меню — модуль (папка со спецификациями),
     промежуточные папки пропускаются. Названия берутся из FOLDER_TITLES и поля `module`.
@@ -46,6 +46,8 @@ def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Pat
             body = ",\n".join(f"            {toml_str(p)}" for p in paths)
             sections.append(f"        {{ {toml_str(title)} = [\n{body},\n        ] }},")
         items.append(f"    {{ {toml_str(FOLDER_TITLES.get(tab, tab))} = [\n" + "\n".join(sections) + "\n    ] },")
+    items += [f"    {{ {toml_str(title)} = {toml_str(page)} }},"
+              for title, page in TRAILING_PAGES if (docs_dir / page).exists() or docs_dir / page in generated]
     return "nav = [\n" + "\n".join(items) + "\n]"
 
 
