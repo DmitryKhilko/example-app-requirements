@@ -130,11 +130,12 @@ def statuses_info(statuses: list[str]) -> list[str]:
     return ['??? info "Статусы спецификаций"', "", *rows, ""]
 
 
-def controls_block(features: list[Feature], statuses: list[str], download_name: str) -> list[str]:
+def controls_block(features: list[Feature], statuses: list[str], download_name: str,
+                   placeholder: str = PLACEHOLDER_SEARCH) -> list[str]:
     """Верх страницы-перечня без заголовка: инфо-блок «Статусы спецификаций», плитки-фильтры, строка отбора,
     «Сбросить» и «Скачать».
 
     Так устроены все страницы-перечни («Обзор», «Действующие», «Архив», индексы модулей): сразу под заголовком первого
-    уровня. download_name — часть имени скачиваемого файла.
+    уровня. download_name — часть имени скачиваемого файла, placeholder — подсказка в строке отбора.
     """
-    return [*statuses_info(statuses), *tiles_block(features, statuses), *filter_block(PLACEHOLDER_SEARCH, download_name)]
+    return [*statuses_info(statuses), *tiles_block(features, statuses), *filter_block(placeholder, download_name)]

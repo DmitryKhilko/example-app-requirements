@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ..config import (DEFAULT_ARCHIVE_DIR_NAME, INDEX_NAME, NAV_BEGIN, NAV_END, NAV_RE, ORDER_KEY, REGISTRY_DIR, SECTION_TITLES)
+from ..config import (LOGO_BEGIN_PREFIX, LOGO_END, LOGO_RE, SITE_FAVICON, SITE_LOGO, DEFAULT_ARCHIVE_DIR_NAME, INDEX_NAME, NAV_BEGIN, NAV_END, NAV_RE, ORDER_KEY, REGISTRY_DIR, SECTION_TITLES)
 from ..layout import is_manual_index, registry_sections, section_of, spec_folders
 from ..models import Feature
 from ..problems import Problems
@@ -75,3 +75,12 @@ def check_locations(features: list[Feature], docs_dir: Path, problems: Problems)
             continue
         elif f.archived:
             problems.warning(path, f"у спецификации в `{section}` статус `archived`: перенесите файл в `{REGISTRY_DIR}/{DEFAULT_ARCHIVE_DIR_NAME}/`")
+
+
+def check_logo(config: Path, docs_dir: Path, problems: Problems) -> None:
+    """Логотип и значок вкладки: файлы из SITE_LOGO / SITE_FAVICON существуют в docs/, а в zensical.toml стоят маркеры блока."""
+    if config.exists() and not LOGO_RE.search(config.read_text(encoding="utf-8")):
+        problems.error(config, f"нет маркеров `{LOGO_BEGIN_PREFIX}` … `{LOGO_END}` в разделе [project.theme]: логотип не обновлён")
+    for name, value in (("SITE_LOGO", SITE_LOGO), ("SITE_FAVICON", SITE_FAVICON)):
+        if value and not (docs_dir / value).is_file():
+            problems.error(docs_dir / value, f"файл из настройки {name} (scripts/docgen/config.py) не найден в docs/")

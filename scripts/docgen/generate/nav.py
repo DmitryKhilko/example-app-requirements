@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ..config import (INDEX_NAME, NAV_BEGIN, NAV_END, NAV_RE, OVERVIEW_MENU_TITLE, OVERVIEW_PAGE, PROJECT_MENU_TITLE,
+from ..config import (LOGO_BEGIN, LOGO_END, LOGO_RE, SITE_FAVICON, SITE_LOGO, INDEX_NAME, NAV_BEGIN, NAV_END, NAV_RE, OVERVIEW_MENU_TITLE, OVERVIEW_PAGE, PROJECT_MENU_TITLE,
                       PROJECT_PAGES, REGISTRY_MENU_TITLE, RELEASES_MENU_TITLE, RELEASES_PAGE, SECTION_TITLES)
 from ..layout import folder_title, registry_sections
 from ..models import Feature
@@ -82,10 +82,21 @@ def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Pat
     return "nav = [\n" + "\n".join(items) + "\n]"
 
 
-def plan_nav(config: Path, nav: str) -> str | None:
-    """Новое содержимое zensical.toml: блок меню между маркерами заменён на `nav`.
+def render_logo() -> str:
+    """Блок `logo` / `favicon` для раздела [project.theme] (значения — SITE_LOGO и SITE_FAVICON из config.py)."""
+    lines = [LOGO_BEGIN]
+    if SITE_LOGO:
+        lines.append(f"logo = {toml_str(SITE_LOGO)}")
+    if SITE_FAVICON:
+        lines.append(f"favicon = {toml_str(SITE_FAVICON)}")
+    lines.append(LOGO_END)
+    return "\n".join(lines)
 
-    None — файла нет (или в нём нет маркеров: об этом сообщает проверка, validate/project.py).
+
+def plan_nav(config: Path, nav: str) -> str | None:
+    """Новое содержимое zensical.toml: блок меню между маркерами заменён на `nav`, блок логотипа — на render_logo().
+
+    None — файла нет (или в нём нет маркеров меню: об этом сообщает проверка, validate/project.py).
     """
     if not config.exists():
         return None
@@ -93,5 +104,6 @@ def plan_nav(config: Path, nav: str) -> str | None:
     block = f"{NAV_BEGIN}\n{nav}\n{NAV_END}"
     if not NAV_RE.search(text):
         return None
-    return NAV_RE.sub(lambda _: block, text, count=1)
+    text = NAV_RE.sub(lambda _: block, text, count=1)
+    return LOGO_RE.sub(lambda _: render_logo(), text, count=1)
    

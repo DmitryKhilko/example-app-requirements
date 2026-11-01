@@ -8,7 +8,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from ..config import (DEFAULT_ARCHIVE_DIR_NAME, DESCRIPTION_ANCHOR, GENERATED_COMMENT, INDEX_MARKER,
-                      INDEX_NAME, OVERVIEW_ANCHOR, OVERVIEW_TITLE, PAGE_FRONT_MATTER, SECTION_PAGE_TITLES)
+                      INDEX_NAME, OVERVIEW_ANCHOR, OVERVIEW_TITLE, PAGE_FRONT_MATTER, PLACEHOLDER_SEARCH_MODULE, SECTION_PAGE_TITLES)
 from ..layout import folder_title, is_manual_index, registry_sections, spec_folders
 from ..models import BuildContext, Feature
 from ..textutils import escape_md
@@ -71,7 +71,7 @@ def render_index(folder: Path, docs_dir: Path, features: list[Feature], module_o
     lines = [
         *PAGE_FRONT_MATTER,
         f"# {escape_md(title)} {{#{slug}}}", "", GENERATED_COMMENT, "",
-        *controls_block(direct, _page_statuses(archive), f"{section}-{slug}"),
+        *controls_block(direct, _page_statuses(archive), f"{section}-{slug}", PLACEHOLDER_SEARCH_MODULE),
         *render_tree(direct, module_order, lambda f: f"{Path(f.path).name}#{DESCRIPTION_ANCHOR}", with_modules=False),
     ]
     return "\n".join(lines).rstrip() + "\n"

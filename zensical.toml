@@ -24,7 +24,7 @@ extra_javascript = ["javascripts/status-filter.js", "javascripts/releases.js"]
 # BEGIN GENERATED NAV — не редактируйте вручную
 nav = [
     { "Проект" = [
-        { "О продукте" = "project/about.md" },
+        { "О продукте" = "index.md" },
         { "Глоссарий" = "project/glossary.md" },
         { "Roadmap" = "project/roadmap.md" },
     ] },
@@ -80,6 +80,11 @@ nav = [
 # --- ТЕМА ---
 [project.theme]
 language = "ru"
+# Логотип в заголовке сайта и значок вкладки браузера: блок формирует скрипт по SITE_LOGO / SITE_FAVICON (scripts/docgen/config.py)
+# BEGIN GENERATED LOGO — задаётся в scripts/docgen/config.py (SITE_LOGO, SITE_FAVICON), не редактируйте вручную
+logo = "assets/logo.png"
+favicon = "assets/logo.png"
+# END GENERATED LOGO
 custom_dir = "theme-custom"  # Zensical будет брать стили и скрипты отсюда
 # Все возможности включаются ОДНИМ списком внутри [project.theme]
 features = [
@@ -174,11 +179,10 @@ custom_checkbox = true
 targets.include = ["**/*.md"]
 # Страницы-перечни сами ссылок для предпросмотра не получают: у ссылок на спецификации там явно задан data-preview,
 # а кнопки фильтра предпросмотра не нужны. Исключены:
-#   * index.md — стартовая страница, индексы подразделов «Действующие» и «Архив» и индексы модулей;
+#   * index.md — стартовая страница «О продукте» (плитки перехода), индексы подразделов «Действующие» и «Архив» и индексы модулей;
 #   * registry/overview.md — страница «Обзор» реестра;
-#   * project/about.md — «О продукте» (плитки перехода);
 #   * releases.md — «Релизы»: ссылки на спецификации в её блоках открываются без окна предпросмотра.
-sources.exclude = ["index.md", "**/index.md", "registry/overview.md", "project/about.md", "releases.md"]
+sources.exclude = ["index.md", "**/index.md", "registry/overview.md", "releases.md"]
 
 # Отображение иконок эмодзи
 [project.markdown_extensions.pymdownx.emoji]
