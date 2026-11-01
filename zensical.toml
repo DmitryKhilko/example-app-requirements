@@ -19,7 +19,7 @@ extra_javascript = ["javascripts/status-filter.js", "javascripts/releases.js"]
 #*.yml
 #"""
 
-# Меню сайта формируется скриптом scripts/generate_docs.py: вкладки «О продукте», «Проект», «Реестр требований» и «Релизы»,
+# Меню сайта формируется скриптом scripts/generate_docs.py: вкладки «О продукте», «Проект», «Требования» и «Релизы»,
 # левое меню вкладки — её страницы (названия папок по-русски).
 # BEGIN GENERATED NAV — не редактируйте вручную
 nav = [
@@ -28,7 +28,7 @@ nav = [
         { "Глоссарий" = "project/glossary.md" },
         { "Roadmap" = "project/roadmap.md" },
     ] },
-    { "Реестр требований" = [
+    { "Требования" = [
         { "Обзор" = "registry/overview.md" },
         { "Действующие" = [
             "registry/active/index.md",
