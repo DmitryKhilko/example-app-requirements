@@ -1,13 +1,13 @@
 """Меню сайта: блок `nav` в zensical.toml между маркерами (Zensical берёт названия папок из имён папок).
 
-Горизонтальное меню (вкладки): «Проект», «Реестр требований», «Релизы». Левое меню — содержимое выбранной вкладки.
+Горизонтальное меню (вкладки): «О продукте», «Проект», «Реестр требований», «Релизы». Левое меню — содержимое выбранной вкладки.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from ..config import (LOGO_BEGIN, LOGO_END, LOGO_RE, SITE_FAVICON, SITE_LOGO, INDEX_NAME, NAV_BEGIN, NAV_END, NAV_RE, OVERVIEW_MENU_TITLE, OVERVIEW_PAGE, PROJECT_MENU_TITLE,
+from ..config import (ABOUT_MENU_TITLE, ABOUT_PAGE, LOGO_BEGIN, LOGO_END, LOGO_RE, SITE_FAVICON, SITE_LOGO, INDEX_NAME, NAV_BEGIN, NAV_END, NAV_RE, OVERVIEW_MENU_TITLE, OVERVIEW_PAGE, PROJECT_MENU_TITLE,
                       PROJECT_PAGES, REGISTRY_MENU_TITLE, RELEASES_MENU_TITLE, RELEASES_PAGE, SECTION_TITLES)
 from ..layout import folder_title, registry_sections
 from ..models import Feature
@@ -29,7 +29,8 @@ def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Pat
                overview_page: str = OVERVIEW_PAGE) -> str:
     """Блок `nav = [...]` для zensical.toml.
 
-    * «Проект» — страницы PROJECT_PAGES («О продукте», «Глоссарий», «Roadmap»); первая открывается при щелчке на вкладке.
+    * «О продукте» — первая вкладка без левого меню: стартовая страница docs/index.md.
+    * «Проект» — страницы PROJECT_PAGES («Глоссарий», «Roadmap»); первая открывается при щелчке на вкладке.
     * «Реестр требований» — «Обзор» (первая страница вкладки), затем подразделы «Действующие» и «Архив». Подраздел
       открывает свой индекс, а внутри него идут модули (папки со спецификациями) с их индексами и спецификациями.
       Названия подразделов — SECTION_TITLES, модулей — поле `module`; промежуточные папки пропускаются.
@@ -42,6 +43,9 @@ def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Pat
         return (docs_dir / rel).exists() or docs_dir / rel in generated
 
     items: list[str] = []
+
+    if exists(ABOUT_PAGE):
+        items.append(_page(4, ABOUT_MENU_TITLE, ABOUT_PAGE))
 
     project = [_page(8, title, page) for title, page in PROJECT_PAGES if exists(page)]
     if project:
