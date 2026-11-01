@@ -14,7 +14,7 @@ hide:
 
 <div class="release-actions" markdown>
 
-[:lucide-download: Скачать в текстовый файл](#){ .md-button data-release-download="1.3.0" }
+[:lucide-download: Скачать](#){ .md-button data-release-download="1.3.0" }
 
 </div>
 
@@ -33,7 +33,7 @@ hide:
 
 <div class="release-actions" markdown>
 
-[:lucide-download: Скачать в текстовый файл](#){ .md-button data-release-download="1.2.1" }
+[:lucide-download: Скачать](#){ .md-button data-release-download="1.2.1" }
 
 </div>
 

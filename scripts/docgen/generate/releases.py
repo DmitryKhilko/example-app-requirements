@@ -60,11 +60,11 @@ def _release_date(items: list[Feature]) -> str:
 def _block(release: str, items: list[Feature], module_order: list[str]) -> list[str]:
     """Сворачиваемый блок релиза (те же классы, что у блоков модулей на карте функциональностей).
 
-    В панели: кнопка «Скачать в текстовый файл» (её обрабатывает releases.js; текст файла он собирает из самой панели)
+    В панели: кнопка «Скачать» (сохраняет список релиза в текстовый файл; её обрабатывает releases.js; текст файла он собирает из самой панели)
     и список спецификаций релиза.
     """
     body = ['<div class="release-actions" markdown>', "",
-            f'[:lucide-download: Скачать в текстовый файл](#){{ .md-button data-release-download="{release}" }}',
+            f'[:lucide-download: Скачать](#){{ .md-button data-release-download="{release}" }}',
             "", "</div>", ""]
     for f in sorted(items, key=lambda f: (module_key(f.module, module_order), feature_key(f))):
         body += _spec_item(f)

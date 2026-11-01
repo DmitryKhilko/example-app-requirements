@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from collections import defaultdict
 
-from ..config import (EMPTY_MESSAGE, LINK_ATTRS_TEMPLATE, STATUS_DESCRIPTIONS, STATUS_ICONS, STATUS_TITLES)
+from ..config import (PLACEHOLDER_SEARCH, DOWNLOAD_ICON, DOWNLOAD_LABEL, EMPTY_MESSAGE, LINK_ATTRS_TEMPLATE, RESET_LABEL, STATUS_DESCRIPTIONS,
+                      STATUS_ICONS, STATUS_TITLES, TOTAL_LABEL)
 from ..models import Feature
 from ..ordering import feature_key, module_key
 from ..textutils import escape_md, sort_key
@@ -16,13 +17,15 @@ def status_keys(only: list[str] | None = None, exclude: tuple[str, ...] = ()) ->
 
 
 def status_counts(features: list[Feature]) -> str:
-    """Счётчики фич по значкам статусов, например `:lucide-inbox:: 3, :lucide-rocket:: 6`.
+    """Строка статистики блока: общая сумма и счётчики фич по значкам статусов, например
+    `всего: 9, :lucide-inbox:: 3, :lucide-rocket:: 6`.
 
-    Порядок — как в STATUS_ICONS; статусы без фич не выводятся. Каждый счётчик — `<span data-count-item>` с числом
-    в `<span data-count>`: при отборе их пересчитывает status-filter.js (запятые между счётчиками рисует
+    Строка начинается с общей суммы спецификаций блока (`data-count-item="total"`). Дальше идут статусы в порядке
+    STATUS_ICONS; статусы без фич не выводятся. Каждый счётчик — `<span data-count-item>` с числом в
+    `<span data-count>`: при отборе их пересчитывает status-filter.js (запятые между счётчиками рисует
     extra.css, раздел 9; без JavaScript страница показывает итоги без отбора).
     """
-    parts = []
+    parts = [f'<span data-count-item="total">{TOTAL_LABEL}: <span data-count>{len(features)}</span></span>']
     for status, icon in STATUS_ICONS.items():
         count = sum(1 for f in features if f.shown_status == status)
         if count:
@@ -96,19 +99,25 @@ def tiles_block(features: list[Feature], statuses: list[str]) -> list[str]:
     return [total, "", f'<div class="status-tiles" data-n="{len(statuses)}" markdown>', "", *tiles, "", "</div>", ""]
 
 
-def filter_block(placeholder: str) -> list[str]:
-    """Строка отбора по названию с кнопкой «Сбросить» (под плитками) и сообщение при пустом результате.
+def filter_block(placeholder: str, download_name: str) -> list[str]:
+    """Строка отбора по названию, кнопки «Сбросить» и «Скачать» (под плитками) и сообщение при пустом результате.
 
-    Поле — обычный HTML-элемент `input` (Markdown пропускает его без изменений), кнопка — ссылка с классом `.md-button`
+    Поле — обычный HTML-элемент `input` (Markdown пропускает его без изменений), кнопки — ссылки с классом `.md-button`
     (оформляет тема, см. документацию Zensical «Buttons»). Ввод и клики обрабатывает status-filter.js.
-    «Сбросить» снимает выбор плиток и очищает поле. Сообщение «Нет данных…» скрыто атрибутом `hidden`, показывает его
-    status-filter.js; своей кнопки у него нет: достаточно «Сбросить» рядом с полем.
+    «Сбросить» снимает выбор плиток и очищает поле. «Скачать» сохраняет в текстовый файл
+    `specifications-<download_name>.txt` перечень спецификаций, который сейчас виден на странице (с учётом отбора);
+    названия статусов для файла (STATUS_TITLES) передаются атрибутом `data-titles`. Поле и кнопки стоят в одной
+    строке, при нехватке места кнопки переносятся под поле (extra.css, раздел 5). Сообщение «Нет данных…» скрыто
+    атрибутом `hidden`, показывает его status-filter.js; своей кнопки у него нет: достаточно «Сбросить» рядом с полем.
     """
     field = (f'<input type="search" class="feature-search" data-feature-search="" autocomplete="off" '
              f'placeholder="{placeholder}" aria-label="{placeholder}">')
     empty = f'<div class="feature-empty" data-feature-empty="" hidden><p>{EMPTY_MESSAGE}</p></div>'
-    return ['<div class="feature-filter" markdown>', "", field, "",
-            '[Сбросить](#){ .md-button data-filter-reset="" }', "", "</div>", "", empty, ""]
+    titles = ";".join(f"{status}={title}" for status, title in STATUS_TITLES.items())
+    reset = f'[{RESET_LABEL}](#){{ .md-button data-filter-reset="" }}'
+    download = (f'[{DOWNLOAD_ICON} {DOWNLOAD_LABEL}](#){{ .md-button data-filter-download="{download_name}" '
+                f'data-titles="{titles}" }}')
+    return ['<div class="feature-filter" markdown>', "", field, "", reset + "\n" + download, "", "</div>", "", empty, ""]
 
 
 def statuses_info(statuses: list[str]) -> list[str]:
@@ -121,14 +130,11 @@ def statuses_info(statuses: list[str]) -> list[str]:
     return ['??? info "Статусы спецификаций"', "", *rows, ""]
 
 
-def controls_block(features: list[Feature], statuses: list[str], placeholder: str) -> list[str]:
-    """Верх страницы-перечня без заголовка: инфо-блок «Статусы спецификаций», плитки-фильтры, строка отбора и «Сбросить».
+def controls_block(features: list[Feature], statuses: list[str], download_name: str) -> list[str]:
+    """Верх страницы-перечня без заголовка: инфо-блок «Статусы спецификаций», плитки-фильтры, строка отбора,
+    «Сбросить» и «Скачать».
 
-    Так устроены страницы «Обзор» и индексы подразделов («Действующие», «Архив»): сразу под заголовком первого уровня.
+    Так устроены все страницы-перечни («Обзор», «Действующие», «Архив», индексы модулей): сразу под заголовком первого
+    уровня. download_name — часть имени скачиваемого файла.
     """
-    return [*statuses_info(statuses), *tiles_block(features, statuses), *filter_block(placeholder)]
-
-
-def statistics_section(features: list[Feature], statuses: list[str], placeholder: str) -> list[str]:
-    """Раздел «Статистика» (индексы модулей): заголовок второго уровня и тот же блок управления."""
-    return ["## Статистика {#statistics}", "", *controls_block(features, statuses, placeholder)]
+    return [*statuses_info(statuses), *tiles_block(features, statuses), *filter_block(PLACEHOLDER_SEARCH, download_name)]

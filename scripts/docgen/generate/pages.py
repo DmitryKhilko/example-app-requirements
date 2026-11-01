@@ -8,12 +8,11 @@ from pathlib import Path
 from urllib.parse import quote
 
 from ..config import (DEFAULT_ARCHIVE_DIR_NAME, DESCRIPTION_ANCHOR, GENERATED_COMMENT, INDEX_MARKER,
-                      INDEX_NAME, OVERVIEW_ANCHOR, OVERVIEW_TITLE, PAGE_FRONT_MATTER, PLACEHOLDER_MODULE,
-                      PLACEHOLDER_PRODUCT, SECTION_PAGE_TITLES)
+                      INDEX_NAME, OVERVIEW_ANCHOR, OVERVIEW_TITLE, PAGE_FRONT_MATTER, SECTION_PAGE_TITLES)
 from ..layout import folder_title, is_manual_index, registry_sections, spec_folders
 from ..models import BuildContext, Feature
 from ..textutils import escape_md
-from .widgets import controls_block, render_tree, statistics_section, status_keys
+from .widgets import controls_block, render_tree, status_keys
 
 
 def link_from(base_dir: str):
@@ -41,7 +40,7 @@ def render_overview(features: list[Feature], module_order: list[str], base_dir: 
         "",
         GENERATED_COMMENT,
         "",
-        *controls_block(features, status_keys(), PLACEHOLDER_PRODUCT),
+        *controls_block(features, status_keys(), OVERVIEW_ANCHOR),
         "## Действующие спецификации {#active-features}",
         "",
     ]
@@ -57,17 +56,22 @@ def _page_statuses(archive: bool) -> list[str]:
 
 
 def render_index(folder: Path, docs_dir: Path, features: list[Feature], module_order: list[str]) -> str:
-    """Содержимое index.md папки модуля: статистика (плитки, отбор) и иерархия субмодулей только по этому модулю."""
+    """Содержимое index.md папки модуля: инфо-блок, плитки, строка отбора и иерархия субмодулей только по этому модулю.
+
+    Как и на страницах подразделов, заголовков второго уровня («Статистика», «Спецификации») нет: сразу под заголовком
+    первого уровня идёт тот же блок управления, затем сворачиваемые блоки субмодулей.
+    """
     direct = [f for f in features if (docs_dir / f.path).parent == folder]
     title = folder_title(folder, features, docs_dir)
     slug = re.sub(r"[^a-z0-9]+", "-", folder.name.lower()).strip("-") or "folder"
     archive = DEFAULT_ARCHIVE_DIR_NAME in folder.relative_to(docs_dir).parts
 
+    # имя скачиваемого файла: подраздел и папка модуля (папки модулей в active/ и archive/ называются одинаково)
+    section = "archive" if archive else "active"
     lines = [
         *PAGE_FRONT_MATTER,
         f"# {escape_md(title)} {{#{slug}}}", "", GENERATED_COMMENT, "",
-        *statistics_section(direct, _page_statuses(archive), PLACEHOLDER_MODULE),
-        "## Спецификации {#specs}", "",
+        *controls_block(direct, _page_statuses(archive), f"{section}-{slug}"),
         *render_tree(direct, module_order, lambda f: f"{Path(f.path).name}#{DESCRIPTION_ANCHOR}", with_modules=False),
     ]
     return "\n".join(lines).rstrip() + "\n"
@@ -90,7 +94,7 @@ def render_section_index(section: str, section_features: list[Feature], module_o
     lines = [
         *PAGE_FRONT_MATTER,
         f"# {escape_md(title)} {{#{slug}}}", "", GENERATED_COMMENT, "",
-        *controls_block(section_features, _page_statuses(archive), PLACEHOLDER_PRODUCT),
+        *controls_block(section_features, _page_statuses(archive), slug),
         *tree,
     ]
     return "\n".join(lines).rstrip() + "\n"

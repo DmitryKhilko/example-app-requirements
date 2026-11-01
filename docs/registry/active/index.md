@@ -29,19 +29,20 @@ hide:
 
 <div class="feature-filter" markdown>
 
-<input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию модуля или субмодуля или функциональности" aria-label="Отбор по названию модуля или субмодуля или функциональности">
+<input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию модуля / субмодуля / функциональности" aria-label="Отбор по названию модуля / субмодуля / функциональности">
 
 [Сбросить](#){ .md-button data-filter-reset="" }
+[:lucide-download: Скачать](#){ .md-button data-filter-download="active" data-titles="backlog=бэклог;analysis=анализ;ready=готово к разработке;development=разработка;released=реализовано;archived=архив" }
 
 </div>
 
 <div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p></div>
 
 <details class="feature-block feature-module" markdown="block">
-<summary markdown="span"><span class="feature-title">**Личный кабинет**</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
+<summary markdown="span"><span class="feature-title">**Личный кабинет**</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>4</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Авторизация*</span><span class="feature-counts"><span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><span class="feature-title">*Авторизация*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>2</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-braces: [Двухфакторная аутентификация (2FA)](profile/auth-2fa.md#article-overview){data-preview data-status="development"}
 - :lucide-file-text: [Вход по номеру телефона и SMS](profile/auth-sms.md#article-overview){data-preview data-status="released"}
@@ -49,7 +50,7 @@ hide:
 </details>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>2</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-text: [Редактирование персональных данных](profile/edit-data.md#article-overview){data-preview data-status="released"}
 - :lucide-file: [Привязка профилей социальных сетей](profile/oauth.md#article-overview){data-preview data-status="backlog"}
@@ -60,10 +61,10 @@ hide:
 </details>
 
 <details class="feature-block feature-module" markdown="block">
-<summary markdown="span"><span class="feature-title">**Каталог товаров**</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>3</span></span></span></summary>
+<summary markdown="span"><span class="feature-title">**Каталог товаров**</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>7</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>3</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Карточка товара*</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><span class="feature-title">*Карточка товара*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>2</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-text: [Галерея изображений с зумом](catalog/product-gallery.md#article-overview){data-preview data-status="released"}
 - :lucide-file: [Блок похожих товаров (рекомендации)](catalog/product-recommendations.md#article-overview){data-preview data-status="backlog"}
@@ -71,7 +72,7 @@ hide:
 </details>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Поиск и фильтрация*</span><span class="feature-counts"><span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
+<summary markdown="span"><span class="feature-title">*Поиск и фильтрация*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>5</span></span> <span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
 
 - :lucide-file-text: [Фильтрация по категориям и тегам](catalog/filter-categories.md#article-overview){data-preview data-status="released"}
 - :lucide-file-braces: [Фильтр по диапазону цен с ползунком](catalog/filter-price-slider.md#article-overview){data-preview data-status="development"}
@@ -85,17 +86,17 @@ hide:
 </details>
 
 <details class="feature-block feature-module" markdown="block">
-<summary markdown="span"><span class="feature-title">**Управление заказами**</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><span class="feature-title">**Управление заказами**</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>4</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*История заказов*</span><span class="feature-counts"><span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><span class="feature-title">*История заказов*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-check: [Отмена заказа клиентом](orders/order-cancel.md#article-overview){data-preview data-status="ready"}
 
 </details>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Оформление заказа*</span><span class="feature-counts"><span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><span class="feature-title">*Оформление заказа*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>3</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file: [Покупка в рассрочку](orders/credit-pay.md#article-overview){data-preview data-status="backlog"}
 - :lucide-file-text: [Оплата через СБП / QR-код](orders/payment-sbp.md#article-overview){data-preview data-status="released"}

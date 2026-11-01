@@ -7,8 +7,6 @@ hide:
 
 <!-- generated: файл формируется автоматически, не редактируйте его вручную -->
 
-## Статистика {#statistics}
-
 ??? info "Статусы спецификаций"
 
     - :lucide-file-archive: архив: отклонённое или устаревшее требование
@@ -23,18 +21,17 @@ hide:
 
 <div class="feature-filter" markdown>
 
-<input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию субмодуля или функциональности" aria-label="Отбор по названию субмодуля или функциональности">
+<input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию модуля / субмодуля / функциональности" aria-label="Отбор по названию модуля / субмодуля / функциональности">
 
 [Сбросить](#){ .md-button data-filter-reset="" }
+[:lucide-download: Скачать](#){ .md-button data-filter-download="archive-orders" data-titles="backlog=бэклог;analysis=анализ;ready=готово к разработке;development=разработка;released=реализовано;archived=архив" }
 
 </div>
 
 <div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p></div>
 
-## Спецификации {#specs}
-
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*История заказов*</span><span class="feature-counts"><span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><span class="feature-title">*История заказов*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-archive: [Выписка заказов в виде бумажного чека](print-receipt.md#article-overview){data-preview data-status="archived"}
 

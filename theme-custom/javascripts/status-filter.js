@@ -39,6 +39,9 @@
 
    Скрытие делается инлайн-стилем (display:none), поэтому от extra.css скрипт не зависит.
 
+   Кнопка «Скачать» (a[data-filter-download], стоит после «Сбросить») сохраняет в текстовый файл перечень, который сейчас
+   виден на странице, то есть с учётом отбора по статусам и названию (формат — перед обработчиком кнопки ниже).
+
    Почему обработчик клика повешен на весь документ, а не на кнопки. На сайте включена
    мгновенная навигация (navigation.instant): содержимое страниц подменяется без полной
    перезагрузки, и кнопки каждый раз создаются заново. Обработчик на document создаётся
@@ -178,14 +181,17 @@
     });
     Array.prototype.forEach.call(root.querySelectorAll("[data-stat-total]"), function (el) { el.textContent = total; });
 
-    /* Счётчики в заголовках блоков модулей и субмодулей: что осталось в списке под заголовком */
+    /* Счётчики в заголовках блоков модулей и субмодулей: что осталось в списке под заголовком.
+       Первый счётчик — общая сумма (data-count-item="total": «всего: N»), далее по статусам. */
     Array.prototype.forEach.call(root.querySelectorAll("details.feature-block"), function (block) {
       var summary = block.querySelector(":scope > summary");
       var items = summary ? Array.prototype.slice.call(summary.querySelectorAll("[data-count-item]")) : [];
       if (!items.length) return;
-      var counts = {};
+      var counts = { total: 0 };
       Array.prototype.forEach.call(block.querySelectorAll("a[data-status]"), function (a) {
-        if (matches(a)) counts[a.getAttribute("data-status")] = (counts[a.getAttribute("data-status")] || 0) + 1;
+        if (!matches(a)) return;
+        counts[a.getAttribute("data-status")] = (counts[a.getAttribute("data-status")] || 0) + 1;
+        counts.total++;
       });
       var last = null;
       items.forEach(function (item) {
@@ -223,12 +229,113 @@
     Array.prototype.forEach.call(block.querySelectorAll("details.feature-block"), function (el) { el.open = false; });
   }, true);
 
-  /* Клик по кнопке фильтра или «Сбросить» (захват события до обработчика мгновенной навигации) */
+  /* ----- Кнопка «Скачать»: перечень спецификаций, видимый на странице (с учётом отбора), в текстовый файл -----
+     Текст собирается из самой страницы (как в releases.js), поэтому всегда совпадает с тем, что видно. Формат:
+
+         Модуль (всего: 4, <статус>: 1, <статус>: 3)
+             Субмодуль (всего: 2, <статус>: 2)
+                  - [статус] Название спецификации
+
+     Статистика — как в заголовке блока (первой идёт сумма «всего», статусы с нулём не выводятся). Вместо значков —
+     русские названия статусов («бэклог», «разработка», …) из атрибута data-titles кнопки («статус=название;…», задаёт
+     STATUS_TITLES в scripts/docgen/config.py); у спецификации название стоит в квадратных скобках.
+     Модули — без отступа, субмодули — 4 пробела, спецификации — 9 пробелов и «- ». На странице модуля нет блоков модулей:
+     там субмодули стоят без отступа, а спецификации — с отступом 5. На странице «Обзор» перед списками стоят заголовки
+     разделов («Действующие спецификации», «Архивные спецификации»). Файл: UTF-8 с BOM, переводы строк Windows. */
+  var EOL = "\r\n";
+
+  function words(text) { return (text || "").replace(/\s+/g, " ").trim(); }
+  function shown(el) { return el.style.display !== "none"; }
+  function pad(n) { return new Array(n + 1).join(" "); }
+
+  function parseSymbols(raw) {
+    var map = {};
+    (raw || "").split(";").forEach(function (pair) {
+      var i = pair.indexOf("=");
+      if (i > 0) map[pair.slice(0, i)] = pair.slice(i + 1);
+    });
+    return map;
+  }
+
+  /* «Название (всего: N, значок: n, …)»: строка статистики берётся из заголовка блока, скрытые счётчики пропускаются */
+  function blockTitle(block, symbols) {
+    var title = words(block.querySelector(":scope > summary .feature-title").textContent);
+    var parts = [];
+    Array.prototype.forEach.call(block.querySelectorAll(":scope > summary [data-count-item]"), function (item) {
+      if (item.hidden) return;
+      var code = item.getAttribute("data-count-item");
+      var label = code === "total" ? "всего" : (symbols[code] || code);
+      parts.push(label + ": " + words(item.querySelector("[data-count]").textContent));
+    });
+    return title + (parts.length ? " (" + parts.join(", ") + ")" : "");
+  }
+
+  function specLines(block, symbols, indent) {
+    var lines = [];
+    Array.prototype.forEach.call(block.querySelectorAll(":scope > ul > li"), function (li) {
+      var a = li.querySelector("a[data-status]");
+      if (!a || !shown(li)) return;
+      var code = a.getAttribute("data-status");
+      lines.push(pad(indent) + "- [" + (symbols[code] || code) + "] " + words(a.textContent));
+    });
+    return lines;
+  }
+
+  function buildList(root, symbols) {
+    var lines = [], heading = "";
+    function walk(block, level) {
+      lines.push(pad(level * 4) + blockTitle(block, symbols));
+      var subs = block.querySelectorAll(":scope > details.feature-block");
+      Array.prototype.forEach.call(subs, function (sub) { if (shown(sub)) walk(sub, level + 1); });
+      lines = lines.concat(specLines(block, symbols, level * 4 + 5));
+    }
+    Array.prototype.forEach.call(root.children, function (el) {
+      if (/^H2$/.test(el.tagName)) {
+        var h = el.cloneNode(true);
+        Array.prototype.forEach.call(h.querySelectorAll(".headerlink"), function (x) { x.parentNode.removeChild(x); });
+        heading = shown(el) ? words(h.textContent) : "";
+        return;
+      }
+      if (!el.matches("details.feature-block") || !shown(el)) return;
+      if (heading) {   /* заголовок раздела выводится один раз перед первым видимым блоком */
+        if (lines.length) lines.push("");
+        lines.push(heading);
+        heading = "";
+      }
+      /* верхний блок — модуль, а на странице модуля — субмодуль: отступ считается от него, поэтому он стоит без отступа */
+      walk(el, 0);
+    });
+    if (!lines.length) lines.push("Нет данных, соответствующих условиям отбора");
+    return lines.join(EOL) + EOL;
+  }
+
+  function saveText(name, text) {
+    var blob = new Blob(["\ufeff" + text], { type: "text/plain;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  /* Клик по кнопке фильтра, «Сбросить» или «Скачать» (захват события до обработчика мгновенной навигации) */
   document.addEventListener("click", function (e) {
-    var target = e.target.closest ? e.target.closest("a[data-filter], a[data-filter-reset]") : null;
+    var target = e.target.closest ? e.target.closest("a[data-filter], a[data-filter-reset], a[data-filter-download]") : null;
     if (!target) return;
     e.preventDefault();
     e.stopPropagation();
+
+    if (target.hasAttribute("data-filter-download")) {
+      var page = article();
+      if (!page) return;
+      var name = (target.getAttribute("data-filter-download") || "list").replace(/[^0-9A-Za-z._-]+/g, "_");
+      saveText("specifications-" + name + ".txt", buildList(page, parseSymbols(target.getAttribute("data-titles"))));
+      return;
+    }
 
     if (target.hasAttribute("data-filter-reset")) {
       active = {};
