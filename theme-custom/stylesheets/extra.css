@@ -456,7 +456,16 @@ span[data-count-item]:last-of-type::after,
   margin-top: 0.15rem !important;
 }
 
-.md-typeset details.feature-submodule {
+/* Боковой отступ — только у субмодуля, вложенного в блок модуля. Блок верхнего уровня (модуль на страницах «Обзор»,
+   «Действующие», «Архив», «Релизы» и субмодуль на странице модуля) занимает всю ширину страницы, как плитка
+   «Всего спецификаций»: отступов по бокам у него нет. */
+.md-typeset details.feature-block {
+  width: auto;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+.md-typeset details.feature-block details.feature-submodule {
   margin: 0.5rem 0.8rem;
 }
 
