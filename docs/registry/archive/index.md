@@ -21,7 +21,7 @@ hide:
 
 <div class="feature-filter" markdown>
 
-<input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Отбор по названию модуля / субмодуля / функциональности" aria-label="Отбор по названию модуля / субмодуля / функциональности">
+<input type="search" class="feature-search" data-feature-search="" autocomplete="off" placeholder="Название модуля / субмодуля / функциональности" aria-label="Название модуля / субмодуля / функциональности">
 
 [Сбросить](#){ .md-button data-filter-reset="" }
 [:lucide-download: Скачать](#){ .md-button data-filter-download="archive" data-titles="backlog=бэклог;analysis=анализ;ready=готово к разработке;development=разработка;released=реализовано;archived=архив" }
