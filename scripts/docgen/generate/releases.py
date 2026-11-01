@@ -1,6 +1,6 @@
 """Страница «Релизы» (docs/releases.md): сворачиваемый блок на каждый релиз со списком вошедших спецификаций.
 
-Заголовок блока: «Релиз 1.2.1 (15.09.2026)»; дата — поле `relise_date`, без даты скобки не выводятся.
+Заголовок блока: «Релиз 1.2.1 (15.09.2026)»; дата — поле `release_date`, без даты скобки не выводятся.
 
 Страница лежит в корне docs, ссылки на спецификации строятся от корня (`registry/active/...`)."""
 
@@ -77,7 +77,7 @@ def _block(release: str, items: list[Feature], module_order: list[str]) -> list[
 
 
 def render_releases(features: list[Feature], module_order: list[str]) -> str:
-    """Содержимое docs/releases.md: релизы от новых к старым; в релиз входят спецификации с заполненным `relise_id`.
+    """Содержимое docs/releases.md: релизы от новых к старым; в релиз входят спецификации с заполненным `release_id`.
 
     Внутри релиза спецификации идут по модулям (порядок nav-order.yml), затем по полю `order` и названию."""
     by_release: dict[str, list[Feature]] = defaultdict(list)

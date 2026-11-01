@@ -29,9 +29,9 @@ class Feature:
     relations: tuple[Relation, ...] = ()
     order: int | None = None   # необязательное поле `order`: порядок в меню и картах (меньше — выше)
     spec_id: str = ""          # код спецификации (поле `id`)
-    release: str = ""          # номер релиза (поле `relise_id`); пусто — спецификация не вошла ни в один релиз
+    release: str = ""          # номер релиза (поле `release_id`); пусто — спецификация не вошла ни в один релиз
     description: str = ""      # текст раздела «Описание» (для страницы «Релизы»)
-    release_date: str = ""     # дата релиза ДД.ММ.ГГГГ (поле `relise_date`)
+    release_date: str = ""     # дата релиза ДД.ММ.ГГГГ (поле `release_date`)
 
     @property
     def shown_status(self) -> str:
@@ -71,7 +71,6 @@ class Spec:
 class BuildContext:
     """Параметры запуска, общие для всех этапов (вместо глобальных переменных)."""
     docs_dir: Path
-    output: Path                  # страница «Обзор» (registry/overview.md, resolved)
     archive_dir_name: str
     config: Path                  # zensical.toml
     nav_order: Path               # nav-order.yml
@@ -82,8 +81,6 @@ class BuildContext:
 @dataclass
 class Plan:
     """Результат генерации: что должно оказаться на диске. Сама генерация ничего не пишет."""
-    map_path: Path                            # страница «Обзор»
-    map_content: str
     indexes: dict[Path, str]
     stale_indexes: list[Path]
     nav_path: Path | None = None              # zensical.toml (None — файла нет)

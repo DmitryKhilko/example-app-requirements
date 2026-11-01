@@ -11,7 +11,6 @@ from .models import Plan
 @dataclass
 class ApplyResult:
     """Что изменилось (при check=True — что устарело)."""
-    map_changed: bool         # страница «Обзор»
     releases_changed: bool
     indexes_changed: int      # изменённые и удалённые лишние индексы
     indexes_total: int
@@ -22,7 +21,7 @@ class ApplyResult:
 
     @property
     def outdated(self) -> bool:
-        return bool(self.map_changed or self.releases_changed or self.indexes_changed or self.nav_changed
+        return bool(self.releases_changed or self.indexes_changed or self.nav_changed
                     or self.icons_changed or self.relations_changed)
 
 
@@ -37,10 +36,6 @@ def _read(path: Path) -> str | None:
 
 def apply_plan(plan: Plan, check: bool) -> ApplyResult:
     """Записывает изменившиеся файлы и удаляет лишние индексы; при check=True ничего на диске не меняет."""
-    map_changed = _read(plan.map_path) != plan.map_content
-    if map_changed and not check:
-        _write(plan.map_path, plan.map_content)
-
     releases_changed = plan.releases_path is not None and _read(plan.releases_path) != plan.releases_content
     if releases_changed and not check:
         _write(plan.releases_path, plan.releases_content)
@@ -65,5 +60,5 @@ def apply_plan(plan: Plan, check: bool) -> ApplyResult:
         for path in sorted(set(plan.icons) | set(plan.relations)):
             _write(path, plan.relations.get(path) or plan.icons[path])
 
-    return ApplyResult(map_changed, releases_changed, indexes_changed, len(plan.indexes), len(plan.stale_indexes), nav_changed,
+    return ApplyResult(releases_changed, indexes_changed, len(plan.indexes), len(plan.stale_indexes), nav_changed,
                        len(plan.icons), len(plan.relations))

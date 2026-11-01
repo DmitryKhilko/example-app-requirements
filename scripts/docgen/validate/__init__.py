@@ -21,7 +21,7 @@ from .structure import check_structure
 def validate_all(ctx: BuildContext, problems: Problems) -> tuple[list[Spec], list[Feature]]:
     """Читает спецификации и выполняет все проверки. Ошибки и предупреждения накапливаются в problems."""
     rules = load_template(ctx.template, problems)
-    specs = read_specs(ctx.docs_dir, ctx.output, problems)
+    specs = read_specs(ctx.docs_dir, problems)
     features = build_features(specs, ctx, problems, rules)
     check_template_meta(specs, rules, problems)
     check_release_dates(features, problems, ctx.docs_dir)

@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ..config import (ABOUT_MENU_TITLE, ABOUT_PAGE, LOGO_BEGIN, LOGO_END, LOGO_RE, SITE_FAVICON, SITE_LOGO, INDEX_NAME, NAV_BEGIN, NAV_END, NAV_RE, OVERVIEW_MENU_TITLE, OVERVIEW_PAGE, PROJECT_MENU_TITLE,
+from ..config import (ABOUT_MENU_TITLE, ABOUT_PAGE, LOGO_BEGIN, LOGO_END, LOGO_RE, SITE_FAVICON, SITE_LOGO, INDEX_NAME, NAV_BEGIN, NAV_END, NAV_RE, PROJECT_MENU_TITLE,
                       PROJECT_PAGES, REGISTRY_MENU_TITLE, RELEASES_MENU_TITLE, RELEASES_PAGE, SECTION_TITLES)
 from ..layout import folder_title, registry_sections
 from ..models import Feature
@@ -25,18 +25,17 @@ def _group(indent: int, title: str, body: list[str]) -> str:
 
 
 def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Path, str],
-               module_order: list[str], generated: frozenset[Path] = frozenset(),
-               overview_page: str = OVERVIEW_PAGE) -> str:
+               module_order: list[str], generated: frozenset[Path] = frozenset()) -> str:
     """Блок `nav = [...]` для zensical.toml.
 
     * «О продукте» — первая вкладка без левого меню: стартовая страница docs/index.md.
-    * «Проект» — страницы PROJECT_PAGES («Глоссарий», «Roadmap»); первая открывается при щелчке на вкладке.
-    * «Требования» — «Обзор» (первая страница вкладки), затем подразделы «Действующие» и «Архив». Подраздел
+    * «Проект» — страницы PROJECT_PAGES («Глоссарий», «Команда проекта», «Дорожная карта», «Риски»); первая открывается при щелчке на вкладке.
+    * «Требования» — подразделы «Действующие» (первая страница вкладки) и «Архив». Подраздел
       открывает свой индекс, а внутри него идут модули (папки со спецификациями) с их индексами и спецификациями.
       Названия подразделов — SECTION_TITLES, модулей — поле `module`; промежуточные папки пропускаются.
     * «Релизы» — страница releases.md.
 
-    generated — файлы, которых ещё нет на диске, но которые будут созданы этой же сборкой (обзор, релизы): страница
+    generated — файлы, которых ещё нет на диске, но которые будут созданы этой же сборкой (релизы): страница
     с таким файлом попадает в меню уже при первом запуске, а не при втором. Отсутствующие страницы пропускаются.
     """
     def exists(rel: str) -> bool:
@@ -52,9 +51,6 @@ def render_nav(docs_dir: Path, features: list[Feature], wanted_indexes: dict[Pat
         items.append(_group(4, PROJECT_MENU_TITLE, project))
 
     registry: list[str] = []
-    if exists(overview_page):
-        registry.append(_page(8, OVERVIEW_MENU_TITLE, overview_page))
-
     for section, section_features in registry_sections(features).items():
         folders = sorted({(docs_dir / f.path).parent for f in section_features})
         # модули в меню — в порядке nav-order.yml (а не по именам папок); тот же порядок в «Действующих» и в «Архиве»

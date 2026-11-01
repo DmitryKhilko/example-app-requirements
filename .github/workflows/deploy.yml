@@ -1,7 +1,7 @@
 name: ci
 
 # Срабатывает при каждом слиянии (push) в основную ветку.
-# Порядок: 1) сгенерировать документы (обзор реестра, индексы, меню, релизы, связи) -> 2) собрать и опубликовать сайт.
+# Порядок: 1) сгенерировать документы (индексы реестра, меню, релизы, связи) -> 2) собрать и опубликовать сайт.
 on:
   push:
     branches:
@@ -50,7 +50,7 @@ jobs:
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add docs zensical.toml
-            git commit -m "docs: автоматическое обновление обзора, индексов реестра, релизов и меню [skip ci]"
+            git commit -m "docs: автоматическое обновление индексов реестра, релизов и меню [skip ci]"
             git push origin HEAD:main
           else
             echo "Сформированные страницы без изменений."

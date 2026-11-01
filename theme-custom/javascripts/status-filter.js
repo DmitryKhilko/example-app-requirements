@@ -1,7 +1,7 @@
 /* ==========================================================================
    status-filter.js — отбор перечня функциональностей по статусам и по названию
 
-   Страницы «Обзор» (docs/registry/overview.md), «Действующие» и «Архив» (index.md подразделов) и индексы модулей
+   Страницы «Действующие» и «Архив» (index.md подразделов) и индексы модулей
    формируются скриптом scripts/generate_docs.py. В них:
      * под заголовком первого уровня (у индексов модулей — в разделе «Статистика») стоят плитки статусов (ссылки с классом .status-tile и атрибутом
        data-filter="<код статуса>": значок статуса и число) — они же кнопки фильтра, а также
@@ -38,6 +38,9 @@
    статусам и очищает поле поиска).
 
    Скрытие делается инлайн-стилем (display:none), поэтому от extra.css скрипт не зависит.
+
+   Кнопки «Раскрыть всё» и «Свернуть всё» (a[data-expand-all], a[data-collapse-all], стоят после «Скачать») принудительно раскрывают и
+   сворачивают все аккордеоны страницы (раскрываются только блоки, не скрытые отбором).
 
    Кнопка «Скачать» (a[data-filter-download], стоит после «Сбросить») сохраняет в текстовый файл перечень, который сейчас
    виден на странице, то есть с учётом отбора по статусам и названию (формат — перед обработчиком кнопки ниже).
@@ -240,8 +243,7 @@
      русские названия статусов («бэклог», «разработка», …) из атрибута data-titles кнопки («статус=название;…», задаёт
      STATUS_TITLES в scripts/docgen/config.py); у спецификации название стоит в квадратных скобках.
      Модули — без отступа, субмодули — 4 пробела, спецификации — 9 пробелов и «- ». На странице модуля нет блоков модулей:
-     там субмодули стоят без отступа, а спецификации — с отступом 5. На странице «Обзор» перед списками стоят заголовки
-     разделов («Действующие спецификации», «Архивные спецификации»). Файл: UTF-8 с BOM, переводы строк Windows. */
+     там субмодули стоят без отступа, а спецификации — с отступом 5. Файл: UTF-8 с BOM, переводы строк Windows. */
   var EOL = "\r\n";
 
   function words(text) { return (text || "").replace(/\s+/g, " ").trim(); }
@@ -324,10 +326,25 @@
 
   /* Клик по кнопке фильтра, «Сбросить» или «Скачать» (захват события до обработчика мгновенной навигации) */
   document.addEventListener("click", function (e) {
-    var target = e.target.closest ? e.target.closest("a[data-filter], a[data-filter-reset], a[data-filter-download]") : null;
+    var target = e.target.closest ? e.target.closest("a[data-filter], a[data-filter-reset], a[data-filter-download], a[data-expand-all], a[data-collapse-all]") : null;
     if (!target) return;
     e.preventDefault();
     e.stopPropagation();
+
+    /* «Раскрыть всё» / «Свернуть всё»: принудительно открывают или закрывают все аккордеоны страницы. Раскрываются только
+       видимые блоки (скрытые отбором остаются закрытыми); сворачиваются все. Отбор и поле поиска не меняются. */
+    if (target.hasAttribute("data-expand-all") || target.hasAttribute("data-collapse-all")) {
+      var open = target.hasAttribute("data-expand-all");
+      var scope = article();
+      if (!scope) return;
+      Array.prototype.forEach.call(scope.querySelectorAll("details.feature-block"), function (block) {
+        if (!open) { block.open = false; return; }
+        var hidden = false;
+        for (var n = block; n && n !== scope; n = n.parentElement) { if (n.style.display === "none") { hidden = true; break; } }
+        if (!hidden) block.open = true;
+      });
+      return;
+    }
 
     if (target.hasAttribute("data-filter-download")) {
       var page = article();

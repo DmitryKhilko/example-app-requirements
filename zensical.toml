@@ -10,7 +10,7 @@ repo_url = "https://github.com/DmitryKhilko/example-app-requirements"
 repo_name = "GitHub"
 edit_uri = "edit/main/docs/"
 extra_css = ["stylesheets/extra.css"]
-extra_javascript = ["javascripts/status-filter.js", "javascripts/releases.js"]
+extra_javascript = ["javascripts/status-filter.js", "javascripts/releases.js", "javascripts/spec-passport.js"]
 
 # Не публиковать служебные файлы (скрипты, схемы, таксономию)
 # exclude_docs = """
@@ -26,10 +26,11 @@ nav = [
     { "О продукте" = "index.md" },
     { "Проект" = [
         { "Глоссарий" = "project/glossary.md" },
-        { "Roadmap" = "project/roadmap.md" },
+        { "Команда проекта" = "project/team.md" },
+        { "Дорожная карта" = "project/roadmap.md" },
+        { "Риски" = "project/risks.md" },
     ] },
     { "Требования" = [
-        { "Обзор" = "registry/overview.md" },
         { "Действующие" = [
             "registry/active/index.md",
             { "Личный кабинет" = [
@@ -179,10 +180,9 @@ custom_checkbox = true
 targets.include = ["**/*.md"]
 # Страницы-перечни сами ссылок для предпросмотра не получают: у ссылок на спецификации там явно задан data-preview,
 # а кнопки фильтра предпросмотра не нужны. Исключены:
-#   * index.md — стартовая страница «О продукте» (плитки перехода), индексы подразделов «Действующие» и «Архив» и индексы модулей;
-#   * registry/overview.md — страница «Обзор» реестра;
+#   * index.md — стартовая страница «О продукте», индексы подразделов «Действующие» и «Архив» и индексы модулей;
 #   * releases.md — «Релизы»: ссылки на спецификации в её блоках открываются без окна предпросмотра.
-sources.exclude = ["index.md", "**/index.md", "registry/overview.md", "releases.md"]
+sources.exclude = ["index.md", "**/index.md", "releases.md"]
 
 # Отображение иконок эмодзи
 [project.markdown_extensions.pymdownx.emoji]

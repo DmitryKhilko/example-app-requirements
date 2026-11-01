@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 
-from ..config import (PLACEHOLDER_SEARCH, DOWNLOAD_ICON, DOWNLOAD_LABEL, EMPTY_MESSAGE, LINK_ATTRS_TEMPLATE, RESET_LABEL, STATUS_DESCRIPTIONS,
+from ..config import (COLLAPSE_ICON, COLLAPSE_LABEL, EXPAND_ICON, EXPAND_LABEL, PLACEHOLDER_SEARCH, DOWNLOAD_ICON, DOWNLOAD_LABEL, EMPTY_MESSAGE, LINK_ATTRS_TEMPLATE, RESET_LABEL, STATUS_DESCRIPTIONS,
                       STATUS_ICONS, STATUS_TITLES, TOTAL_LABEL)
 from ..models import Feature
 from ..ordering import feature_key, module_key
@@ -100,14 +100,16 @@ def tiles_block(features: list[Feature], statuses: list[str]) -> list[str]:
 
 
 def filter_block(placeholder: str, download_name: str) -> list[str]:
-    """Строка отбора по названию, кнопки «Сбросить» и «Скачать» (под плитками) и сообщение при пустом результате.
+    """Строка отбора по названию, под ней кнопки «Сбросить», «Скачать», «Раскрыть всё», «Свернуть всё» и сообщение при
+    пустом результате.
 
     Поле — обычный HTML-элемент `input` (Markdown пропускает его без изменений), кнопки — ссылки с классом `.md-button`
     (оформляет тема, см. документацию Zensical «Buttons»). Ввод и клики обрабатывает status-filter.js.
     «Сбросить» снимает выбор плиток и очищает поле. «Скачать» сохраняет в текстовый файл
     `specifications-<download_name>.txt` перечень спецификаций, который сейчас виден на странице (с учётом отбора);
-    названия статусов для файла (STATUS_TITLES) передаются атрибутом `data-titles`. Поле и кнопки стоят в одной
-    строке, при нехватке места кнопки переносятся под поле (extra.css, раздел 5). Сообщение «Нет данных…» скрыто
+    названия статусов для файла (STATUS_TITLES) передаются атрибутом `data-titles`. «Раскрыть всё» и «Свернуть всё»
+    раскрывают и сворачивают аккордеоны страницы. Поле растянуто на ширину страницы, кнопки стоят под ним в один ряд
+    (при нехватке места переносятся; extra.css, раздел 5). Сообщение «Нет данных…» скрыто
     атрибутом `hidden`, показывает его status-filter.js; своей кнопки у него нет: достаточно «Сбросить» рядом с полем.
     """
     field = (f'<input type="search" class="feature-search" data-feature-search="" autocomplete="off" '
@@ -117,7 +119,10 @@ def filter_block(placeholder: str, download_name: str) -> list[str]:
     reset = f'[{RESET_LABEL}](#){{ .md-button data-filter-reset="" }}'
     download = (f'[{DOWNLOAD_ICON} {DOWNLOAD_LABEL}](#){{ .md-button data-filter-download="{download_name}" '
                 f'data-titles="{titles}" }}')
-    return ['<div class="feature-filter" markdown>', "", field, "", reset + "\n" + download, "", "</div>", "", empty, ""]
+    expand = f'[{EXPAND_ICON} {EXPAND_LABEL}](#){{ .md-button data-expand-all="" }}'
+    collapse = f'[{COLLAPSE_ICON} {COLLAPSE_LABEL}](#){{ .md-button data-collapse-all="" }}'
+    return ['<div class="feature-filter" markdown>', "", field, "", "\n".join((reset, download, expand, collapse)), "",
+            "</div>", "", empty, ""]
 
 
 def statuses_info(statuses: list[str]) -> list[str]:

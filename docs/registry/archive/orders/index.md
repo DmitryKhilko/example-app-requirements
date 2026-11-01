@@ -25,6 +25,8 @@ hide:
 
 [Сбросить](#){ .md-button data-filter-reset="" }
 [:lucide-download: Скачать](#){ .md-button data-filter-download="archive-orders" data-titles="backlog=бэклог;analysis=анализ;ready=готово к разработке;development=разработка;released=реализовано;archived=архив" }
+[:lucide-chevrons-up-down: Раскрыть всё](#){ .md-button data-expand-all="" }
+[:lucide-chevrons-down-up: Свернуть всё](#){ .md-button data-collapse-all="" }
 
 </div>
 

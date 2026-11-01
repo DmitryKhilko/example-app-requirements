@@ -1,4 +1,4 @@
-"""Страницы-перечни: «Обзор» реестра (registry/overview.md), индексы подразделов «Действующие» и «Архив» и индексы модулей."""
+"""Страницы-перечни: индексы подразделов «Действующие» и «Архив» и индексы модулей."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from ..config import (DEFAULT_ARCHIVE_DIR_NAME, DESCRIPTION_ANCHOR, GENERATED_COMMENT, INDEX_MARKER,
-                      INDEX_NAME, OVERVIEW_ANCHOR, OVERVIEW_TITLE, PAGE_FRONT_MATTER, PLACEHOLDER_SEARCH_MODULE, SECTION_PAGE_TITLES)
+                      INDEX_NAME, PAGE_FRONT_MATTER, PLACEHOLDER_SEARCH_MODULE, SECTION_PAGE_TITLES)
 from ..layout import folder_title, is_manual_index, registry_sections, spec_folders
 from ..models import BuildContext, Feature
 from ..textutils import escape_md
@@ -21,33 +21,6 @@ def link_from(base_dir: str):
     Ссылка ведёт на раздел «Описание» спецификации.
     """
     return lambda f: quote(posixpath.relpath(f.path, base_dir)) + f"#{DESCRIPTION_ANCHOR}"
-
-
-def render_overview(features: list[Feature], module_order: list[str], base_dir: str) -> str:
-    """Страница «Обзор» (registry/overview.md): итоги по всем спецификациям и два списка — действующие и архивные.
-
-    Структура: заголовок первого уровня, инфо-блок «Статусы спецификаций», плитки статусов с общим итогом, строка отбора,
-    затем разделы «Действующие спецификации» и «Архивные спецификации» — вложенные сворачиваемые блоки
-    «Модуль» → «Субмодуль» → спецификации. Плитки и отбор действуют сразу на оба списка.
-    """
-    active = [f for f in features if not f.archived]
-    archived = [f for f in features if f.archived]
-    link = link_from(base_dir)
-
-    out: list[str] = [
-        *PAGE_FRONT_MATTER,
-        f"# {OVERVIEW_TITLE} {{#{OVERVIEW_ANCHOR}}}",
-        "",
-        GENERATED_COMMENT,
-        "",
-        *controls_block(features, status_keys(), OVERVIEW_ANCHOR),
-        "## Действующие спецификации {#active-features}",
-        "",
-    ]
-    out += render_tree(active, module_order, link) if active else ["*Нет действующих спецификаций*", ""]
-    out += ["## Архивные спецификации {#archived-features}", ""]
-    out += render_tree(archived, module_order, link) if archived else ["*Нет архивных спецификаций*", ""]
-    return "\n".join(out).rstrip() + "\n"
 
 
 def _page_statuses(archive: bool) -> list[str]:
@@ -78,7 +51,7 @@ def render_index(folder: Path, docs_dir: Path, features: list[Feature], module_o
 
 
 def render_section_index(section: str, section_features: list[Feature], module_order: list[str]) -> str:
-    """Содержимое index.md подраздела («Действующие» или «Архив»): тот же вид, что у «Обзора», но по одному списку.
+    """Содержимое index.md подраздела («Действующие» или «Архив»): инфо-блок, плитки статусов, строка отбора и список.
 
     Структура: заголовок первого уровня («Действующие спецификации» / «Архивные спецификации»), инфо-блок «Статусы
     спецификаций», плитки статусов с общим итогом, строка отбора и сразу за ними — сворачиваемые блоки

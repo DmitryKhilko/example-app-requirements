@@ -29,12 +29,10 @@ def read_front_matter(path: Path, text: str, problems: Problems) -> dict | None:
     return data
 
 
-def read_specs(docs_dir: Path, output: Path, problems: Problems) -> list[Spec]:
-    """Читает все .md-файлы папки docs/ (кроме файла карты): текст и метаданные. Решений о корректности не принимает."""
+def read_specs(docs_dir: Path, problems: Problems) -> list[Spec]:
+    """Читает все .md-файлы папки docs/: текст и метаданные. Решений о корректности не принимает."""
     specs: list[Spec] = []
     for path in sorted(docs_dir.rglob("*.md")):
-        if path.resolve() == output:
-            continue
         text = path.read_text(encoding="utf-8")
         errors_before = len(problems.errors)
         meta = read_front_matter(path, text, problems)
