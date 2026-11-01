@@ -97,7 +97,7 @@ features = [
     "navigation.tabs.sticky",
     #"navigation.sections",      # группы в левом меню делает раскрытыми
     "navigation.prune",          # физическое удаление из HTML-кода страницы всех элементов из свёрнутой группы
-    #"navigation.path",          # «хлебные крошки» (вместо неверного navigation.breadcrumbs)
+    "navigation.path",          # «хлебные крошки» (вместо неверного navigation.breadcrumbs)
     "navigation.indexes",
     "navigation.top",           # кнопка «Наверх»
     "navigation.footer",        # ссылки «Предыдущая / Следующая» внизу страницы
