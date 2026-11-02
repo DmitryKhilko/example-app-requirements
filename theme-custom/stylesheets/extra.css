@@ -410,14 +410,57 @@ span[data-count-item]:last-of-type::after,
    Генератор выводит списки спецификаций вложенными блоками <details class="feature-block">. Тема оформляет
    <details> как «панель» со значком типа и стрелкой; значок типа здесь убран (оставлена стрелка раскрытия),
    размер шрифта как у основного текста, цветной полосы за названием нет. Раскрытием управляет status-filter.js.
+
+   Списки спецификаций (модули, субмодули, релизы) оформлены так же, как блоки `??? note` в Zensical: без рамки, скруглённые
+   углы, весь блок (заголовок и содержимое) залит одним голубым оттенком --sf-accordion-tint; вложенный блок (субмодуль в
+   модуле) накладывает свой оттенок на оттенок родителя и поэтому выглядит темнее. Стрелка раскрытия — цвета
+   --sf-accordion-color (#448aff). Сами блоки `??? note`, `??? info` и другие тема оформляет по умолчанию; единственное
+   исключение — класс `no-icon`: блок `??? note no-icon "Журнал изменений"` выводится без значка типа, а заголовок
+   выровнен по левому краю.
    -------------------------------------------------------------------------- */
+:root {
+  --sf-accordion-color: #448aff;                    /* цвет стрелки раскрытия (как у блока note) */
+  --sf-accordion-tint: rgba(68, 138, 255, 0.1);     /* заливка блока (как у блока note) */
+  --sf-accordion-radius: 0.5rem;                    /* скругление углов блока */
+}
+
+/* !important — чтобы оформление темы Zensical (рамки, фон, тени блоков details) не перебивало наше, какой бы специфичности оно ни было */
+.md-typeset details.feature-block,
+.md-typeset details.feature-block[open] {
+  border: 0 !important;
+  border-radius: var(--sf-accordion-radius) !important;
+  box-shadow: none !important;
+  background: var(--sf-accordion-tint) !important;
+}
+
+/* Заголовок не закрашивается отдельно: тема красит summary своим оттенком, и он удвоил бы заливку блока */
+.md-typeset details.feature-block > summary,
+.md-typeset details.feature-block[open] > summary {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: var(--sf-accordion-radius) !important;
+  box-shadow: none !important;
+}
+
+.md-typeset details.feature-block > summary::after {
+  background-color: var(--sf-accordion-color) !important;   /* стрелка раскрытия */
+}
+
+/* Блок без значка типа: значок скрыт, заголовок начинается у левого края блока */
+.md-typeset details.no-icon > summary::before,
+.md-typeset .admonition.no-icon > .admonition-title::before {
+  display: none;
+}
+
+.md-typeset details.no-icon > summary,
+.md-typeset .admonition.no-icon > .admonition-title {
+  padding-inline-start: 0.6rem;
+}
+
 .md-typeset details.feature-block {
   margin: 0.5rem 0;
   padding: 0;
   font-size: inherit;
-  border: 0.05rem solid var(--md-default-fg-color--lighter);
-  border-radius: 0.3rem;
-  box-shadow: none;
   min-height: 0 !important; /* Полный сброс минимальной высоты */
 }
 
@@ -426,8 +469,8 @@ span[data-count-item]:last-of-type::after,
   padding: 0.3rem 2.4rem 0.3rem 0.9rem !important;
   font-size: inherit;
   cursor: pointer;
-  background: none !important;
   position: relative;
+  margin: 0;   /* тема сдвигает заголовок за края блока (отрицательный отступ): подкраска не должна выходить за рамку */
   
   /* Сбрасываем высоту и жесткий line-height темы */
   min-height: 0 !important;

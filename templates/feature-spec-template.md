@@ -24,7 +24,7 @@ relations:                                # необязательное: пря
 
 # Название фичи {#feature-slug}
 
-??? note "<h2 id="change-history" style="display: inline;">Журнал изменений</h2>"
+??? note no-icon "<h2 id="change-history" style="display: inline;">Журнал изменений</h2>"
 
     Какие изменения произошли в новой версии.
 
