@@ -5,7 +5,7 @@ submodule: "Авторизация"
 feature_name: "Двухфакторная аутентификация (2FA)"
 status: "development"
 icon: lucide/file-braces
-doc_version: "0.03"
+doc_version: "0.1.0"
 order: 10
 owner: "Дмитрий Хилько"
 task_id: "1"
@@ -20,6 +20,10 @@ relations:
 ---
 
 # Двухфакторная аутентификация (2FA) {#auth-2fa}
+
+??? note no-icon "<h2 id="change-history" style="display: inline;">Журнал изменений</h2>"
+
+    - [Версия 0.1.0](https://github.com/DmitryKhilko/example-app-requirements/commit/0051b0603735add2d8accbce728da892dbae579d). Ответственный: Dmitry Khilko
   
 ## Описание {#article-overview}
 
