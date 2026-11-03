@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 from .apply import apply_plan
+from .changelog import check_commit_message, check_staged_edits, sync_versions
 from .config import (DEFAULT_ARCHIVE_DIR_NAME, DEFAULT_CONFIG, DEFAULT_DOCS_DIR, DEFAULT_NAV_ORDER,
                      DEFAULT_TEMPLATE, ICON_KEY, RELATIONS_TITLE)
 from .generate import build_plan
@@ -26,9 +27,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--check", action="store_true", help="не писать файл, а проверить его актуальность")
     parser.add_argument("--validate", action="store_true",
                         help="только проверить спецификации (метаданные, связи, структура); ничего не писать")
+    parser.add_argument("--versioning", action="store_true",
+                        help="пересчитать doc_version и «Журнал изменений» активных спецификаций по истории git (для CI)")
+    parser.add_argument("--staged", action="store_true",
+                        help="проверка для хука pre-commit: в индексе нет ручных правок doc_version и журнала изменений")
+    parser.add_argument("--commit-msg", type=Path, metavar="ФАЙЛ",
+                        help="проверка для хука commit-msg: префикс Conventional Commits в сообщении коммита")
     args = parser.parse_args(argv)
     if args.validate and args.check:
         parser.error("--validate и --check взаимоисключающие")
+    if args.versioning and (args.check or args.validate):
+        parser.error("--versioning нельзя сочетать с --check и --validate")
 
     docs_dir = args.docs.resolve()
     if not docs_dir.is_dir():
@@ -37,6 +46,20 @@ def main(argv: list[str] | None = None) -> int:
 
     ctx = BuildContext(docs_dir, args.archive_dir, args.config, args.nav_order, args.template)
     problems = Problems()
+
+    # Хук commit-msg: только проверка сообщения
+    if args.commit_msg:
+        check_commit_message(args.commit_msg, docs_dir, args.archive_dir, problems)
+        return 1 if problems.errors else 0
+
+    # Этап 0. Версии и журнал изменений по истории git (только по запросу: в CI)
+    if args.versioning:
+        for path in sync_versions(docs_dir, args.archive_dir, args.config):
+            print(f"Версия и журнал изменений обновлены: {path.relative_to(docs_dir.parent).as_posix()}")
+
+    # Хук pre-commit: запрет ручных правок версии и журнала
+    if args.staged:
+        check_staged_edits(docs_dir, args.archive_dir, problems)
 
     # Этап 1-2. Чтение и проверка
     specs, features = validate_all(ctx, problems)

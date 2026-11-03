@@ -30,6 +30,8 @@ jobs:
       contents: write   # право на push коммита со сгенерированными файлами
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # полная история нужна для версий и журнала изменений (по ней считаются коммиты каждой спецификации)
 
       - uses: actions/setup-python@v7
         with:
@@ -41,8 +43,9 @@ jobs:
       - run: uv pip install --system -r scripts/requirements.txt
 
       # Падает с ошибкой, если в метаданных спецификаций нет module или feature_name либо файл лежит вне docs/registry/
+      # --versioning: пересчитывает doc_version и «Журнал изменений» активных спецификаций по истории git (ссылки на коммиты)
       - name: Generate docs
-        run: python scripts/generate_docs.py
+        run: python scripts/generate_docs.py --versioning
 
       - name: Commit generated docs
         run: |
@@ -50,7 +53,7 @@ jobs:
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add docs zensical.toml
-            git commit -m "docs: автоматическое обновление индексов реестра, релизов и меню [skip ci]"
+            git commit -m "docs: автоматическое обновление версий, журналов изменений, индексов реестра, релизов и меню [skip ci]"
             git push origin HEAD:main
           else
             echo "Сформированные страницы без изменений."

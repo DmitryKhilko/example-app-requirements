@@ -1,0 +1,15 @@
+#!/bin/sh
+# Проверка сообщения коммита: если в коммит попала активная спецификация, нужен префикс Conventional Commits
+# (feat: / fix: / feat!: ...), по нему скрипт считает версию документа.
+# Включение (один раз в клоне): git config core.hooksPath .githooks
+# Обход (на этапе разработки): git commit --no-verify
+
+export PYTHONIOENCODING=utf-8
+export LANG=ru_RU.UTF-8
+export LC_ALL=ru_RU.UTF-8
+
+PY=python; command -v python >/dev/null 2>&1 || PY=python3
+"$PY" scripts/generate_docs.py --commit-msg "$1" || {
+  echo "Коммит отменён: исправьте сообщение коммита (см. выше)."
+  exit 1
+}

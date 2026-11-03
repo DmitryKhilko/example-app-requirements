@@ -9,7 +9,7 @@ export LANG=ru_RU.UTF-8
 export LC_ALL=ru_RU.UTF-8
 
 PY=python; command -v python >/dev/null 2>&1 || PY=python3
-"$PY" scripts/generate_docs.py --validate || {
+"$PY" scripts/generate_docs.py --validate --staged || {
   echo "Коммит отменён: исправьте ошибки в спецификациях (см. выше)."
   exit 1
 }
