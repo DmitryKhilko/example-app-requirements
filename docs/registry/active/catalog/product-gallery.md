@@ -6,7 +6,7 @@ feature_name: "Галерея изображений с зумом"
 status: "released"
 icon: lucide/file-text
 order: 30
-doc_version: "0.01"
+doc_version: "0.1.0"
 owner: "Дмитрий Хилько"
 task_id: "1"
 release_id: "1.2.1"
@@ -17,6 +17,10 @@ relations:
 ---
 
 # Галерея изображений с зумом {#product-gallery}
+
+??? note no-icon "<h2 id="change-history" style="display: inline;">Журнал изменений</h2>"
+
+    - [Версия 0.1.0](https://github.com/DmitryKhilko/example-app-requirements/commit/0051b0603735add2d8accbce728da892dbae579d). Ответственный: Dmitry Khilko
 
 ## Описание {#article-overview}
 
