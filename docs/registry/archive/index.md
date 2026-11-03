@@ -33,10 +33,10 @@ hide:
 <div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p></div>
 
 <details class="feature-block feature-module" markdown="block">
-<summary markdown="span"><span class="feature-title">**Личный кабинет**</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h2 class="feature-title">Личный кабинет</h2><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h3 class="feature-title">Профиль пользователя</h3><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-archive: [Дисконтные карты старого образца](profile/legacy-cards.md#article-overview){data-preview data-status="archived"}
 
@@ -46,10 +46,10 @@ hide:
 </details>
 
 <details class="feature-block feature-module" markdown="block">
-<summary markdown="span"><span class="feature-title">**Каталог товаров**</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h2 class="feature-title">Каталог товаров</h2><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Поиск и фильтрация*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h3 class="feature-title">Поиск и фильтрация</h3><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-archive: [Старый текстовый поиск (устарел)](catalog/search-old.md#article-overview){data-preview data-status="archived"}
 
@@ -59,10 +59,10 @@ hide:
 </details>
 
 <details class="feature-block feature-module" markdown="block">
-<summary markdown="span"><span class="feature-title">**Управление заказами**</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h2 class="feature-title">Управление заказами</h2><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*История заказов*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h3 class="feature-title">История заказов</h3><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="archived">:lucide-file-archive:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-archive: [Выписка заказов в виде бумажного чека](orders/print-receipt.md#article-overview){data-preview data-status="archived"}
 

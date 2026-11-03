@@ -41,7 +41,7 @@ hide:
 <div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p></div>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Карточка товара*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>2</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h3 class="feature-title">Карточка товара</h3><span class="feature-counts"><span data-count-item="total">всего: <span data-count>2</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-text: [Галерея изображений с зумом](product-gallery.md#article-overview){data-preview data-status="released"}
 - :lucide-file: [Блок похожих товаров (рекомендации)](product-recommendations.md#article-overview){data-preview data-status="backlog"}
@@ -49,7 +49,7 @@ hide:
 </details>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Поиск и фильтрация*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>5</span></span> <span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
+<summary markdown="span"><h3 class="feature-title">Поиск и фильтрация</h3><span class="feature-counts"><span data-count-item="total">всего: <span data-count>5</span></span> <span data-count-item="analysis">:lucide-file-pen-line:: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>2</span></span></span></summary>
 
 - :lucide-file-text: [Фильтрация по категориям и тегам](filter-categories.md#article-overview){data-preview data-status="released"}
 - :lucide-file-braces: [Фильтр по диапазону цен с ползунком](filter-price-slider.md#article-overview){data-preview data-status="development"}

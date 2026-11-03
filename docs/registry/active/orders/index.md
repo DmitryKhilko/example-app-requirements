@@ -41,14 +41,14 @@ hide:
 <div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p></div>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*История заказов*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h3 class="feature-title">История заказов</h3><span class="feature-counts"><span data-count-item="total">всего: <span data-count>1</span></span> <span data-count-item="ready">:lucide-file-check:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-check: [Отмена заказа клиентом](order-cancel.md#article-overview){data-preview data-status="ready"}
 
 </details>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Оформление заказа*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>3</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h3 class="feature-title">Оформление заказа</h3><span class="feature-counts"><span data-count-item="total">всего: <span data-count>3</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file: [Покупка в рассрочку](credit-pay.md#article-overview){data-preview data-status="backlog"}
 - :lucide-file-text: [Оплата через СБП / QR-код](payment-sbp.md#article-overview){data-preview data-status="released"}

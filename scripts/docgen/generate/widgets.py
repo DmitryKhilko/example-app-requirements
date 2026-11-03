@@ -40,15 +40,20 @@ def _tree(features: list[Feature]) -> dict[str, dict[str, list[Feature]]]:
     return tree
 
 
-def _block(kind: str, title_md: str, counts: str, body: list[str]) -> list[str]:
+# Название блока выводится заголовком: модуль — второго уровня, субмодуль — третьего (стили заголовков темы, extra.css, раздел 10)
+BLOCK_TITLE_TAGS = {"module": "h2", "submodule": "h3"}
+
+
+def _block(kind: str, title: str, counts: str, body: list[str]) -> list[str]:
     """Сворачиваемый блок `<details>` (kind — `module` или `submodule`).
 
-    Заголовок и счётчики статусов — в `<summary>`: название на первой строке, статистика (значки и числа) на второй. Атрибуты `markdown="block"` / `"span"` (md_in_html) нужны, чтобы
+    Заголовок и счётчики статусов — в `<summary>`: название на первой строке (модуль — `<h2>`, субмодуль — `<h3>`, обычным
+    начертанием, без курсива), статистика (значки и числа) на второй. Атрибуты `markdown="block"` / `"span"` (md_in_html) нужны, чтобы
     Markdown внутри блока обрабатывался: список функциональностей и значки статусов (:lucide-…:). Блок закрыт по умолчанию;
     открывать и закрывать его, а также раскрывать совпадения при отборе будет status-filter.js.
     """
     return [f'<details class="feature-block feature-{kind}" markdown="block">',
-            f'<summary markdown="span"><span class="feature-title">{title_md}</span>'
+            f'<summary markdown="span"><{BLOCK_TITLE_TAGS[kind]} class="feature-title">{title}</{BLOCK_TITLE_TAGS[kind]}>'
             f'<span class="feature-counts">{counts}</span></summary>', "", *body, "", "</details>", ""]
 
 
@@ -70,11 +75,11 @@ def render_tree(features: list[Feature], module_order: list[str], link=lambda f:
         subs = _tree(features)[module]
         sub_blocks: list[str] = []
         for submodule in sorted(subs, key=sort_key):
-            sub_blocks += _block("submodule", f"*{escape_md(submodule)}*", status_counts(subs[submodule]),
+            sub_blocks += _block("submodule", escape_md(submodule), status_counts(subs[submodule]),
                                  _feature_lines(subs[submodule], link))
         if with_modules:
             module_features = [f for items in subs.values() for f in items]
-            lines += _block("module", f"**{escape_md(module)}**", status_counts(module_features), sub_blocks)
+            lines += _block("module", escape_md(module), status_counts(module_features), sub_blocks)
         else:
             lines += sub_blocks
     return lines

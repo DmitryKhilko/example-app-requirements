@@ -41,7 +41,7 @@ hide:
 <div class="feature-empty" data-feature-empty="" hidden><p>Нет данных, соответствующих условиям отбора</p></div>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Авторизация*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>2</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h3 class="feature-title">Авторизация</h3><span class="feature-counts"><span data-count-item="total">всего: <span data-count>2</span></span> <span data-count-item="development">:lucide-file-braces:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-braces: [Двухфакторная аутентификация (2FA)](auth-2fa.md#article-overview){data-preview data-status="development"}
 - :lucide-file-text: [Вход по номеру телефона и SMS](auth-sms.md#article-overview){data-preview data-status="released"}
@@ -49,7 +49,7 @@ hide:
 </details>
 
 <details class="feature-block feature-submodule" markdown="block">
-<summary markdown="span"><span class="feature-title">*Профиль пользователя*</span><span class="feature-counts"><span data-count-item="total">всего: <span data-count>2</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
+<summary markdown="span"><h3 class="feature-title">Профиль пользователя</h3><span class="feature-counts"><span data-count-item="total">всего: <span data-count>2</span></span> <span data-count-item="backlog">:lucide-file:: <span data-count>1</span></span> <span data-count-item="released">:lucide-file-text:: <span data-count>1</span></span></span></summary>
 
 - :lucide-file-text: [Редактирование персональных данных](edit-data.md#article-overview){data-preview data-status="released"}
 - :lucide-file: [Привязка профилей социальных сетей](oauth.md#article-overview){data-preview data-status="backlog"}

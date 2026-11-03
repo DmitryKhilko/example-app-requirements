@@ -25,7 +25,7 @@
      7. Сообщение «Нет данных» при пустом результате отбора
      8. Значок статуса справа от названия в меню (скрыт)
      9. Запятые между счётчиками статусов в заголовках модулей
-    10. Сворачиваемые блоки «Модуль» и «Субмодуль»
+    10. Сворачиваемые блоки (аккордеоны) и блоки note
     11. Ширина страниц со скрытым правым меню
     12. Паспорт спецификации (шаблон theme-custom/spec.html)
     13. Страница «Релизы» (docs/releases.md)
@@ -405,86 +405,83 @@ span[data-count-item]:last-of-type::after,
 
 
 /* --------------------------------------------------------------------------
-   10. СВОРАЧИВАЕМЫЕ БЛОКИ «МОДУЛЬ» И «СУБМОДУЛЬ»
+   10. СВОРАЧИВАЕМЫЕ БЛОКИ (АККОРДЕОНЫ) И БЛОКИ `??? note`
 
-   Генератор выводит списки спецификаций вложенными блоками <details class="feature-block">. Тема оформляет
-   <details> как «панель» со значком типа и стрелкой; значок типа здесь убран (оставлена стрелка раскрытия),
-   размер шрифта как у основного текста, цветной полосы за названием нет. Раскрытием управляет status-filter.js.
+   Генератор выводит списки спецификаций (модули, субмодули, релизы) вложенными блоками <details class="feature-block">.
+   Тема Zensical оформляет <details> как «панель» (так же устроены блоки `??? note`): заливка голубым оттенком без рамки,
+   скругление, боковые, верхние и нижние отступы, положение стрелки раскрытия справа. Всё это берётся из темы, поэтому
+   аккордеоны выглядят так же, как note. Здесь заданы только отличия:
+     * значка типа нет, заголовок начинается у левого края блока;
+     * стрелка раскрытия цвета --sf-accordion-color (#448aff);
+     * название модуля — заголовок 2-го уровня (<h2>), название субмодуля — 3-го (<h3>, обычным начертанием, без курсива),
+       название релиза — жирным; строка с итогами (значки статусов, «N спецификаций») — обычным начертанием;
+     * расстояние между соседними блоками небольшое (0.5rem).
+   Раскрытием блоков управляет status-filter.js.
+
+   Блоки `??? note` (например, «Журнал изменений» в спецификациях): шрифт равен основному тексту страницы (тема задаёт
+   им уменьшенный); класс `no-icon` (`??? note no-icon "Журнал изменений"`) убирает значок типа, заголовок выровнен по
+   левому краю — так же, как у аккордеонов. Правила не зависят от страницы, поэтому блоки note выглядят одинаково во
+   всех спецификациях.
    -------------------------------------------------------------------------- */
-.md-typeset details.feature-block {
-  margin: 0.5rem 0;
-  padding: 0;
-  font-size: inherit;
-  border: 0.05rem solid var(--md-default-fg-color--lighter);
-  border-radius: 0.3rem;
-  box-shadow: none;
-  min-height: 0 !important; /* Полный сброс минимальной высоты */
+:root {
+  --sf-accordion-color: #448aff;   /* цвет стрелки раскрытия аккордеонов (как у блока note) */
 }
 
-.md-typeset details.feature-block > summary {
-  /* Задаем минимальные вертикальные отступы */
-  padding: 0.3rem 2.4rem 0.3rem 0.9rem !important;
+/* Блоки note: шрифт — как у основного текста страницы (в заголовке и в тексте) */
+.md-typeset details.note,
+.md-typeset details.note > summary,
+.md-typeset .admonition.note {
   font-size: inherit;
-  cursor: pointer;
-  background: none !important;
-  position: relative;
-  
-  /* Сбрасываем высоту и жесткий line-height темы */
-  min-height: 0 !important;
-  height: auto !important;
-  line-height: 1.2 !important; 
 }
 
+/* Без значка типа: значок скрыт, заголовок начинается у левого края блока (без отступа под значок) */
+.md-typeset details.no-icon > summary::before,
+.md-typeset .admonition.no-icon > .admonition-title::before,
 .md-typeset details.feature-block > summary::before {
   display: none;
 }
 
-/* Центрирование стрелки раскрытия по вертикали */
-.md-typeset details.feature-block > summary::after {
-  top: 0 !important;
-  bottom: 0 !important;
-  margin-top: auto !important;
-  margin-bottom: auto !important;
+.md-typeset details.no-icon > summary,
+.md-typeset .admonition.no-icon > .admonition-title,
+.md-typeset details.feature-block > summary {
+  padding-inline-start: 0;
 }
 
-/* Название модуля/субмодуля и статистика */
-.md-typeset details.feature-block .feature-title,
-.md-typeset details.feature-block .feature-counts {
-  display: block;
-  margin: 0 !important;       /* Убираем все скрытые отступы темы */
-  padding: 0 !important;      /* Убираем внутренние отступы у строк текста */
-  line-height: 1.25 !important; /* Делаем текст компактным по высоте */
-}
-
-/* Возвращаем строго контролируемый микро-отступ между двумя строками */
-.md-typeset details.feature-block .feature-counts {
-  margin-top: 0.15rem !important;
-}
-
-/* Боковой отступ — только у субмодуля, вложенного в блок модуля. Блок верхнего уровня (модуль на страницах-перечнях,
-   «Действующие», «Архив», «Релизы» и субмодуль на странице модуля) занимает всю ширину страницы, как плитка
-   «Всего спецификаций»: отступов по бокам у него нет. */
+/* Аккордеоны: шрифт основного текста, небольшой зазор между блоками, стрелка нужного цвета */
 .md-typeset details.feature-block {
-  width: auto;
-  max-width: none;
-  box-sizing: border-box;
+  margin: 0.5rem 0;
+  font-size: inherit;
 }
 
-.md-typeset details.feature-block details.feature-submodule {
-  margin: 0.5rem 0.8rem;
+.md-typeset details.feature-block details.feature-block {
+  margin: 0.5rem 0;   /* вложенный блок (субмодуль в модуле); боковые отступы даёт блок-родитель, как у вложенных note */
 }
 
-.md-typeset details.feature-block > ul {
-  margin: 0.2rem 0.8rem 0.6rem;
+.md-typeset details.feature-block > summary {
+  font-size: inherit;
+  font-weight: 400;
 }
 
-/* Заголовки блоков (модуль, субмодуль, релиз) и строка со счётчиком (значки статусов, «N спецификаций») — обычным
-   начертанием: тема делает текст в summary полужирным, а генератор выделяет название модуля и релиза (**…**). */
-.md-typeset details.feature-block > summary,
-.md-typeset details.feature-block > summary .feature-title,
-.md-typeset details.feature-block > summary .feature-counts,
+.md-typeset details.feature-block > summary::after {
+  background-color: var(--sf-accordion-color);
+}
+
+/* Название: модуль — <h2>, субмодуль — <h3> (стили заголовков темы; отступы убраны, их задаёт summary), релиз — <span> с жирным текстом */
+.md-typeset details.feature-block > summary .feature-title {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
 .md-typeset details.feature-block > summary strong {
-  font-weight: 400 !important;
+  font-weight: 700;
+}
+
+/* Строка с итогами — обычным начертанием, небольшой зазор от названия */
+.md-typeset details.feature-block > summary .feature-counts {
+  display: block;
+  margin: 0.15rem 0 0;
+  font-weight: 400;
 }
 
 
@@ -568,7 +565,7 @@ span[data-count-item]:last-of-type::after,
    название-ссылка и под ней описание, приглушённым цветом. Скачивание — theme-custom/javascripts/releases.js.
    -------------------------------------------------------------------------- */
 .md-typeset .release-actions {
-  margin: 0.6rem 0.9rem 0.2rem;
+  margin: 0 0 0.6rem;   /* боковые и верхний отступы даёт сам блок (как у note) */
 }
 
 /* Кнопка «Скачать»: тот же вид и высота, что у кнопок под строкой отбора (раздел 5) */
