@@ -18,6 +18,10 @@ relations:
 
 # Вход по номеру телефона и SMS {#auth-sms}
 
+??? note no-icon "<h2 id="change-history" style="display: inline;">Журнал изменений</h2>"
+
+    - [Версия 0.1.0](https://github.com/DmitryKhilko/example-app-requirements/commit/0051b0603735add2d8accbce728da892dbae579d). Ответственный: Dmitry Khilko
+
 ## Описание {#article-overview}
 
 Вход без пароля по одноразовому коду из SMS.
