@@ -5,7 +5,7 @@ submodule: "Авторизация"
 feature_name: "Двухфакторная аутентификация (2FA)"
 status: "development"
 icon: lucide/file-braces
-doc_version: "0.03"
+doc_version: "0.04"
 order: 10
 owner: "Дмитрий Хилько"
 task_id: "1"
@@ -31,6 +31,12 @@ relations:
     ??? note no-icon "<h3 id="version-0-03" style="display: inline;">Версия 0.03</h3>"
 
         1. Изменение [третье](#main-scenario).
+
+    ??? note no-icon "<h3 id="version-0-04" style="display: inline;">Версия 0.04</h3>"
+
+        1. Изменение четвёртое.
+        2. Изменение пятое.
+        3. Изменение шестое.
 
 ## Описание {#article-overview}
 
