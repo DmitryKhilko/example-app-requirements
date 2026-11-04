@@ -6,8 +6,8 @@ feature_name: "Фильтр по диапазону цен с ползунком
 status: "analysis"
 icon: lucide/file-pen-line
 order: 20
-doc_version: "0.01.00"
-datetime_version: "04.11.2026 09:46"
+doc_version: "0.01.01"
+datetime_version: "04.11.2026 10:07"
 owner: "Khilko Dmitry"
 task_id: "1"
 release_id: ""
@@ -27,6 +27,7 @@ relations:
 
 ??? note no-icon "<h2 id="change-history" style="display: inline;">Журнал изменений</h2>"
 
+    - [Версия 0.01.01](https://github.com/DmitryKhilko/example-app-requirements/commit/5bf3a1fe433f7fe4a0f5a117c9abbf69222d7d1d). Ответственный: Khilko Dmitry
     - [Версия 0.01.00](https://github.com/DmitryKhilko/example-app-requirements/commit/1de627f91060c943c51f314eb554d76ad1e23bd7). Ответственный: Khilko Dmitry
     - [Версия 0.00.18](https://github.com/DmitryKhilko/example-app-requirements/commit/75f3ebdc1c6dca93c1dd99f62bd2e8c61a01e329). Ответственный: Dmitry Khilko
     - [Версия 0.00.17](https://github.com/DmitryKhilko/example-app-requirements/commit/0051b0603735add2d8accbce728da892dbae579d). Ответственный: Dmitry Khilko
