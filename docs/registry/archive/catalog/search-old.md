@@ -6,6 +6,7 @@ feature_name: "Старый текстовый поиск (устарел)"
 status: "archived"
 icon: lucide/file-archive
 doc_version: "0.01"
+datetime_version: ""
 order: 10
 owner: "Дмитрий Хилько"
 task_id: "1"

@@ -20,19 +20,18 @@ from __future__ import annotations
 
 import re
 import subprocess
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
 
-from .config import (CHANGELOG_ANCHOR, CHANGELOG_TITLE, COMMIT_TYPES, COMMIT_URL_PATH, DOC_VERSION_KEY,
-                     FRONT_MATTER_RE, GENERATED_COMMIT_MARK, INITIAL_VERSION, RELATIONS_BEGIN_PREFIX, RELATIONS_END,
-                     SPEC_KEYS)
+from .config import (CHANGELOG_ANCHOR, CHANGELOG_EMPTY, CHANGELOG_TITLE, COMMIT_TYPES, COMMIT_URL_PATH,
+                     DATETIME_VERSION_FORMAT, DATETIME_VERSION_KEY, DEFAULT_VERSION, DOC_VERSION_KEY, DRAFT_TYPE,
+                     FRONT_MATTER_RE, GENERATED_COMMIT_MARK, OWNER_KEY, SPEC_KEYS)
 from .problems import Problems
 
 _CHANGELOG_START_RE = re.compile(r'^\?\?\?\+?[ \t]+\w+[^\n]*id="' + CHANGELOG_ANCHOR + '"')
 _H1_RE = re.compile(r"^ {0,3}#[ \t]+(.+?)[ \t]*$")
-_VERSION_LINE_RE = re.compile(rf"^({DOC_VERSION_KEY}:[ \t]*)(\"[^\"\n]*\"|'[^'\n]*'|[^\s#\n]*)", re.MULTILINE)
 _REPO_URL_RE = re.compile(r'^repo_url\s*=\s*"([^"]+)"', re.MULTILINE)
 _CONVENTIONAL_RE = re.compile(r"^(?P<type>[A-Za-z]+)(\([^)\n]*\))?(?P<bang>!)?:[ \t]*\S")
 _SEP = "\x1f"
@@ -115,8 +114,26 @@ def _changelog_span(lines: list[str]) -> tuple[int, int] | None:
     return None
 
 
-def _doc_version_of(text: str | None) -> str:
-    return str((_front_matter(text or "") or {}).get(DOC_VERSION_KEY) or "").strip()
+_LEGACY_H2_RE = re.compile(rf"^ {{0,3}}##[ \t]+{CHANGELOG_TITLE}[ \t]*\{{#{CHANGELOG_ANCHOR}\}}[ \t]*$")
+
+
+def _remove_legacy_h2(lines: list[str]) -> list[str]:
+    """Удаляет журнал старого вида — раздел `## Журнал изменений {#change-history}` (до следующего заголовка или конца файла):
+    теперь журнал — блок под заголовком первого уровня, и два раздела с одним якорем быть не должно."""
+    start = next((i for i, l in enumerate(lines) if _LEGACY_H2_RE.match(l)), None)
+    if start is None:
+        return lines
+    end = next((i for i in range(start + 1, len(lines)) if re.match(r"^ {0,3}#{1,2}[ \t]", lines[i])), len(lines))
+    rest = lines[:start] + lines[end:]
+    if end >= len(lines):
+        while rest and not rest[-1].strip():
+            rest.pop()
+        rest.append("")
+    return rest
+
+
+def _field_of(text: str | None, key: str) -> str:
+    return str((_front_matter(text or "") or {}).get(key) or "").strip()
 
 
 def _journal_of(text: str | None) -> list[str]:
@@ -131,9 +148,14 @@ def _journal_of(text: str | None) -> list[str]:
 
 @dataclass
 class VersionEntry:
-    version: str
+    version: str          # например "0.01.00"
     commit: str
     author: str
+    when: str             # дата и время коммита (DATETIME_VERSION_FORMAT)
+
+
+def format_version(version: tuple[int, int, int]) -> str:
+    return f"{version[0]}.{version[1]:02d}.{version[2]:02d}"
 
 
 def next_version(version: tuple[int, int, int], message: str) -> tuple[int, int, int]:
@@ -148,22 +170,39 @@ def next_version(version: tuple[int, int, int], message: str) -> tuple[int, int,
     return major, minor, patch + 1
 
 
-def version_history(root: Path, rel: str) -> list[VersionEntry]:
-    """Записи журнала от старых к новым: версия после каждого коммита, затронувшего файл."""
-    out = _git(root, "log", "--follow", "--reverse", "--no-merges", f"--format=%x00%H{_SEP}%an{_SEP}%B", "--", rel)
+def is_draft(message: str) -> bool:
+    found = _CONVENTIONAL_RE.match(message.strip().split("\n", 1)[0])
+    return bool(found) and found.group("type").lower() == DRAFT_TYPE
+
+
+@dataclass
+class History:
+    commits: int = 0                       # сколько коммитов файла найдено (без автоматических)
+    entries: list[VersionEntry] = field(default_factory=list)   # от старых к новым; пусто — нумерация по умолчанию
+
+
+def version_history(root: Path, rel: str) -> History:
+    """Первый коммит файла — создание (версия по умолчанию, без записи). Каждый следующий коммит повышает версию и
+    даёт запись журнала; исключения: автоматические коммиты CI (`[skip ci]`) и коммиты с префиксом `draft:`."""
+    fmt = f"%x00%H{_SEP}%an{_SEP}%cd{_SEP}%B"
+    out = _git(root, "log", "--follow", "--reverse", "--no-merges", f"--date=format:{DATETIME_VERSION_FORMAT}",
+               f"--format={fmt}", "--", rel)
+    result = History()
     if not out:
-        return []
-    version = tuple(int(p) for p in INITIAL_VERSION.split("."))
-    entries: list[VersionEntry] = []
+        return result
+    version = tuple(int(p) for p in DEFAULT_VERSION.split("."))
     for chunk in out.split("\x00")[1:]:
         commit, _, rest = chunk.partition(_SEP)
-        author, _, message = rest.partition(_SEP)
+        author, _, rest = rest.partition(_SEP)
+        when, _, message = rest.partition(_SEP)
         if GENERATED_COMMIT_MARK in message:
             continue
-        if entries:
-            version = next_version(version, message)
-        entries.append(VersionEntry(".".join(map(str, version)), commit.strip(), author.strip()))
-    return entries
+        result.commits += 1
+        if result.commits == 1 or is_draft(message):
+            continue
+        version = next_version(version, message)
+        result.entries.append(VersionEntry(format_version(version), commit.strip(), author.strip(), when.strip()))
+    return result
 
 
 def build_journal(entries: list[VersionEntry], url: str) -> list[str]:
@@ -173,25 +212,46 @@ def build_journal(entries: list[VersionEntry], url: str) -> list[str]:
         label = f"Версия {item.version}"
         link = f"[{label}]({url}{COMMIT_URL_PATH}{item.commit})" if url else label
         lines.append(f"    - {link}. Ответственный: {item.author}")
+    if not entries:
+        lines.append(f"    {CHANGELOG_EMPTY}")
     return lines
 
 
-def apply_versioning(text: str, entries: list[VersionEntry], url: str) -> str:
-    """Текст спецификации с актуальными `doc_version` и журналом изменений."""
+def _yaml_str(value: str) -> str:
+    return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def _set_field(head: str, key: str, value: str, after: str | None = None) -> str:
+    """Значение поля `key` в front matter (комментарий в конце строки сохраняется); поля нет — добавляет его после `after`
+    (или перед закрывающим `---`)."""
+    pattern = re.compile(rf"^({re.escape(key)}:[ \t]*)(\"(?:[^\"\\\n]|\\.)*\"|'[^'\n]*'|[^\s#\n]*)", re.MULTILINE)
+    if pattern.search(head):
+        return pattern.sub(lambda m: m.group(1) + _yaml_str(value), head, count=1)
+    line = f"{key}: {_yaml_str(value)}"
+    anchor = re.search(rf"^{re.escape(after)}:[^\n]*$", head, re.MULTILINE) if after else None
+    if anchor:
+        return head[:anchor.end()] + "\n" + line + head[anchor.end():]
+    return re.sub(r"(\r?\n---[ \t]*\r?\n?)$", lambda m: "\n" + line + m.group(1), head, count=1)
+
+
+def apply_versioning(text: str, history: History, url: str) -> str:
+    """Текст спецификации с актуальными метаданными (`doc_version`, `datetime_version`, `owner`) и журналом изменений."""
     eol = "\r\n" if "\r\n" in text else "\n"
     match = FRONT_MATTER_RE.match(text)
     head, tail = (text[:match.end()], text[match.end():]) if match else ("", text)
-    version = entries[-1].version
-    new_head, count = _VERSION_LINE_RE.subn(lambda m: f'{m.group(1)}"{version}"', head, count=1)
-    if not count and match:   # поля нет — добавляем перед закрывающим ---
-        new_head = re.sub(r"(\r?\n---[ \t]*\r?\n?)$", lambda m: f'{eol}{DOC_VERSION_KEY}: "{version}"{m.group(1)}', head, count=1)
-    lines = (new_head + tail).replace("\r\n", "\n").split("\n")
-    journal = build_journal(entries, url)
+    head = head.replace("\r\n", "\n")
+    last = history.entries[-1] if history.entries else None
+    head = _set_field(head, DOC_VERSION_KEY, last.version if last else DEFAULT_VERSION)
+    head = _set_field(head, DATETIME_VERSION_KEY, last.when if last else "", after=DOC_VERSION_KEY)
+    if last:
+        head = _set_field(head, OWNER_KEY, last.author)
+    lines = _remove_legacy_h2((head + tail.replace("\r\n", "\n")).split("\n"))
+    journal = build_journal(history.entries, url)
     span = _changelog_span(lines)
     if span:
         lines[span[0]:span[1] + 1] = journal
     else:
-        offset = new_head.replace("\r\n", "\n").count("\n")
+        offset = head.count("\n")
         h1 = next((i for i in range(offset, len(lines)) if _H1_RE.match(lines[i])), None)
         at = (h1 + 1) if h1 is not None else offset
         block = ["", *journal]
@@ -201,13 +261,27 @@ def apply_versioning(text: str, entries: list[VersionEntry], url: str) -> str:
     return eol.join(lines)
 
 
-def sync_versions(docs_dir: Path, archive_dir_name: str, config: Path) -> list[Path]:
-    """Обновляет `doc_version` и журнал изменений у активных спецификаций по истории git. Возвращает изменённые файлы."""
+def _is_shallow(root: Path) -> bool:
+    return (_git(root, "rev-parse", "--is-shallow-repository") or "").strip() == "true"
+
+
+def sync_versions(docs_dir: Path, archive_dir_name: str, config: Path) -> tuple[list[Path], list[str]]:
+    """Обновляет метаданные версии и журнал изменений у активных спецификаций по истории git.
+    Возвращает (изменённые файлы, строки отчёта для журнала CI)."""
     root = repo_root(docs_dir)
-    if root is None or not _has_commits(root):
-        return []
+    if root is None:
+        return [], ["Версии не обновлены: папка не входит в git-репозиторий."]
+    if not _has_commits(root):
+        return [], ["Версии не обновлены: в репозитории нет коммитов."]
+    report: list[str] = []
+    if _is_shallow(root):
+        report.append("ВНИМАНИЕ: в репозитории неполная история (shallow clone) — версии будут посчитаны неверно. "
+                      "В CI нужен checkout с fetch-depth: 0.")
     url = repo_url(config)
+    if not url:
+        report.append("repo_url в zensical.toml не задан: версии в журнале изменений будут без ссылок на коммиты.")
     changed: list[Path] = []
+    total = 0
     for rel in _md_names(root, "ls-files", "--", docs_dir.as_posix()):
         path = root / rel
         if not path.is_file() or not is_active(path.relative_to(docs_dir).as_posix(), archive_dir_name):
@@ -215,14 +289,19 @@ def sync_versions(docs_dir: Path, archive_dir_name: str, config: Path) -> list[P
         text = path.read_text(encoding="utf-8")
         if not _is_spec(text):
             continue
-        entries = version_history(root, rel)
-        if not entries:
+        history = version_history(root, rel)
+        if not history.commits:
+            report.append(f"  пропущено (в истории git нет коммитов файла): {rel}")
             continue
-        updated = apply_versioning(text, entries, url)
+        total += 1
+        updated = apply_versioning(text, history, url)
+        label = history.entries[-1].version if history.entries else DEFAULT_VERSION
+        report.append(f"  {rel}: версия {label}, коммитов в истории {history.commits}, записей журнала {len(history.entries)}")
         if updated != text:
             path.write_text(updated, encoding="utf-8", newline="")
             changed.append(path)
-    return changed
+    report.insert(0, f"Активных спецификаций обработано: {total}, изменено: {len(changed)}.")
+    return changed, report
 
 
 # ---------------------------------------------------------------------------
@@ -241,9 +320,10 @@ def check_staged_edits(docs_dir: Path, archive_dir_name: str, problems: Problems
         old, new = _git(root, "show", f"HEAD:{rel}"), _git(root, "show", f":{rel}")
         if old is None or new is None or not _is_spec(new):
             continue
-        if _doc_version_of(old) != _doc_version_of(new):
-            problems.error(path, f"`{DOC_VERSION_KEY}` менять вручную нельзя: версию считает скрипт по сообщениям коммитов "
-                                 f"(feat: / fix: / feat!:)")
+        for key in (DOC_VERSION_KEY, DATETIME_VERSION_KEY):
+            if _field_of(old, key) != _field_of(new, key):
+                problems.error(path, f"`{key}` менять вручную нельзя: версию и её дату считает скрипт по сообщениям коммитов "
+                                     f"(feat: / fix: / feat!:; draft: — без изменения версии)")
         if _journal_of(old) != _journal_of(new):
             problems.error(path, f"раздел «{CHANGELOG_TITLE}» менять вручную нельзя: его формирует скрипт по истории git")
 

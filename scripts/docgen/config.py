@@ -246,16 +246,22 @@ TEMPLATE_PLACEHOLDER_FIELDS = ("module", "submodule", "feature_name", "owner")
 # ---------------------------------------------------------------------------
 # Версии и журнал изменений спецификаций (changelog.py)
 # ---------------------------------------------------------------------------
-# Версию `doc_version` и «Журнал изменений» формирует скрипт по истории git (`generate_docs.py --versioning`, в CI): авторы их
-# руками не правят. Версия X.Y.Z считается по сообщениям коммитов файла (Conventional Commits): `fix:`/`docs:`/прочее — Z+1,
-# `feat:` — Y+1 и Z=0, `feat!:` или «BREAKING CHANGE» — X+1, Y=Z=0. Первый коммит файла — версия 0.1.0.
-# Версионируются только активные спецификации (не архивные).
+# Метаданные `doc_version`, `datetime_version`, `owner` и «Журнал изменений» формирует скрипт по истории git
+# (`generate_docs.py --versioning`, в CI): авторы их руками не правят. Версия X.YY.ZZ считается по сообщениям коммитов файла
+# (Conventional Commits): `fix:`/`docs:`/прочее — ZZ+1; `feat:` — YY+1, ZZ=0; `feat!:` или «BREAKING CHANGE» — X+1, YY=ZZ=0.
+# Нумерация по умолчанию — 0.00.00: так нумеруется спецификация после создания (первый коммит файла), записи в журнале для неё нет.
+# Коммит с префиксом `draft:` нумерацию не меняет и в журнал не попадает. Версионируются только активные спецификации.
 DOC_VERSION_KEY = "doc_version"
-INITIAL_VERSION = "0.1.0"
+DATETIME_VERSION_KEY = "datetime_version"   # дата и время коммита, по которому присвоена текущая версия
+OWNER_KEY = "owner"                         # при смене версии — автор этого коммита
+DEFAULT_VERSION = "0.00.00"
+DATETIME_VERSION_FORMAT = "%d.%m.%Y %H:%M"  # для git: --date=format:...
+DRAFT_TYPE = "draft"                        # префикс сообщения коммита: версия и метаданные не обновляются
 CHANGELOG_TITLE = "Журнал изменений"
 CHANGELOG_ANCHOR = "change-history"
+CHANGELOG_EMPTY = "Записей пока нет."
 COMMIT_URL_PATH = "/commit/"   # одинаково для GitHub и Gitea
 # Коммиты с этой пометкой в сообщении (автоматические коммиты CI со сгенерированными файлами) в версиях не учитываются
 GENERATED_COMMIT_MARK = "[skip ci]"
 # Допустимые префиксы сообщений коммитов, затрагивающих активные спецификации (проверяет хук commit-msg)
-COMMIT_TYPES = ("feat", "fix", "docs", "style", "refactor", "chore")
+COMMIT_TYPES = ("feat", "fix", "docs", "style", "refactor", "chore", DRAFT_TYPE)

@@ -28,7 +28,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--validate", action="store_true",
                         help="только проверить спецификации (метаданные, связи, структура); ничего не писать")
     parser.add_argument("--versioning", action="store_true",
-                        help="пересчитать doc_version и «Журнал изменений» активных спецификаций по истории git (для CI)")
+                        help="пересчитать doc_version, datetime_version, owner и «Журнал изменений» активных спецификаций по истории git (для CI)")
     parser.add_argument("--staged", action="store_true",
                         help="проверка для хука pre-commit: в индексе нет ручных правок doc_version и журнала изменений")
     parser.add_argument("--commit-msg", type=Path, metavar="ФАЙЛ",
@@ -54,7 +54,9 @@ def main(argv: list[str] | None = None) -> int:
 
     # Этап 0. Версии и журнал изменений по истории git (только по запросу: в CI)
     if args.versioning:
-        for path in sync_versions(docs_dir, args.archive_dir, args.config):
+        changed, report = sync_versions(docs_dir, args.archive_dir, args.config)
+        print("\n".join(report))
+        for path in changed:
             print(f"Версия и журнал изменений обновлены: {path.relative_to(docs_dir.parent).as_posix()}")
 
     # Хук pre-commit: запрет ручных правок версии и журнала
