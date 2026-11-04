@@ -49,7 +49,7 @@
         <div class="spec-passport__item"><dt>Ответственный</dt><dd>{{ meta.owner }}</dd></div>
       {% endif %}
       {% if meta.doc_version %}
-        <div class="spec-passport__item"><dt>Версия документа</dt><dd>{{ meta.doc_version }}</dd></div>
+        <div class="spec-passport__item"><dt>Версия документа</dt><dd>{{ meta.doc_version }}{% if meta.datetime_version %} ({{ meta.datetime_version }}){% endif %}</dd></div>
       {% endif %}
       {#- Ключи task_id, release_id и release_date выводятся всегда, даже если значение пусто. Текст ссылки на задачу — её номер из task_id,
           адрес строится из [project.extra.tracker] task_url в zensical.toml; если адрес не задан, выводится только номер. -#}

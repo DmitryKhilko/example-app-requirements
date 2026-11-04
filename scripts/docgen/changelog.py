@@ -7,7 +7,7 @@
 2. считает версию X.Y.Z по сообщениям коммитов (Conventional Commits): первый коммит — 0.1.0; `feat!:` или «BREAKING CHANGE» —
    X+1, Y=0, Z=0; `feat:` — Y+1, Z=0; всё остальное (`fix:`, `docs:`, …) — Z+1;
 3. записывает итоговую версию в `doc_version` и целиком перезаписывает «Журнал изменений»: по строке на каждый коммит,
-   новые сверху — «Версия 0.2.0. Ответственный: Автор», где версия — ссылка на коммит (адрес — `repo_url` из zensical.toml).
+   новые сверху — «Версия 0.02.00 (04.11.2026 09:46). Ответственный: Автор», где версия со временем коммита — ссылка на коммит (в новой вкладке) (адрес — `repo_url` из zensical.toml).
 
 Полная перезапись выбрана намеренно: журнал всегда повторяет историю git, без дублей и сбоев порядка. Для этого в CI нужна
 полная история (`fetch-depth: 0`). Без git, без коммитов у файла и для архивных спецификаций этап пропускается.
@@ -220,8 +220,9 @@ def build_journal(entries: list[VersionEntry], url: str) -> list[str]:
     """Блок «Журнал изменений» (аккордеон `??? note no-icon`) со списком версий, новые сверху."""
     lines = [f'??? note no-icon "<h2 id="{CHANGELOG_ANCHOR}" style="display: inline;">{CHANGELOG_TITLE}</h2>"', ""]
     for item in reversed(entries):
-        label = f"Версия {item.version}"
-        link = f"[{label}]({url}{COMMIT_URL_PATH}{item.commit})" if url else label
+        label = f"Версия {item.version} ({item.when})" if item.when else f"Версия {item.version}"
+        # {target="_blank"} (расширение attr_list) открывает коммит в новой вкладке
+        link = f'[{label}]({url}{COMMIT_URL_PATH}{item.commit}){{target="_blank" rel="noopener"}}' if url else label
         lines.append(f"    - {link}. Ответственный: {item.author}")
     if not entries:
         lines.append(f"    {CHANGELOG_EMPTY}")
