@@ -20,7 +20,7 @@ relations:
 
 ??? note no-icon "<h2 id="change-history" style="display: inline;">Журнал изменений</h2>"
 
-    - [Версия 0.1.0](https://github.com/DmitryKhilko/example-app-requirements/commit/0051b0603735add2d8accbce728da892dbae579d). Ответственный: Dmitry Khilko
+    Записей пока нет.
 
 ## Описание {#article-overview}
 
