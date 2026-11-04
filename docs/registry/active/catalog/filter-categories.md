@@ -6,7 +6,8 @@ feature_name: "Фильтрация по категориям и тегам"
 status: "released"
 icon: lucide/file-text
 order: 10
-doc_version: "0.1.0"
+doc_version: "0.00.00"
+datetime_version: ""
 owner: "Дмитрий Хилько"
 task_id: "1"
 release_id: "1.2.1"
