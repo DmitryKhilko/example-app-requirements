@@ -6,8 +6,8 @@ feature_name: "Фильтрация по категориям и тегам"
 status: "released"
 icon: lucide/file-text
 order: 10
-doc_version: "0.01.03"
-datetime_version: "04.11.2026 09:08"
+doc_version: "0.02.00"
+datetime_version: "04.11.2026 09:39"
 owner: "Khilko Dmitry"
 task_id: "1"
 release_id: "1.2.1"
@@ -21,6 +21,7 @@ relations:
 
 ??? note no-icon "<h2 id="change-history" style="display: inline;">Журнал изменений</h2>"
 
+    - [Версия 0.02.00](https://github.com/DmitryKhilko/example-app-requirements/commit/865e3627eaff6ae21328ca0e3f67d73181fec363). Ответственный: Khilko Dmitry
     - [Версия 0.01.03](https://github.com/DmitryKhilko/example-app-requirements/commit/e6dd9ce17ebd521abe7e7bd7ae1a240bd413d20c). Ответственный: Khilko Dmitry
     - [Версия 0.01.02](https://github.com/DmitryKhilko/example-app-requirements/commit/3f24ece8705397b67ef3becf9c0e1fe478b80039). Ответственный: Dmitry Khilko
     - [Версия 0.01.01](https://github.com/DmitryKhilko/example-app-requirements/commit/94ece33ea28b5bbb3b2fe7e5d0edd25aa71cb5a1). Ответственный: Dmitry Khilko
