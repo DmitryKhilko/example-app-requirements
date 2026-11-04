@@ -178,6 +178,7 @@ def is_draft(message: str) -> bool:
 @dataclass
 class History:
     commits: int = 0                       # сколько коммитов файла найдено (без автоматических)
+    log: list[str] = field(default_factory=list)   # как скрипт разобрал каждый коммит файла (для отчёта)
     entries: list[VersionEntry] = field(default_factory=list)   # от старых к новым; пусто — нумерация по умолчанию
 
 
@@ -195,11 +196,19 @@ def version_history(root: Path, rel: str) -> History:
         commit, _, rest = chunk.partition(_SEP)
         author, _, rest = rest.partition(_SEP)
         when, _, message = rest.partition(_SEP)
+        subject = message.strip().split("\n", 1)[0][:70]
+        short = commit.strip()[:7]
         if GENERATED_COMMIT_MARK in message:
+            result.log.append(f"{short} «{subject}» — пропущен: автоматический коммит ({GENERATED_COMMIT_MARK})")
             continue
         result.commits += 1
-        if result.commits == 1 or is_draft(message):
+        if result.commits == 1:
+            result.log.append(f"{short} «{subject}» — создание файла, версия по умолчанию")
             continue
+        if is_draft(message):
+            result.log.append(f"{short} «{subject}» — пропущен: draft")
+            continue
+        result.log.append(f"{short} «{subject}» — учтён")
         version = next_version(version, message)
         result.entries.append(VersionEntry(format_version(version), commit.strip(), author.strip(), when.strip()))
     return result
@@ -277,6 +286,9 @@ def sync_versions(docs_dir: Path, archive_dir_name: str, config: Path) -> tuple[
     if _is_shallow(root):
         report.append("ВНИМАНИЕ: в репозитории неполная история (shallow clone) — версии будут посчитаны неверно. "
                       "В CI нужен checkout с fetch-depth: 0.")
+    recent = (_git(root, "log", "-n", "8", "--format=%h %an: %s") or "").strip().split("\n")
+    report.append("Последние коммиты репозитория (HEAD):")
+    report.extend(f"  {line}" for line in recent)
     url = repo_url(config)
     if not url:
         report.append("repo_url в zensical.toml не задан: версии в журнале изменений будут без ссылок на коммиты.")
@@ -297,6 +309,8 @@ def sync_versions(docs_dir: Path, archive_dir_name: str, config: Path) -> tuple[
         updated = apply_versioning(text, history, url)
         label = history.entries[-1].version if history.entries else DEFAULT_VERSION
         report.append(f"  {rel}: версия {label}, коммитов в истории {history.commits}, записей журнала {len(history.entries)}")
+        if not history.entries:
+            report.extend(f"      {line}" for line in history.log)
         if updated != text:
             path.write_text(updated, encoding="utf-8", newline="")
             changed.append(path)
