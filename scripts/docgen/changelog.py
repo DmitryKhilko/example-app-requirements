@@ -186,13 +186,15 @@ def version_history(root: Path, rel: str) -> History:
     """Первый коммит файла — создание (версия по умолчанию, без записи). Каждый следующий коммит повышает версию и
     даёт запись журнала; исключения: автоматические коммиты CI (`[skip ci]`) и коммиты с префиксом `draft:`."""
     fmt = f"%x00%H{_SEP}%an{_SEP}%cd{_SEP}%B"
-    out = _git(root, "log", "--follow", "--reverse", "--no-merges", f"--date=format:{DATETIME_VERSION_FORMAT}",
+    out = _git(root, "log", "--follow", "--no-merges", f"--date=format:{DATETIME_VERSION_FORMAT}",
                f"--format={fmt}", "--", rel)
     result = History()
     if not out:
         return result
     version = tuple(int(p) for p in DEFAULT_VERSION.split("."))
-    for chunk in out.split("\x00")[1:]:
+    # git log --follow --reverse отдаёт только один (самый старый) коммит файла, переименованного в истории,
+    # поэтому история берётся от новых к старым (так работает --follow) и разворачивается здесь
+    for chunk in reversed(out.split("\x00")[1:]):
         commit, _, rest = chunk.partition(_SEP)
         author, _, rest = rest.partition(_SEP)
         when, _, message = rest.partition(_SEP)
