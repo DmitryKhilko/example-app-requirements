@@ -6,7 +6,8 @@ feature_name: "Фильтр по диапазону цен с ползунком
 status: "development"
 icon: lucide/file-braces
 order: 20
-doc_version: "0.1.0"
+doc_version: "0.00.00"
+datetime_version: ""
 owner: "Дмитрий Хилько"
 task_id: "1"
 release_id: ""
@@ -26,7 +27,7 @@ relations:
 
 ??? note no-icon "<h2 id="change-history" style="display: inline;">Журнал изменений</h2>"
 
-    - [Версия 0.1.0](https://github.com/DmitryKhilko/example-app-requirements/commit/0051b0603735add2d8accbce728da892dbae579d). Ответственный: Dmitry Khilko
+    Записей пока нет.
 
 ## Описание {#article-overview}
 
